@@ -51,8 +51,8 @@ class StudentResource extends Resource
             ->columns([
                 TextColumn::make('user.name')->label('Nama')->searchable(),
                 TextColumn::make('gender')->label('Jenis Kelamin'),
-                TextColumn::make('birth_date')->date('d/m/Y')->label('Tanggal Lahir'),
-                TextColumn::make('address')->label('Alamat'),
+                // TextColumn::make('birth_date')->date('d/m/Y')->label('Tanggal Lahir'),
+                // TextColumn::make('address')->label('Alamat'),
                 TextColumn::make('user.phone')->label('Nomor Telepon')->searchable(),
                 TextColumn::make('user.email')->label('Email')->searchable(),
             ])

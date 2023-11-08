@@ -27,6 +27,14 @@ class CreateEmployee extends CreateRecord
             'password' => Hash::make($password),
         ]);
 
+
+        foreach ($data['roles'] as $roleId) {
+            $role = Role::find($roleId);
+            if ($role) {
+                $user->assignRole($role);
+            }
+        }
+
         // Create Student
         $record = static::getModel()::create([
             'name' => $data['name'],

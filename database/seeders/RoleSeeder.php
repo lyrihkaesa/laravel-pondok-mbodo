@@ -13,14 +13,10 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name' => 'student']);
-        Role::create(['name' => 'teacher']);
-        Role::create(['name' => 'financial administration']);
-        $adminSuper = Role::create(['name' => 'admin super']);
-
-        // Mengaitkan semua izin ke peran "admin super"
-        $adminSuper->givePermissionTo('manage users');
-        $adminSuper->givePermissionTo('manage roles');
-        $adminSuper->givePermissionTo('manage permissions');
+        Role::create(['name' => 'Santri']);
+        Role::create(['name' => 'Guru']);
+        Role::create(['name' => 'Admin Keuangan']);
+        Role::create(['name' => 'Super Admin']);
+        Role::create(['name' => 'Admin Tata Usaha']);
     }
 }

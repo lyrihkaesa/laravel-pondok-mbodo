@@ -7,6 +7,7 @@ use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class EditEmployee extends EditRecord
 {
@@ -26,6 +27,7 @@ class EditEmployee extends EditRecord
         $data['name'] = $user->name;
         $data['email'] = $user->email;
         $data['phone'] = $user->phone;
+        $data['roles'] = $user->roles->pluck('id')->toArray();
 
         return $data;
     }
@@ -47,6 +49,9 @@ class EditEmployee extends EditRecord
             'birth_date' => $data['birth_date'],
             'address' => $data['address'],
         ]);
+
+        // Menghapus semua peran yang dimiliki oleh user
+        $record->user->syncRoles([Role::find($data['roles'])]);
 
         return $record;
     }

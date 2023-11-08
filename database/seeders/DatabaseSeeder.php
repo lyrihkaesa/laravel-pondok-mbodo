@@ -24,5 +24,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
         ]);
+
+        \App\Models\Student::factory(10)->create();
+        \App\Models\Employee::factory(10)->create();
     }
 }
