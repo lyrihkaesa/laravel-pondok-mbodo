@@ -63,4 +63,9 @@ class EmployeePolicy
     {
         return $user->can('force-delete Employee');
     }
+
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->can('force-delete-any Employee');
+    }
 }

@@ -50,22 +50,23 @@ class StudentResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')->label('Nama')->searchable(),
-                TextColumn::make('gender')->label('Jenis Kelamin'),
-                // TextColumn::make('birth_date')->date('d/m/Y')->label('Tanggal Lahir'),
-                // TextColumn::make('address')->label('Alamat'),
                 TextColumn::make('user.phone')->label('Nomor Telepon')->searchable(),
                 TextColumn::make('user.email')->label('Email')->searchable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
@@ -94,5 +95,13 @@ class StudentResource extends Resource
     public static function getModelLabel(): string
     {
         return 'Santri';
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

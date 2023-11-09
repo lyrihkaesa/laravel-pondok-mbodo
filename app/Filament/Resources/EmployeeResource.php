@@ -56,21 +56,24 @@ class EmployeeResource extends Resource
                 TextColumn::make('user.roles.name')->label('Peran'),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ])->modifyQueryUsing(function (Builder $query) {
-                $query->whereHas('user', function (Builder $query) {
-                    $query->whereHas('roles', function (Builder $query) {
-                        $query->whereNotIn('name', ['Super Admin', 'Santri']);
-                    });
+            ])
+            ->modifyQueryUsing(function (Builder $query) {
+                $query->whereHas('user.roles', function (Builder $query) {
+                    $query->whereNotIn('name', ['Super Admin', 'Santri']);
                 });
             });
     }
@@ -99,5 +102,13 @@ class EmployeeResource extends Resource
     public static function getModelLabel(): string
     {
         return 'Pengurus';
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

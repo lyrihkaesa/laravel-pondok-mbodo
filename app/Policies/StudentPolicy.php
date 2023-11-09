@@ -63,4 +63,9 @@ class StudentPolicy
     {
         return $user->can('force-delete Student');
     }
+
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->can('force-delete-any Student');
+    }
 }

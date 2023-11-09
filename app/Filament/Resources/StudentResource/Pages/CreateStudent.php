@@ -17,7 +17,7 @@ class CreateStudent extends CreateRecord
     protected function handleRecordCreation(array $data): Model
     {
         // Generate password based on birth_date and phone
-        $password = substr($data['phone'], -4) . date('dmY', strtotime($data['birth_date']));
+        $password = $data['password'] ?? substr($data['phone'], -4) . date('dmY', strtotime($data['birth_date']));
 
         // Create User
         $user = User::create([

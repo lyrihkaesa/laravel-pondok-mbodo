@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,12 @@ class AuthServiceProvider extends ServiceProvider
     {
         Gate::before(function (User $user, string $ability) {
             return $user->isSuperAdmin() ? true : null;
+        });
+
+        // Melakukan logging perintah query ke database
+        // storage\logs\laravel.log
+        DB::listen(function ($query) {
+            Log::info("Query : {$query->sql}");
         });
     }
 }
