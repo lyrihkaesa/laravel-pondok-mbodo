@@ -21,8 +21,9 @@ use Spatie\Permission\Models\Role;
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationGroup = 'Manajemen Anggota';
+
 
     public static function form(Form $form): Form
     {

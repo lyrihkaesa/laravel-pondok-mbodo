@@ -22,8 +22,8 @@ use Illuminate\Validation\Rules\Unique;
 class StudentResource extends Resource
 {
     protected static ?string $model = Student::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationGroup = 'Manajemen Anggota';
 
     public static function form(Form $form): Form
     {
@@ -50,8 +50,15 @@ class StudentResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')->label('Nama')->searchable(),
-                TextColumn::make('user.phone')->label('Nomor Telepon')->searchable(),
-                TextColumn::make('user.email')->label('Email')->searchable(),
+                TextColumn::make('gender')->label('Nama')->searchable()->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'Laki-Laki' => 'info',
+                        'Perempuan' => 'pink',
+                    })->visibleFrom('md'),
+                TextColumn::make('user.phone')->label('Nomor Telepon')->searchable()->visibleFrom('md'),
+                TextColumn::make('user.email')->label('Email')->searchable()->copyable()
+                    ->copyMessage('Alamat email telah disalin!')
+                    ->copyMessageDuration(1500)->visibleFrom('md'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -74,7 +81,7 @@ class StudentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ClassroomsRelationManager::class
         ];
     }
 
