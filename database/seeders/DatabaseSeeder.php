@@ -23,9 +23,11 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+            StudentSeeder::class,
+            EmployeeSeeder::class,
+            AcademicYearSeeder::class,
+            SchoolSeeder::class,
+            ProductSeeder::class,
         ]);
-
-        \App\Models\Student::factory(10)->create();
-        \App\Models\Employee::factory(10)->create();
     }
 }

@@ -32,7 +32,7 @@ class Classroom extends Model
 
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(Student::class, 'enrollments', 'classroom_id', 'student_id');
+        return $this->belongsToMany(Student::class, 'enrollments', 'classroom_id', 'student_id')->withTimestamps();
     }
 
     public function homeroomTeacher(): BelongsTo

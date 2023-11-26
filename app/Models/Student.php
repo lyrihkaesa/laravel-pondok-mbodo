@@ -22,6 +22,20 @@ class Student extends Model
 
     public function classrooms(): BelongsToMany
     {
-        return $this->belongsToMany(Classroom::class, 'enrollments', 'student_id', 'classroom_id');
+        return $this->belongsToMany(Classroom::class, 'enrollments', 'student_id', 'classroom_id')->withTimestamps();
+    }
+
+    public function lastEnrolledClassroom(): BelongsToMany
+    {
+        return $this->belongsToMany(Classroom::class, 'enrollments', 'student_id', 'classroom_id')
+            ->withTimestamps()
+            ->orderByPivot('created_at', 'desc')
+            ->limit(1);
+    }
+
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'student_product')
+            ->using(StudentProduct::class)->withPivot('id');
     }
 }

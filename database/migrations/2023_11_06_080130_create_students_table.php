@@ -17,10 +17,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique()->nullable();
             $table->string('phone')->unique();
-            // $table->string('nis')->unique();
+            $table->string('nis')->unique(); // Nomor Induk Siswa atau Nomor Induk Pesantren
             $table->enum('gender', ['Laki-Laki', 'Perempuan'])->nullable();
             $table->date('birth_date')->nullable();
             $table->string('address')->nullable();
+            $table->enum('status', ['Aktif', 'Lulus', 'Tidak Aktif'])->default('Aktif');
+            $table->enum('current_school', ['PAUD', 'TK', 'SD', 'SMP', 'SMK'])->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

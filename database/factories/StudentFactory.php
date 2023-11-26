@@ -37,10 +37,13 @@ class StudentFactory extends Factory
             'name' => $user->name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'nis' => '23' . $this->faker->unique()->numberBetween(10000000, 99999999),
             'gender' => $this->faker->randomElement(['Laki-Laki', 'Perempuan']),
             'birth_date' => $this->faker->date,
             'address' => $this->faker->address,
             'user_id' => $user->id,
+            'status' => $this->faker->randomElement(['Aktif', 'Lulus', 'Tidak Aktif']),
+            'current_school' => $this->faker->randomElement(['PAUD', 'TK', 'SD', 'SMP', 'SMK']),
         ];
     }
 }
