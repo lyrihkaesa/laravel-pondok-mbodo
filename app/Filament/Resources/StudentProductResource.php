@@ -83,7 +83,16 @@ class StudentProductResource extends Resource
                         'SD' => 'SD',
                         'SMP' => 'SMP',
                         'SMK' => 'SMK',
-                    ])
+                    ])->modifyQueryUsing(
+                        function (Builder $query, $data) {
+                            if (!$data['values']) {
+                                return $query;
+                            }
+                            return $query->whereHas('student', function (Builder $query) use ($data) {
+                                return $query->whereIn('current_school', $data['values']);
+                            });
+                        }
+                    )
                     ->multiple(),
             ])
             ->actions([
