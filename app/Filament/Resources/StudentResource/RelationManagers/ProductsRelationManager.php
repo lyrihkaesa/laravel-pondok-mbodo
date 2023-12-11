@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ProductsRelationManager extends RelationManager
 {
     protected static string $relationship = 'products';
+    protected static ?string $title = 'Keuangan';
     protected static ?string $recordTitleAttribute = 'name';
     protected bool $allowsDuplicates = true;
 
@@ -83,5 +84,15 @@ class ProductsRelationManager extends RelationManager
                 ]),
             ])
             ->allowDuplicates();
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Keuangan';
+    }
+
+    public static function getModelLabel(): string
+    {
+        return 'Keuangan';
     }
 }

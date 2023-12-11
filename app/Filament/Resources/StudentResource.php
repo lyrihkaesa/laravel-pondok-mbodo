@@ -24,6 +24,7 @@ class StudentResource extends Resource
     protected static ?string $model = Student::class;
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationGroup = 'Manajemen Anggota';
+    protected static ?int $navigationSort = -3;
 
     public static function form(Form $form): Form
     {
@@ -181,8 +182,9 @@ class StudentResource extends Resource
     public static function getRelations(): array
     {
         return [
+            RelationManagers\GuardiansRelationManager::class,
             RelationManagers\ClassroomsRelationManager::class,
-            RelationManagers\ProductsRelationManager::class
+            RelationManagers\ProductsRelationManager::class,
         ];
     }
 
