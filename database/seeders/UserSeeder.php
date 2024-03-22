@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'phone' => '628111222333',
             'address' => 'Dusun Sendangsari, Desa Tambirejo, Kec. Toroh, Kab. Grobogan',
-            'gender' => 'Laki-laki',
+            'gender' => 'MALE',
             'birth_date' => '1990-01-01',
         ]);
 

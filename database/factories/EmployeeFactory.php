@@ -36,7 +36,7 @@ class EmployeeFactory extends Factory
             'name' => $user->name,
             'email' => $user->email,
             'phone' => $user->phone,
-            'gender' => $this->faker->randomElement(['Laki-Laki', 'Perempuan']),
+            'gender' => $this->faker->randomElement(['MALE', 'FAMALE']),
             'birth_date' => $this->faker->date,
             'address' => $this->faker->address,
             'user_id' => $user->id,
