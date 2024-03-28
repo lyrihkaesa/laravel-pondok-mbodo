@@ -1,5 +1,14 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-cloak x-data="{
+    theme: localStorage.getItem('theme') ||
+        localStorage.setItem('theme', 'system')
+}" x-init="$watch('theme', val => localStorage.setItem('theme', val))"
+    x-bind:class="{
+        'dark': theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)')
+            .matches)
+    }">
+
+
 
 <head>
     <meta charset="utf-8">
@@ -12,6 +21,9 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+    {{-- Image Icons --}}
+    <link rel="icon" type="image/png" href="/favicon-150x150.png">
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -22,11 +34,12 @@
 
         <!-- Page Heading -->
         @if (isset($header))
-            <header class="bg-white dark:bg-gray-800 shadow">
+            {{ $header }}
+            {{-- <header class="bg-white dark:bg-gray-800 shadow">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
-            </header>
+            </header> --}}
         @endif
 
         <!-- Page Content -->
