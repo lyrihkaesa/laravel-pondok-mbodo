@@ -46,6 +46,13 @@
         <main>
             {{ $slot }}
         </main>
+
+
+        @if (isset($footer))
+            {{ $footer }}
+        @else
+            <x-footer />
+        @endif
     </div>
 </body>
 

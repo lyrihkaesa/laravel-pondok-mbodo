@@ -190,7 +190,7 @@ class StudentResource extends Resource
                             ->autosize()
                             ->placeholder('Dusun Sendangsari, Jl Sendangsari'),
                         Forms\Components\Grid::make([
-                            'default' => 2,
+                            'default' => 1,
                             'sm' => 3,
                         ])
                             ->schema([
@@ -219,7 +219,7 @@ class StudentResource extends Resource
                                                     }
                                                 }
                                             }),
-                                    ])->columnSpan(2),
+                                    ]),
                             ])->columnSpan(1),
 
                     ])->columns(2),
