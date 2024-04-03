@@ -24,6 +24,10 @@
     {{-- Image Icons --}}
     <link rel="icon" type="image/png" href="/favicon-150x150.png">
 
+    @isset($css)
+        {{ $css }}
+    @endisset
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -33,27 +37,38 @@
         {{-- @include('layouts.navigation') --}}
 
         <!-- Page Heading -->
-        @if (isset($header))
+        @isset($header)
             {{ $header }}
-            {{-- <header class="bg-white dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        @endisset
+        {{-- @if (isset($header))
+            <header class="bg-white shadow dark:bg-gray-800">
+                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
-            </header> --}}
-        @endif
+            </header>
+        @endif --}}
 
         <!-- Page Content -->
         <main>
             {{ $slot }}
         </main>
 
-
-        @if (isset($footer))
+        @isset($footer)
             {{ $footer }}
         @else
             <x-footer />
-        @endif
+        @endisset
+
+        {{-- @if (isset($footer))
+            {{ $footer }}
+        @else
+            <x-footer />
+        @endif --}}
     </div>
+
+    @isset($script)
+        {{ $script }}
+    @endisset
 </body>
 
 </html>

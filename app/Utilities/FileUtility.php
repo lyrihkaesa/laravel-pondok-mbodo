@@ -14,14 +14,14 @@ class FileUtility
         //
     }
 
-    public static function getImageHelperText(): HtmlString
+    public static function getImageHelperText(string $prefix = ''): HtmlString
     {
-        return str('File harus berformat **.jpg**, **.jpeg**, **.png** dan berukuran maksimal **500KB**. Untuk backgorund warna merah gunakan **#DB1514** dan biru gunakan **#0090FF**.')->inlineMarkdown()->toHtmlString();
+        return str($prefix . 'File harus berformat **.jpg**, **.jpeg**, **.png** dan berukuran maksimal **500KB**. Untuk backgorund warna merah gunakan **#DB1514** dan biru gunakan **#0090FF**.')->inlineMarkdown()->toHtmlString();
     }
 
-    public static function getPdfHelperText(): HtmlString
+    public static function getPdfHelperText(string $prefix = ''): HtmlString
     {
-        return str('File harus berformat **.pdf** dan berukuran maksimal **500KB**.')->inlineMarkdown()->toHtmlString();
+        return str($prefix . 'File harus berformat **.pdf** dan berukuran maksimal **500KB**.')->inlineMarkdown()->toHtmlString();
     }
 
     public static function generateFileName(string $uniqueValue, string $fileNameWithExtension, ?string $suffixLabel): string
