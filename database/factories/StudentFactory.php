@@ -2,12 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\Student;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
+use App\Models\Student;
 use Illuminate\Support\Str;
+use App\Utilities\NikUtility;
+use Creasi\Nusa\Models\District;
+use Creasi\Nusa\Models\Regency;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Student>
@@ -33,14 +36,41 @@ class StudentFactory extends Factory
         $studentRole = Role::where('name', 'Santri')->first();
         $user->assignRole($studentRole);
 
+
+        $nik = $this->faker->nik();
+        $parseNik = NikUtility::parseNIK($nik);
+        $district = District::where('code', $parseNik->district)->first();
+
+        // Lakukan pengecekan apakah $district ada dalam database
+        if (!$district) {
+            // Jika tidak ditemukan, buat NIK baru
+            do {
+                $nik = $this->faker->nik();
+                $parseNik = NikUtility::parseNIK($nik);
+                $district = District::where('code', $parseNik->district)->first();
+            } while (!$district);
+        }
+        $parseNik = NikUtility::parseNIK($nik);
+        $regency = Regency::where('code', $parseNik->regency)->first();
+
+        $rtRwArray = ["001", "002", "003", "004", "005", "006", "007", "008", "009"];
+
         return [
             'name' => $user->name,
-            'email' => $user->email,
-            'phone' => $user->phone,
+            'nik' => $nik,
             'nis' => '23' . $this->faker->unique()->numberBetween(10000000, 99999999),
-            'gender' => $this->faker->randomElement(['Laki-Laki', 'Perempuan']),
-            'birth_date' => $this->faker->date,
-            'address' => $this->faker->address,
+            'nisn' => $this->faker->unique()->numberBetween(10000000, 9999999999),
+            'gender' => $parseNik->gender,
+            'birth_place' => $regency->name ?? 'Unknown',
+            'birth_date' => $parseNik->birthDate,
+            'province' => $parseNik->province,
+            'regency' => $parseNik->regency,
+            'district' => $parseNik->district,
+            // 'village' => $this->faker->randomElement(\Creasi\Nusa\Models\Village::all()->pluck('name')->toArray()),
+            'address' => $this->faker->address(),
+            'rt' => $this->faker->randomElement($rtRwArray),
+            'rw' => $this->faker->randomElement($rtRwArray),
+            'postcode' => $this->faker->postcode(),
             'user_id' => $user->id,
             'status' => $this->faker->randomElement(['Aktif', 'Lulus', 'Tidak Aktif']),
             'current_school' => $this->faker->randomElement(['PAUD', 'TK', 'SD', 'SMP', 'SMK']),

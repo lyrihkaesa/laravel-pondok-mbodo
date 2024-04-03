@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b31cfe119ac01bc7cd6a327ee9df890f",
+    "content-hash": "90dd7253633b6828d3d38b8ee1f84eda",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -557,6 +557,79 @@
                 }
             ],
             "time": "2023-12-11T17:09:12+00:00"
+        },
+        {
+            "name": "creasi/laravel-nusa",
+            "version": "v0.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/creasico/laravel-nusa.git",
+                "reference": "433203109396057da2e02a0fcadc9b38b1f50fb9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/creasico/laravel-nusa/zipball/433203109396057da2e02a0fcadc9b38b1f50fb9",
+                "reference": "433203109396057da2e02a0fcadc9b38b1f50fb9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-sqlite3": "*",
+                "laravel/framework": "^9.0|^10.0|^11.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "composer-runtime-api": "*",
+                "laravel/pint": "^1.1",
+                "nunomaduro/collision": "^7.4|^8.0",
+                "orchestra/testbench": "^8.5|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Creasi\\Nusa\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Creasi\\Nusa\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Creasi Developers",
+                    "email": "developers@creasi.co"
+                }
+            ],
+            "description": "A Laravel package that aim to provide Indonesia' Administrative Data",
+            "keywords": [
+                "desa",
+                "indonesia",
+                "kabupaten",
+                "kecamatan",
+                "kelurahan",
+                "kota",
+                "laravel",
+                "package",
+                "provinsi"
+            ],
+            "support": {
+                "forum": "https://github.com/orgs/creasico/discussions",
+                "issues": "https://github.com/creasico/laravel-nusa/issues",
+                "source": "https://github.com/creasico/laravel-nusa"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/creasico",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-03-13T01:44:53+00:00"
         },
         {
             "name": "danharrin/date-format-converter",

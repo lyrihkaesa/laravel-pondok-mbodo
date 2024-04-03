@@ -4,7 +4,6 @@ namespace App\Filament\Resources\StudentResource\Pages;
 
 use App\Filament\Resources\StudentResource;
 use App\Models\User;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
@@ -16,8 +15,9 @@ class CreateStudent extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        // Generate password based on birth_date and phone
-        $password = $data['password'] ?? substr($data['phone'], -4) . date('dmY', strtotime($data['birth_date']));
+        // Generate password berdasarkan nama, 4 angka nomor handphone terakhir, dan tanggal lahir
+        $password = $data['password'] ?? \App\Utilities\PasswordUtility::generatePassword($data['name'], $data['phone'], $data['birth_date']);
+        dd($password);
 
         // Create User
         $user = User::create([
@@ -34,11 +34,14 @@ class CreateStudent extends CreateRecord
         // Create Student
         $record = static::getModel()::create([
             'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
+            'nis' => $data['nis'],
             'gender' => $data['gender'],
             'birth_date' => $data['birth_date'],
-            'address' => $data['address'],
+            'province' => $data['province'],
+            'regency' => $data['regency'],
+            'district' => $data['district'],
+            'village' => $data['village'],
+            'postcode' => $data['postcode'],
             'user_id' => $user->id,
         ]);
 
