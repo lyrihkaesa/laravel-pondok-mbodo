@@ -13,6 +13,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'price',
+        'payment_term',
     ];
 
     public function students(): BelongsToMany

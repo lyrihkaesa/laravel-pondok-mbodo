@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('price');
+            $table->string('payment_term')->nullable();
             $table->timestamps();
         });
     }

@@ -58,9 +58,9 @@
                     class="hs-collapse hidden grow basis-full overflow-hidden transition-all duration-300 sm:block">
                     <div class="mt-5 flex flex-col gap-5 sm:mt-0 sm:flex-row sm:items-center sm:justify-end sm:ps-5">
                         <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                            href="{{ route('ppdb') }}">Beranda PPDB</a>
+                            href="{{ route('ppdb.index') }}">Beranda PPDB</a>
                         <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                            href="#">Biaya Pendidikan</a>
+                            href="{{ route('ppdb.price') }}">Biaya Pendidikan</a>
                         <div class="hs-dropdown [--adaptive:none] [--strategy:static] sm:[--strategy:fixed]">
                             <button id="hs-mega-menu-basic-dr" type="button"
                                 class="flex w-full items-center font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500">

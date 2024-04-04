@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             AcademicYearSeeder::class,
             SchoolSeeder::class,
             ProductSeeder::class,
+            PackageSeeder::class,
         ]);
     }
 }

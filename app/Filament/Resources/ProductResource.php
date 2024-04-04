@@ -6,6 +6,7 @@ use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,8 +29,23 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')->label('Nama')->required(),
-                TextInput::make('price')->label('Harga')->required()->numeric()
-                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',', precision: 2),
+                TextInput::make('price')->label('Harga')->required()->numeric(),
+                Select::make('payment_term')
+                    ->label('Jangka Waktu')
+                    ->options([
+                        'Sekali' => 'Sekali',
+                        'Bulanan' => 'Bulanan',
+                        '6 Bulan' => '6 Bulan',
+                        'Tahunan' => 'Tahunan',
+                    ])
+                    ->native(false)
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('name')->label('Jangka Waktu')->required(),
+                    ])
+                    ->createOptionUsing(function (array $data): string {
+                        // dd($data['name']);
+                        return $data['name'];
+                    })
             ]);
     }
 
@@ -38,7 +54,8 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->label('Nama'),
-                TextColumn::make('price')->label('Harga')->currency('IDR', true)->summarize(Sum::make()),
+                TextColumn::make('price')->label('Harga')->currency('IDR', true),
+                TextColumn::make('payment_term')->label('Jangka Waktu'),
             ])
             ->filters([
                 //
