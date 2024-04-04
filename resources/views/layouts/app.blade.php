@@ -28,6 +28,8 @@
         {{ $css }}
     @endisset
 
+    @filamentStyles()
+    @vite('resources/css/filament/admin/theme.css')
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -69,6 +71,7 @@
     @isset($script)
         {{ $script }}
     @endisset
+    @filamentScripts()
 </body>
 
 </html>

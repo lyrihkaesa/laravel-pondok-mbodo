@@ -19,10 +19,10 @@ class StudentRegistrationForm extends Component implements HasForms
 
     public ?array $data = [];
 
-    public function mount(): void
-    {
-        $this->form->fill();
-    }
+    // public function mount(): void
+    // {
+    //     $this->form->fill();
+    // }
 
     public function form(Form $form): Form
     {
@@ -112,8 +112,8 @@ class StudentRegistrationForm extends Component implements HasForms
                         Forms\Components\Select::make('province')
                             ->label('Provinsi')
                             ->options(\App\Utilities\NikUtility::$provinces)
-                            ->live()
                             ->afterStateUpdated(function (?string $state, ?string $old, Forms\Set $set) {
+                                // dd($state);
                                 if ($state !== $old) {
                                     $set('regency', NULL);
                                     $set('district', NULL);
@@ -121,13 +121,15 @@ class StudentRegistrationForm extends Component implements HasForms
                                 }
                                 return $state;
                             })
-                            ->searchable(),
+                            ->live(),
+                        // ->searchable(),
                         Forms\Components\Select::make('regency')
                             ->label('Kabupaten/Kota')
                             ->disabled(fn (Forms\Get $get): bool => $get('province') == null)
                             ->options(function (Forms\Get $get, ?string $state) {
                                 if ($get('province') !== null) {
                                     $province = \Creasi\Nusa\Models\Province::where('code', $get('province'))->first();
+                                    // dd($province);
                                     $regencies = $province->regencies->pluck('name', 'code');
                                     return $regencies;
                                 } else {
@@ -141,8 +143,8 @@ class StudentRegistrationForm extends Component implements HasForms
                                     $set('village', null);
                                 }
                                 return $state;
-                            })
-                            ->searchable(fn (Forms\Get $get): bool => $get('province') != null),
+                            }),
+                        // ->searchable(fn (Forms\Get $get): bool => $get('province') != null),
                         Forms\Components\Select::make('district')
                             ->label('Kecamatan')
                             ->disabled(fn (Forms\Get $get): bool => $get('regency') == null)
@@ -161,8 +163,8 @@ class StudentRegistrationForm extends Component implements HasForms
                                     $set('village', null);
                                 }
                                 return $state;
-                            })
-                            ->searchable(fn (Forms\Get $get): bool => $get('regency') != null),
+                            }),
+                        // ->searchable(fn (Forms\Get $get): bool => $get('regency') != null),
                         Forms\Components\Select::make('village')
                             ->label('Desa/Kelurahan')
                             ->disabled(fn (Forms\Get $get): bool => $get('district') == null)
@@ -175,18 +177,18 @@ class StudentRegistrationForm extends Component implements HasForms
                                     }
                                 }
                                 return $villages;
-                            })
-                            // ->live()
-                            // ->afterStateUpdated(function (?string $state, Forms\Set $set) {
-                            //     if ($state !== null) {
-                            //         $village = \Creasi\Nusa\Models\Village::where('code', $state)->first();
-                            //         if ($village !== null) {
-                            //             $set('postcode', $village->postal_code);
-                            //         }
-                            //     }
-                            //     return $state;
-                            // })
-                            ->searchable(fn (Forms\Get $get): bool => $get('district') != null),
+                            }),
+                        // ->live()
+                        // ->afterStateUpdated(function (?string $state, Forms\Set $set) {
+                        //     if ($state !== null) {
+                        //         $village = \Creasi\Nusa\Models\Village::where('code', $state)->first();
+                        //         if ($village !== null) {
+                        //             $set('postcode', $village->postal_code);
+                        //         }
+                        //     }
+                        //     return $state;
+                        // })
+                        // ->searchable(fn (Forms\Get $get): bool => $get('district') != null),
                         Forms\Components\Textarea::make('address')
                             ->label('Alamat')
                             ->autosize()
@@ -205,6 +207,7 @@ class StudentRegistrationForm extends Component implements HasForms
                                 Forms\Components\TextInput::make('postcode')
                                     ->label('Kode Pos')
                                     ->placeholder('58171')
+                                    ->live()
                                     ->suffixActions([
                                         Forms\Components\Actions\Action::make('autoGeneratePostCode')
                                             ->label('Auto Generate Kode Post')
@@ -216,8 +219,10 @@ class StudentRegistrationForm extends Component implements HasForms
                                                 $villageField = $get('village');
                                                 if ($villageField !== null) {
                                                     $village = \Creasi\Nusa\Models\Village::where('code', $villageField)->first();
+                                                    // dd($village);
                                                     if ($village !== null) {
                                                         $set('postcode', $village->postal_code);
+                                                        // dd($set('postcode', $village->postal_code));
                                                     }
                                                 }
                                             }),
@@ -408,59 +413,59 @@ class StudentRegistrationForm extends Component implements HasForms
                             ->directory('ijazah'),
                     ])
                     ->columns(2),
-                Forms\Components\Section::make('Orang Tua/Wali')
-                    ->schema([
-                        Forms\Components\Repeater::make('guardians')
-                            ->label(false)
-                            ->schema([
-                                Forms\Components\TextInput::make('name')
-                                    ->label('Nama Lengkap')
-                                    ->required()
-                                    ->maxLength(255),
-                                Forms\Components\Select::make('relationship')
-                                    ->label('Hubungan Keluarga')
-                                    ->native(false)
-                                    ->options([
-                                        'Ayah' => '<span class="text-blue-600 dark:text-blue-400">Ayah</span>',
-                                        'Ibu' => '<span class="text-pink-600 dark:text-pink-400">Ibu</span>',
-                                    ])
-                                    ->allowHtml(true)
-                                    ->createOptionForm([
-                                        Forms\Components\TextInput::make('name')
-                                            ->label('Hubungan Keluarga')
-                                            ->required()
-                                            ->placeholder('Paman / Bude / Kakek / Nenek')
-                                            ->maxLength(255),
-                                    ])
-                                    ->createOptionUsing(function (array $data) {
-                                        if (!isset($data['name'])) {
-                                            return 'Ayah';
-                                        }
-                                        return ucwords($data['name']);
-                                    })
-                                    ->required(),
-                                Forms\Components\Textarea::make('address')
-                                    ->default(function ($livewire) {
-                                        if (isset($livewire->data["address"])) {
-                                            return $livewire->data["address"];
-                                        }
-                                    })
-                                    ->label('Alamat')
-                                    ->autosize()
-                                    ->maxLength(255),
-                                Forms\Components\TextInput::make('phone')
-                                    ->label('Nomor Telepon')
-                                    ->tel()
-                                    ->required()
-                                    ->placeholder('081234567890')
-                                    ->maxLength(255),
-                            ])
-                            ->relationship('guardians')
-                            // ->collapsed()
-                            ->columns(2)
-                            ->itemLabel(fn (array $state): ?string => $state['relationship'] . ' : ' . $state['name'] ?? null)
-                    ])
-                    ->collapsible(),
+                // Forms\Components\Section::make('Orang Tua/Wali')
+                //     ->schema([
+                //         Forms\Components\Repeater::make('guardians')
+                //             ->label(false)
+                //             ->schema([
+                //                 Forms\Components\TextInput::make('name')
+                //                     ->label('Nama Lengkap')
+                //                     ->required()
+                //                     ->maxLength(255),
+                //                 Forms\Components\Select::make('relationship')
+                //                     ->label('Hubungan Keluarga')
+                //                     ->native(false)
+                //                     ->options([
+                //                         'Ayah' => '<span class="text-blue-600 dark:text-blue-400">Ayah</span>',
+                //                         'Ibu' => '<span class="text-pink-600 dark:text-pink-400">Ibu</span>',
+                //                     ])
+                //                     ->allowHtml(true)
+                //                     ->createOptionForm([
+                //                         Forms\Components\TextInput::make('name')
+                //                             ->label('Hubungan Keluarga')
+                //                             ->required()
+                //                             ->placeholder('Paman / Bude / Kakek / Nenek')
+                //                             ->maxLength(255),
+                //                     ])
+                //                     ->createOptionUsing(function (array $data) {
+                //                         if (!isset($data['name'])) {
+                //                             return 'Ayah';
+                //                         }
+                //                         return ucwords($data['name']);
+                //                     })
+                //                     ->required(),
+                //                 Forms\Components\Textarea::make('address')
+                //                     ->default(function ($livewire) {
+                //                         if (isset($livewire->data["address"])) {
+                //                             return $livewire->data["address"];
+                //                         }
+                //                     })
+                //                     ->label('Alamat')
+                //                     ->autosize()
+                //                     ->maxLength(255),
+                //                 Forms\Components\TextInput::make('phone')
+                //                     ->label('Nomor Telepon')
+                //                     ->tel()
+                //                     ->required()
+                //                     ->placeholder('081234567890')
+                //                     ->maxLength(255),
+                //             ])
+                //             ->relationship('guardians')
+                //             // ->collapsed()
+                //             ->columns(2)
+                //             ->itemLabel(fn (array $state): ?string => $state['relationship'] . ' : ' . $state['name'] ?? null)
+                //     ])
+                //     ->collapsible(),
                 Forms\Components\Section::make('Pernyataan Persetujuan')
                     ->schema([
                         Forms\Components\Checkbox::make('term_01')

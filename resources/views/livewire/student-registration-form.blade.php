@@ -1,15 +1,15 @@
 <x-slot name="header">
-    <x-header />
+    <x-ppdb.header />
 </x-slot>
 
-<x-slot name="css">
+{{-- <x-slot name="css">
     @vite('resources/css/filament/admin/theme.css')
     @filamentStyles()
-</x-slot>
+</x-slot> --}}
 
-<x-slot name="script">
+{{-- <x-slot name="script">
     @filamentScripts()
-</x-slot>
+</x-slot> --}}
 
 <div class="mx-auto max-w-[85rem] px-4 py-2 sm:px-6 lg:px-8 lg:py-4">
     <h1 class="mb-4 text-lg font-semibold">Pendaftaran Santri</h1>
