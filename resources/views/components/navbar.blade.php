@@ -3,7 +3,7 @@
     class="mx-auto w-full max-w-[85rem] border-b-2 border-gray-100 bg-white px-4 py-2 transition-colors duration-500 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
     aria-label="Global">
     <div class="flex items-center justify-between">
-        <a href="/" class="inline-flex items-center gap-x-2 font-semibold dark:text-white" wire:navigate>
+        <a href="/" class="inline-flex items-center gap-x-2 font-semibold dark:text-white">
             <img class="h-auto w-10" src="/favicon-150x150.png" alt="Logo">
             <span class="whitespace-nowrap text-base sm:text-xl">Pondok Mbodo</span>
         </a>
@@ -34,7 +34,7 @@
         <div id="navbar-image-and-text-2"
             class="hs-collapse hidden grow basis-full overflow-hidden transition-all duration-300 sm:block">
             <div class="mt-5 flex flex-col gap-5 sm:mt-0 sm:flex-row sm:items-center sm:justify-end sm:ps-5">
-                <a wire:navigate
+                <a
                     class="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                     href="{{ route('about') }}">Profile Pondok</a>
                 <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
