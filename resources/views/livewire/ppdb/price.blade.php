@@ -9,8 +9,7 @@
     <div class="grid grid-cols-1 px-4 sm:px-6 md:grid-cols-4 md:gap-4 lg:px-8">
         <div class="md:col-span-3">
             @foreach ($packages as $package)
-                <div id="{{ $package->id }}" class="pt-2"></div>
-                <x-ppdb.card>
+                <x-ppdb.card :packageId="$package->id">
                     <x-ppdb.card-header>{{ $package->name }}</x-ppdb.card-header>
                     <x-ppdb.table>
                         @foreach ($package->products as $product)

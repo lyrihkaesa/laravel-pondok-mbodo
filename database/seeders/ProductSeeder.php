@@ -43,8 +43,10 @@ class ProductSeeder extends Seeder
             ['name' => 'Jurusan', 'price' => 50000, 'payment_term' => 'Bulanan'],
             ['name' => 'Pesantren', 'price' => 50000, 'payment_term' => 'Bulanan'],
             ['name' => 'Kitab', 'price' => 200000, 'payment_term' => 'Bulanan'],
-            ['name' => 'Pengadaan Almari', 'price' => 150000, 'payment_term' => 'Semester'],
-            ['name' => 'Field Trip Tiap Semester', 'price' => 100000, 'payment_term' => 'Semester']
+            ['name' => 'Pengadaan Almari', 'price' => 150000, 'payment_term' => 'Tahunan'],
+            ['name' => 'Field Trip Tiap Semester', 'price' => 100000, 'payment_term' => 'Semester'],
+            ['name' => 'Makan 1 Kali', 'price' => 50000, 'payment_term' => 'Bulanan'],
+            ['name' => 'Transportasi', 'price' => 60000, 'payment_term' => 'Bulanan'],
         ]);
     }
 }

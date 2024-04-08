@@ -36,6 +36,8 @@ class PackageSeeder extends Seeder
                 'Seragam Batik MI Putra/i',
                 'Seragam Pramuka MI Putra/i',
                 'Seragam Olahraga MI Putra/i',
+                'Makan 1 Kali',
+                'Transportasi',
             ]],
             ['name' => 'Pendaftaran MI Putri', 'product_names' => [
                 'Pendaftaran MI',
@@ -44,6 +46,8 @@ class PackageSeeder extends Seeder
                 'Seragam Batik MI Putra/i',
                 'Seragam Pramuka MI Putra/i',
                 'Seragam Olahraga MI Putra/i',
+                'Makan 1 Kali',
+                'Transportasi',
             ]],
             ['name' => 'Pendaftaran SMP', 'product_names' => [
                 'Pendaftaran SMP/MA',

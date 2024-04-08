@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Organization extends Model
 {
@@ -11,28 +12,29 @@ class Organization extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'category',
         'vision',
         'mission',
         'description',
     ];
 
-    public function programs()
+    public function programs(): BelongsToMany
     {
-        return $this->belongsToMany(Program::class);
+        return $this->belongsToMany(Program::class, 'organization_program', 'organization_id', 'program_id');
     }
 
-    public function extracurriculars()
+    public function extracurriculars(): BelongsToMany
     {
         return $this->belongsToMany(Extracurricular::class);
     }
 
-    public function users()
+    public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot(['role', 'position'])->withTimestamps()->with('employee');
     }
 
-    public function packages()
+    public function packages(): BelongsToMany
     {
         return $this->belongsToMany(Package::class);
     }

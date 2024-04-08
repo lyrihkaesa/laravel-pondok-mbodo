@@ -24,14 +24,16 @@
     {{-- Image Icons --}}
     <link rel="icon" type="image/png" href="/favicon-150x150.png">
 
-    @isset($css)
-        {{ $css }}
-    @endisset
+
 
     @filamentStyles()
     @vite('resources/css/filament/admin/theme.css')
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @isset($css)
+        {{ $css }}
+    @endisset
 </head>
 
 <body class="font-sans antialiased">

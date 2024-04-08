@@ -11,7 +11,7 @@ class AcademicYear extends Model
     use HasFactory;
 
     protected $table = 'academic_years';
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'slug'];
 
     public function classrooms(): HasMany
     {

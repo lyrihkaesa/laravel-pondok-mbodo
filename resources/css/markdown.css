@@ -1,0 +1,92 @@
+.markdown>h2 {
+    @apply block text-xl font-bold text-gray-800 dark:text-white sm:text-2xl lg:text-3xl lg:leading-tight;
+}
+
+.markdown>h3 {
+    @apply block text-lg font-bold text-gray-800 dark:text-white sm:text-xl lg:text-2xl lg:leading-tight;
+}
+
+.markdown>h4 {
+    @apply block text-base font-bold text-gray-800 dark:text-white sm:text-lg lg:text-xl lg:leading-tight;
+}
+
+.markdown>p {
+    @apply block mt-2 text-gray-600 dark:text-gray-400;
+}
+
+.markdown>ul {
+    @apply list-disc;
+}
+
+.markdown>ol {
+    @apply ps-4 list-decimal;
+}
+
+.markdown>ol>li {
+    @apply mt-2 text-gray-600 dark:text-gray-400;
+}
+
+.markdown>a {
+    @apply text-blue-500 underline;
+}
+
+.markdown>blockquote {
+    @apply border-l-4 border-gray-300 pl-4 text-gray-500 dark:text-gray-300 sm:text-base;
+}
+
+.markdown>img {
+    @apply w-full;
+}
+
+.markdown>table {
+    @apply w-full;
+}
+
+.markdown>td {
+    @apply border border-gray-300 p-2;
+}
+
+.markdown>th {
+    @apply border border-gray-300 p-2;
+}
+
+.markdown>tr {
+    @apply border border-gray-300;
+}
+
+.markdown>hr {
+    @apply my-4;
+}
+
+.markdown>pre {
+    @apply my-4;
+}
+
+.markdown>pre>code {
+    @apply block overflow-x-auto p-4;
+}
+
+.markdown>code {
+    @apply bg-gray-200 p-1 dark:bg-gray-700;
+}
+
+.markdown>strong {
+    @apply font-bold;
+}
+
+.markdown>em {
+    @apply italic;
+}
+
+.markdown>del {
+    @apply line-through;
+}
+
+.markdown>h1,
+.markdown>h2,
+.markdown>h3,
+.markdown>h4,
+.markdown>h5,
+.markdown>h6 {
+    @apply my-4;
+}

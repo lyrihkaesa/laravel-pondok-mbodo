@@ -14,7 +14,12 @@ return new class extends Migration
         Schema::create('extracurriculars', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('category');
+            $table->string('slug')->unique();
+            $table->string('category')->nullable();
+            $table->text('description')->nullable();
+            $table->string('thumbnail')->nullable();
+            $table->text('vision')->nullable();
+            $table->text('mission')->nullable();
             $table->timestamps();
         });
     }

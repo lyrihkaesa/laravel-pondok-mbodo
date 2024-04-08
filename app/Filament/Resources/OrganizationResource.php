@@ -16,14 +16,61 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class OrganizationResource extends Resource
 {
     protected static ?string $model = Organization::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-library';
+    protected static ?string $navigationGroup = 'Manajemen Akademik';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Section::make('Profile Organisasi')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nama')
+                            ->required()
+                            ->debounce()
+                            ->minLength(1)
+                            ->maxLength(255)
+                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                                if ($operation === 'edit') {
+                                    return;
+                                }
+
+                                $set('slug', str()->slug($state));
+                            }),
+                        Forms\Components\TextInput::make('slug')
+                            ->label('Slug')
+                            ->minLength(1)
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true)
+                            ->required(),
+                        Forms\Components\MarkdownEditor::make('description')
+                            ->label('Deskripsi')
+                            ->disableToolbarButtons([
+                                'attachFiles',
+                            ]),
+                        Forms\Components\Select::make('category')
+                            ->label('Kategori')
+                            ->required()
+                            ->options([
+                                'Sekolah Formal' => 'Sekolah Formal',
+                                'Sekolah Madarasah' => 'Sekolah Madarasah',
+                                'Program Jurusan' => 'Program Jurusan',
+                                'Badan Lembaga' => 'Badan Lembaga',
+                            ])
+                            ->default('Badan Lembaga')
+                            ->native(false),
+                        Forms\Components\MarkdownEditor::make('vision')
+                            ->label('Visi')
+                            ->disableToolbarButtons([
+                                'attachFiles',
+                            ]),
+                        Forms\Components\MarkdownEditor::make('mission')
+                            ->label('Misi')
+                            ->disableToolbarButtons([
+                                'attachFiles',
+                            ]),
+                    ]),
             ]);
     }
 
@@ -31,7 +78,10 @@ class OrganizationResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nama'),
+                Tables\Columns\TextColumn::make('category')
+                    ->label('Kategori'),
             ])
             ->filters([
                 //
@@ -49,7 +99,10 @@ class OrganizationResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\UsersRelationManager::class,
+            RelationManagers\ProgramsRelationManager::class,
+            RelationManagers\PackagesRelationManager::class,
+            RelationManagers\ExtracurricularsRelationManager::class,
         ];
     }
 

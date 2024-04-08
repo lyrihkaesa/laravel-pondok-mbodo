@@ -1,8 +1,8 @@
 <!-- Header -->
 <div
-    class="grid gap-3 border-b border-gray-200 px-6 py-4 dark:border-gray-700 md:flex md:items-center md:justify-between">
+    class="grid gap-3 border-b border-gray-200 px-4 py-2 dark:border-gray-700 md:flex md:items-center md:justify-between md:px-6 md:py-4">
     <div>
-        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 md:text-xl">
             {{ $slot }}
         </h2>
     </div>

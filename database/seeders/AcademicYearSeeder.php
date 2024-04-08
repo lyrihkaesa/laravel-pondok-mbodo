@@ -15,13 +15,13 @@ class AcademicYearSeeder extends Seeder
     {
         AcademicYear::withoutEvents(function () {
             $startYear = 2019;
-            $endYear = 2024;
+            $endYear = 2025;
 
             $data = [];
 
             for ($year = $startYear; $year < $endYear; $year++) {
                 $academicYear = $year . '/' . ($year + 1);
-                $data[] = ['name' => $academicYear];
+                $data[] = ['name' => $academicYear, 'slug' => str($academicYear)->slug()];
             }
 
             AcademicYear::insert($data);

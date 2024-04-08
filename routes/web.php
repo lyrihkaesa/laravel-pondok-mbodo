@@ -10,6 +10,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/ppdb', \App\Livewire\Ppdb\Index::class)->name('ppdb.index');
     Route::get('/ppdb/formulir', \App\Livewire\StudentRegistrationForm::class)->name('student-registration');
     Route::get('/ppdb/biaya', \App\Livewire\Ppdb\Price::class)->name('ppdb.price');
+    Route::get('/organizations/{slug}', App\Livewire\OrganizationShow::class)->name('organizations.show');
 });
 
 Route::get('/dashboard', function () {

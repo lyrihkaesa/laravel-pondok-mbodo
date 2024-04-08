@@ -14,9 +14,9 @@ class FileUtility
         //
     }
 
-    public static function getImageHelperText(string $prefix = ''): HtmlString
+    public static function getImageHelperText(string $prefix = '', string $suffix = ' Untuk backgorund warna merah gunakan **#DB1514** dan biru gunakan **#0090FF**.'): HtmlString
     {
-        return str($prefix . 'File harus berformat **.jpg**, **.jpeg**, **.png** dan berukuran maksimal **500KB**. Untuk backgorund warna merah gunakan **#DB1514** dan biru gunakan **#0090FF**.')->inlineMarkdown()->toHtmlString();
+        return str($prefix . 'File harus berformat **.jpg**, **.jpeg**, **.png** dan berukuran maksimal **500KB**.' . $suffix)->inlineMarkdown()->toHtmlString();
     }
 
     public static function getPdfHelperText(string $prefix = ''): HtmlString
@@ -24,7 +24,7 @@ class FileUtility
         return str($prefix . 'File harus berformat **.pdf** dan berukuran maksimal **500KB**.')->inlineMarkdown()->toHtmlString();
     }
 
-    public static function generateFileName(string $uniqueValue, string $fileNameWithExtension, ?string $suffixLabel): string
+    public static function generateFileName(string $uniqueValue, string $fileNameWithExtension, ?string $suffixLabel = null): string
     {
         $extension = pathinfo($fileNameWithExtension, PATHINFO_EXTENSION);
         $suffixLabel = $suffixLabel ? '-' . $suffixLabel : '';

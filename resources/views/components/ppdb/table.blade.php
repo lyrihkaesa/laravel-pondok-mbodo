@@ -2,7 +2,7 @@
  <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
      <thead class="bg-gray-50 dark:bg-slate-800">
          <tr>
-             <th scope="col" class="whitespace-nowrap px-6 py-3 text-start">
+             <th scope="col" class="whitespace-nowrap px-4 py-2 text-start md:px-6 md:py-3">
                  <div class="flex items-center gap-x-2">
                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                          Keterangan
@@ -10,7 +10,7 @@
                  </div>
              </th>
 
-             <th scope="col" class="whitespace-nowrap px-6 py-3">
+             <th scope="col" class="whitespace-nowrap px-4 py-2 md:px-6 md:py-3">
                  <div class="flex items-center justify-end gap-x-2">
                      <span class="text-xs font-semibold uppercase tracking-wide text-gray-800 dark:text-gray-200">
                          Biaya
