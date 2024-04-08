@@ -1,0 +1,1 @@
+ngrok start --config=conf/pondokmbodo.yml --region=ap laragon

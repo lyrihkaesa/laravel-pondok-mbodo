@@ -1,0 +1,9 @@
+web_addr: localhost:4790
+version: "2"
+region: ap
+authtoken: random-string // https://dashboard.ngrok.com/get-started/your-authtoken
+tunnels:
+    laragon:
+        addr: pondokmbodo.test:80
+        proto: http
+        host_header: rewrite
