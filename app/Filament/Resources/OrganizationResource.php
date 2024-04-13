@@ -103,6 +103,7 @@ class OrganizationResource extends Resource
             RelationManagers\ProgramsRelationManager::class,
             RelationManagers\PackagesRelationManager::class,
             RelationManagers\ExtracurricularsRelationManager::class,
+            RelationManagers\FacilitiesRelationManager::class,
         ];
     }
 

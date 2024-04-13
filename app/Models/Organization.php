@@ -38,4 +38,9 @@ class Organization extends Model
     {
         return $this->belongsToMany(Package::class);
     }
+
+    public function facilities(): BelongsToMany
+    {
+        return $this->belongsToMany(Facility::class);
+    }
 }

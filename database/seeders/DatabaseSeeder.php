@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             PackageSeeder::class,
             ExtracurricularSeeder::class,
+            OrganizationSeeder::class,
         ]);
     }
 }
