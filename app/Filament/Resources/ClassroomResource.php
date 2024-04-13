@@ -32,8 +32,8 @@ class ClassroomResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->required()
                     ->label('Nama Kelas')
+                    ->required()
                     ->placeholder('Contoh: SMP Kelas 1')->live(debounce: 500)->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
                         $academicYearId = $get('academic_year_id');
                         if ($academicYearId) {
@@ -46,13 +46,15 @@ class ClassroomResource extends Resource
                         }
                     }),
                 Select::make('academic_year_id')
+                    ->label('Tahun Ajaran')
                     ->required()
                     ->relationship('academicYear', 'name',  modifyQueryUsing: function (Builder $query) {
                         $query->orderByDesc('name');
                     })
                     ->searchable()
                     ->preload()
-                    ->label('Tahun Ajaran')->live(debounce: 500)->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
+                    ->live(debounce: 500)
+                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
                         $academicYearId = $state;
                         if ($academicYearId) {
                             $academicYear = AcademicYear::find($academicYearId);
@@ -63,13 +65,17 @@ class ClassroomResource extends Resource
                             $set('combined_name', null);
                         }
                     }),
-                Select::make('school_id')
+                Select::make('organisation_id')
+                    ->label('Organisasi')
                     ->required()
-                    ->relationship('school', 'name')
+                    ->relationship('organisation', 'name')
                     ->searchable()
-                    ->preload()
-                    ->label('Sekolah/Jurusan'),
-                TextInput::make('combined_name')->required()->label('Kombinasi Nama')->live()->unique(),
+                    ->preload(),
+                TextInput::make('combined_name')
+                    ->label('Kombinasi Nama')
+                    ->required()
+                    ->live()
+                    ->unique(),
                 Select::make('homeroom_teacher_id')
                     ->required()
                     ->relationship('homeroomTeacher', 'name')
@@ -83,11 +89,20 @@ class ClassroomResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Nama')->searchable(),
-                TextColumn::make('school.name')->label('Sekolah/Jurusan'),
-                TextColumn::make('homeroomTeacher.name')->label('Wali Kelas'),
-                TextColumn::make('combined_name')->label('Tahun Ajaran'),
-                TextColumn::make('students_count')->badge()->color('pink')->counts('students')->label('Jumlah Siswa'),
+                TextColumn::make('name')
+                    ->label('Nama')
+                    ->searchable(),
+                TextColumn::make('organisation.name')
+                    ->label('Organisasi'),
+                TextColumn::make('homeroomTeacher.name')
+                    ->label('Wali Kelas'),
+                TextColumn::make('combined_name')
+                    ->label('Tahun Ajaran'),
+                TextColumn::make('students_count')
+                    ->label('Jumlah Siswa')
+                    ->badge()
+                    ->color('pink')
+                    ->counts('students'),
             ])
             ->filters([
                 //

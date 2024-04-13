@@ -20,9 +20,9 @@ class Classroom extends Model
         'combined_name',
     ];
 
-    public function school(): BelongsTo
+    public function organisation(): BelongsTo
     {
-        return $this->belongsTo(School::class, 'school_id', 'id');
+        return $this->belongsTo(Organization::class, 'organization_id', 'id');
     }
 
     public function academicYear(): BelongsTo

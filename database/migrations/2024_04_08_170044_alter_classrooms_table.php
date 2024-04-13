@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::table('classrooms', function (Blueprint $table) {
             $table->dropForeign(['school_id']);
             $table->dropColumn('school_id');
+            $table->unsignedBigInteger('organization_id')->nullable()->after('combined_name');
+            $table->foreign('organization_id')->references('id')->on('organizations')->nullOnDelete();
         });
     }
 
@@ -25,6 +27,8 @@ return new class extends Migration
         Schema::table('classrooms', function (Blueprint $table) {
             $table->unsignedBigInteger('school_id')->nullable()->after('combined_name');
             $table->foreign('school_id')->references('id')->on('schools')->nullOnDelete();
+            $table->dropForeign(['organization_id']);
+            $table->dropColumn('organization_id');
         });
     }
 };
