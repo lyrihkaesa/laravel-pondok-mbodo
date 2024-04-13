@@ -26,7 +26,25 @@ class AcademicYearResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required(),
+                TextInput::make('name')
+                    ->label('Nama')
+                    ->required()
+                    ->debounce()
+                    ->minLength(1)
+                    ->maxLength(255)
+                    ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
+                        if ($operation === 'edit') {
+                            return;
+                        }
+
+                        $set('slug', str()->slug($state));
+                    }),
+                TextInput::make('slug')
+                    ->label('Slug')
+                    ->minLength(1)
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true)
+                    ->required(),
             ]);
     }
 
@@ -34,7 +52,14 @@ class AcademicYearResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Nama')->searchable()->sortable(),
+                TextColumn::make('name')
+                    ->label('Nama')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('slug')
+                    ->label('Slug')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //
