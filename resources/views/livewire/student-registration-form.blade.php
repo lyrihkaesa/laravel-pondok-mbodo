@@ -16,11 +16,15 @@
     <form wire:submit="create">
         {{ $this->form }}
 
-        <div class="my-4">
+        <x-filament::section aside class="my-4 lg:my-6">
+            <x-slot name="heading">
+
+            </x-slot>
             <x-filament::button type="submit" class="w-full" size="lg">
                 Daftar
             </x-filament::button>
-        </div>
+        </x-filament::section>
+
     </form>
 
     <x-filament-actions::modals />

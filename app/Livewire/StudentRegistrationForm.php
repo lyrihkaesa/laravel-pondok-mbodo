@@ -19,99 +19,87 @@ class StudentRegistrationForm extends Component implements HasForms
 
     public ?array $data = [];
 
-    // public function mount(): void
-    // {
-    //     $this->form->fill();
-    // }
+    public function mount(): void
+    {
+        $this->form->fill();
+    }
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Informasi pribadi')
-                    ->description('Informasi pribadi yang dimiliki oleh santri')
+                Forms\Components\Section::make('Identitas Pribadi')
+                    ->description('Informasi tentang data diri calon santri. Klik auto input data dari NIK untuk memasukkan beberapa data secara otomatis.')
+                    ->aside()
                     ->schema([
-                        Forms\Components\Grid::make(1)->schema([
-                            Forms\Components\TextInput::make('name')
-                                ->label('Nama Lengkap')
-                                ->placeholder('Susilo Bambang')
-                                ->required(),
-                            Forms\Components\TextInput::make('nik')
-                                ->label('NIK')
-                                ->placeholder('331504090919990001')
-                                ->required()
-                                ->length(16)
-                                // ->helperText(fn (?string $state, Forms\Components\TextInput $component) => strlen($state) . '/' . $component->getMaxLength())
-                                ->hintActions([
-                                    Forms\Components\Actions\Action::make('autoInputAddress')
-                                        ->label('Auto Input Data dari NIK')
-                                        ->badge()
-                                        ->icon('heroicon-c-paint-brush')
-                                        ->color('warning')
-                                        // ->closeModalByClickingAway(false)
-                                        ->requiresConfirmation()
-                                        ->modalIcon('heroicon-c-paint-brush')
-                                        ->modalHeading('Auto Input Data dari NIK')
-                                        ->modalDescription('Apakah anda yakin ingin auto input data "Jenis Kelamin, Tempat dan Tanggal Lahir, Provinsi, Kabupaten/Kota, Kecamatan" dari NIK?')
-                                        ->modalSubmitActionLabel('Ya, input semuanya')
-                                        ->action(function (?String $state, Forms\Get $get, Forms\Set $set) {
-                                            if ($state !== null) {
-                                                if (strlen($state) === 16) {
-                                                    $result = \App\Utilities\NikUtility::parseNIK($state);
-                                                    $set('gender', $result->gender);
-                                                    $set('province', $result->province);
-                                                    $set('regency', $result->regency);
-                                                    $set('district', $result->district);
-                                                    $set('birth_place', \Creasi\Nusa\Models\Regency::where('code', $result->regency)->first()->name);
-                                                    $set('birth_date', $result->birthDate);
-                                                }
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nama Lengkap')
+                            ->placeholder('Ahmad Nur Rohman')
+                            ->required(),
+                        Forms\Components\TextInput::make('nik')
+                            ->label('NIK')
+                            ->placeholder('331504090919990001')
+                            ->required()
+                            ->length(16)
+                            ->hintActions([
+                                Forms\Components\Actions\Action::make('autoInputAddress')
+                                    ->label('Auto Input Data dari NIK')
+                                    ->badge()
+                                    ->icon('heroicon-c-paint-brush')
+                                    ->color('warning')
+                                    ->closeModalByClickingAway(false)
+                                    ->requiresConfirmation()
+                                    ->modalIcon('heroicon-c-paint-brush')
+                                    ->modalHeading('Auto Input Data dari NIK')
+                                    ->modalDescription('Apakah anda yakin ingin auto input data "Jenis Kelamin, Tempat dan Tanggal Lahir, Provinsi, Kabupaten/Kota, Kecamatan" dari NIK?')
+                                    ->modalSubmitActionLabel('Ya, input semuanya')
+                                    ->action(function (?String $state, Forms\Get $get, Forms\Set $set) {
+                                        if ($state !== null) {
+                                            if (strlen($state) === 16) {
+                                                $result = \App\Utilities\NikUtility::parseNIK($state);
+                                                $set('gender', $result->gender);
+                                                $set('province', $result->province);
+                                                $set('regency', $result->regency);
+                                                $set('district', $result->district);
+                                                $set('birth_place', \Creasi\Nusa\Models\Regency::where('code', $result->regency)->first()->name);
+                                                $set('birth_date', $result->birthDate);
                                             }
-                                        }),
-                                ]),
-                            Forms\Components\ToggleButtons::make('gender')
-                                ->label('Jenis Kelamin')
-                                ->options([
-                                    'Laki-Laki' => 'Laki-Laki',
-                                    'Perempuan' => 'Perempuan',
-                                ])->colors([
-                                    'Laki-Laki' => 'info',
-                                    'Perempuan' => 'pink',
-                                ])
-                                ->required()
-                                ->default('Laki-Laki')
-                                ->inline(),
-                            Forms\Components\Grid::make([
-                                'default' => 1,
-                                'sm' => 2,
-                            ])->schema([
-                                Forms\Components\TextInput::make('birth_place')
-                                    ->label('Tempat Lahir')
-                                    ->placeholder('Grobogan'),
-                                Forms\Components\DatePicker::make('birth_date')
-                                    ->label('Tanggal Lahir'),
-                            ])->columnSpan(1),
-                        ])->columnSpan(1),
-                        Forms\Components\Grid::make(1)->schema([
-                            Forms\Components\FileUpload::make('profile_picture_1x1')
-                                ->label('Foto Profil 1x1')
-                                ->helperText(\App\Utilities\FileUtility::getImageHelperText())
-                                ->getUploadedFileNameForStorageUsing(
-                                    function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                        return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-1x1');
-                                    }
-                                )
-                                ->image()
-                                ->downloadable()
-                                ->openable()
-                                ->directory('profile_picture'),
+                                        }
+                                    }),
+                            ]),
+                        Forms\Components\ToggleButtons::make('gender')
+                            ->label('Jenis Kelamin')
+                            ->options([
+                                'Laki-Laki' => 'Laki-Laki',
+                                'Perempuan' => 'Perempuan',
+                            ])->colors([
+                                'Laki-Laki' => 'info',
+                                'Perempuan' => 'pink',
+                            ])
+                            ->required()
+                            ->default('Laki-Laki')
+                            ->inline(),
+                        Forms\Components\Grid::make([
+                            'default' => 1,
+                            'sm' => 2,
+                        ])->schema([
+                            Forms\Components\TextInput::make('birth_place')
+                                ->label('Tempat Lahir')
+                                ->placeholder('Grobogan'),
+                            Forms\Components\DatePicker::make('birth_date')
+                                ->label('Tanggal Lahir'),
                         ])->columnSpan(1),
                     ])
                     ->columns(2),
-                Forms\Components\Section::make('Alamat')
+
+                Forms\Components\Section::make('Informasi Alamat')
+                    ->description('Informasi tempat tinggal calon santri. Klik auto input data dari NIK untuk memasukkan beberapa data secara otomatis.')
+                    ->aside()
                     ->schema([
                         Forms\Components\Select::make('province')
                             ->label('Provinsi')
                             ->options(\App\Utilities\NikUtility::$provinces)
+                            ->live()
                             ->afterStateUpdated(function (?string $state, ?string $old, Forms\Set $set) {
                                 // dd($state);
                                 if ($state !== $old) {
@@ -121,8 +109,7 @@ class StudentRegistrationForm extends Component implements HasForms
                                 }
                                 return $state;
                             })
-                            ->live(),
-                        // ->searchable(),
+                            ->searchable(),
                         Forms\Components\Select::make('regency')
                             ->label('Kabupaten/Kota')
                             ->disabled(fn (Forms\Get $get): bool => $get('province') == null)
@@ -143,8 +130,8 @@ class StudentRegistrationForm extends Component implements HasForms
                                     $set('village', null);
                                 }
                                 return $state;
-                            }),
-                        // ->searchable(fn (Forms\Get $get): bool => $get('province') != null),
+                            })
+                            ->searchable(fn (Forms\Get $get): bool => $get('province') != null),
                         Forms\Components\Select::make('district')
                             ->label('Kecamatan')
                             ->disabled(fn (Forms\Get $get): bool => $get('regency') == null)
@@ -163,8 +150,8 @@ class StudentRegistrationForm extends Component implements HasForms
                                     $set('village', null);
                                 }
                                 return $state;
-                            }),
-                        // ->searchable(fn (Forms\Get $get): bool => $get('regency') != null),
+                            })
+                            ->searchable(fn (Forms\Get $get): bool => $get('regency') != null),
                         Forms\Components\Select::make('village')
                             ->label('Desa/Kelurahan')
                             ->disabled(fn (Forms\Get $get): bool => $get('district') == null)
@@ -177,20 +164,10 @@ class StudentRegistrationForm extends Component implements HasForms
                                     }
                                 }
                                 return $villages;
-                            }),
-                        // ->live()
-                        // ->afterStateUpdated(function (?string $state, Forms\Set $set) {
-                        //     if ($state !== null) {
-                        //         $village = \Creasi\Nusa\Models\Village::where('code', $state)->first();
-                        //         if ($village !== null) {
-                        //             $set('postcode', $village->postal_code);
-                        //         }
-                        //     }
-                        //     return $state;
-                        // })
-                        // ->searchable(fn (Forms\Get $get): bool => $get('district') != null),
+                            })
+                            ->searchable(fn (Forms\Get $get): bool => $get('district') != null),
                         Forms\Components\Textarea::make('address')
-                            ->label('Alamat')
+                            ->label('Alamat Lengkap')
                             ->autosize()
                             ->placeholder('Dusun Sendangsari, Jl Sendangsari'),
                         Forms\Components\Grid::make([
@@ -219,10 +196,8 @@ class StudentRegistrationForm extends Component implements HasForms
                                                 $villageField = $get('village');
                                                 if ($villageField !== null) {
                                                     $village = \Creasi\Nusa\Models\Village::where('code', $villageField)->first();
-                                                    // dd($village);
                                                     if ($village !== null) {
                                                         $set('postcode', $village->postal_code);
-                                                        // dd($set('postcode', $village->postal_code));
                                                     }
                                                 }
                                             }),
@@ -230,58 +205,73 @@ class StudentRegistrationForm extends Component implements HasForms
                             ])->columnSpan(1),
 
                     ])->columns(2),
-                Forms\Components\Section::make('Status Akademik')
+
+                Forms\Components\Section::make('Informasi Akademik')
+                    ->description('Informasi tentang data akademis calon santri, serta memilih kategori santri dan sekolah.')
+                    ->aside()
                     ->schema([
-                        Forms\Components\TextInput::make('nisn')
-                            ->label('NISN (Nomor Induk Siswa Nasional)')
-                            ->unique(ignoreRecord: true),
-                        Forms\Components\TextInput::make('current_name_school')
-                            ->label('Asal Sekolah')
-                            ->placeholder('SD/SMP/SMA/SMK Negeri 1 Purwodadi'),
-                        Forms\Components\ToggleButtons::make('current_school')
-                            ->label('Sekolah')
-                            ->inline()
-                            ->options([
-                                'PAUD' => 'PAUD',
-                                'TK' => 'TK',
-                                'SD' => 'SD',
-                                'SMP' => 'SMP',
-                                'SMA' => 'SMA',
-                                'SMK' => 'SMK',
+                        Forms\Components\Group::make()
+                            ->schema([
+                                Forms\Components\TextInput::make('nisn')
+                                    ->label('NISN (Nomor Induk Siswa Nasional)')
+                                    ->unique(ignoreRecord: true),
+                                Forms\Components\TextInput::make('kip')
+                                    ->label('KIP (Kartu Indonesia Pintar)')
+                                    ->unique(ignoreRecord: true),
+                                Forms\Components\TextInput::make('current_name_school')
+                                    ->label('Asal Sekolah')
+                                    ->placeholder('SD Negeri 2 Danyang'),
                             ])
-                            ->required()
-                            ->default('PAUD'),
-                        // Forms\Components\ToggleButtons::make('status')
-                        //     ->label('Status')
-                        //     ->options([
-                        //         'Pendaftaran Awal' => 'Pendaftaran Awal',
-                        //         'Pendaftaran Akhir' => 'Pendaftaran Akhir',
-                        //         'Aktif' => 'Aktif',
-                        //         'Lulus' => 'Lulus',
-                        //         'Tidak Aktif' => 'Tidak Aktif',
-                        //     ])
-                        //     ->inline()
-                        //     ->required()
-                        //     ->default('Aktif'),
-                        Forms\Components\ToggleButtons::make('type')
-                            ->label('Tipe')
-                            ->options([
-                                'Santri Reguler' => 'Santri Reguler',
-                                'Santri Khidmah' => 'Santri Khidmah',
-                            ])
-                            ->inline()
-                            ->required()
-                            ->default('Santri Reguler')
-                            ->live(),
-                    ])
-                    ->columns(2),
-                Forms\Components\Section::make('Kontak dan keamanan')
+                            ->columns(3),
+                        Forms\Components\Group::make()
+                            ->schema([
+                                Forms\Components\ToggleButtons::make('category')
+                                    ->label('Kategori')
+                                    ->inline()
+                                    ->options([
+                                        'Santri Reguler' => 'Santri Reguler',
+                                        'Santri Ndalem' => 'Santri Ndalem',
+                                        'Santri Berprestasi' => 'Santri Berprestasi',
+                                    ])
+                                    ->colors([
+                                        'Santri Reguler' => 'info',
+                                        'Santri Ndalem' => 'warning',
+                                        'Santri Berprestasi' => 'success',
+                                    ])
+                                    ->required()
+                                    ->default('Santri Reguler'),
+                                Forms\Components\ToggleButtons::make('current_school')
+                                    ->label('Sekolah')
+                                    ->inline()
+                                    ->options([
+                                        'PAUD/TK' => 'PAUD/TK',
+                                        'MI' => 'MI',
+                                        'SMP' => 'SMP',
+                                        'MA' => 'MA',
+                                        'Takhasus' => 'Takhasus',
+                                    ])
+                                    ->colors([
+                                        'PAUD/TK' => 'pink',
+                                        'MI' => 'danger',
+                                        'SMP' => 'warning',
+                                        'MA' => 'success',
+                                        'Takhasus' => 'info',
+                                    ])
+                                    ->required()
+                                    ->default('PAUD/TK'),
+                            ]),
+                    ]),
+
+                Forms\Components\Section::make('Informasi Kontak dan keamanan')
+                    ->description('Digunakan untuk konfirmasi pendafaran dan login sebagai santri.')
+                    ->aside()
                     ->schema([
                         Forms\Components\TextInput::make('phone')
-                            ->label('Nomor Telepon')
+                            ->label('Nomor Telepon (Whatsapp)')
                             ->required()
                             ->tel()
-                            ->placeholder('Contoh: 628123456789')
+                            ->placeholder('628123456789')
+                            ->helperText('Ganti awalan 0 menjadi 62. Seperti nomor 08123456789 ke 628123456789.')
                             ->unique(table: 'users', column: 'phone', modifyRuleUsing: function (Unique $rule,  Component $livewire, string $operation) {
                                 if ($operation === 'edit') {
                                     return $rule->ignore($livewire->data['user_id'], "id");
@@ -298,6 +288,7 @@ class StudentRegistrationForm extends Component implements HasForms
                         Forms\Components\TextInput::make('password')
                             ->label('Kata Sandi')
                             ->password()
+                            ->revealable()
                             ->helperText(function (string $operation, Forms\Get $get) {
                                 if ($operation === 'create') {
                                     return 'Jika kata sandi tidak di isi, kata sandi akan dibuat secara automatis, nama depan dengan huruf kecil + 4 angka terakhir nomor telepon + tanggal lahir dengan format: 09092002';
@@ -307,189 +298,201 @@ class StudentRegistrationForm extends Component implements HasForms
                                 }
                             }),
                     ])->columns(2),
-                Forms\Components\Section::make('Berkas')
+                Forms\Components\Section::make('Informasi Orang Tua')
+                    ->description('Informasi tentang data orang tua calon santri.')
+                    ->aside()
+                    ->compact()
                     ->schema([
-                        Forms\Components\FileUpload::make('profile_picture_3x4')
-                            ->label('Foto Profil 3x4')
-                            ->helperText(\App\Utilities\FileUtility::getImageHelperText())
-                            ->getUploadedFileNameForStorageUsing(
-                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-3x4');
-                                }
-                            )
-                            ->image()
-                            ->downloadable()
-                            ->openable()
-                            ->directory('profile_picture'),
-                        Forms\Components\FileUpload::make('profile_picture_4x6')
-                            ->label('Foto Profil 2x3/4x6')
-                            ->helperText(\App\Utilities\FileUtility::getImageHelperText(prefix: 'Pilih salah satu ukuran 2x3 atau 4x6, rekomendasi 4x6. '))
-                            ->getUploadedFileNameForStorageUsing(
-                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-4x6');
-                                }
-                            )
-                            ->image()
-                            ->downloadable()
-                            ->openable()
-                            ->directory('profile_picture'),
-                        Forms\Components\FileUpload::make('birth_certificate')
-                            ->label('Akta Kelahiran')
-                            ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
-                            ->getUploadedFileNameForStorageUsing(
-                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'akta-kelahiran');
-                                }
-                            )
-                            ->acceptedFileTypes(['application/pdf'])
-                            ->downloadable()
-                            ->directory('akta_kelahiran'),
-                        Forms\Components\FileUpload::make('family_card')
-                            ->label('Kartu Keluarga (KK)')
-                            ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
-                            ->getUploadedFileNameForStorageUsing(
-                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'kk');
-                                }
-                            )
-                            ->acceptedFileTypes(['application/pdf'])
-                            ->downloadable()
-                            ->directory('kartu_keluarga')
-                            ->hintActions([
-                                Forms\Components\Actions\Action::make('preview-fc')
-                                    ->label('Lihat Berkas')
-                                    ->icon('heroicon-c-eye')
-                                    ->color('warning')
-                                    // ->iconButton()
-                                    ->closeModalByClickingAway(false)
-                                    ->modal()
-                                    ->modalContent(
-                                        function (array $state, ?string $operation) {
-                                            if (empty($state)) {
-                                                return str('Berkas tidak ditemukan!')->toHtmlString();
-                                            }
-
-                                            // $value is string | TemporaryUploadedFile
-                                            $value = array_values($state)[0];
-
-                                            if ($operation === 'create' && $value instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
-                                                $url = $value->temporaryUrl();
-                                                $iframe = '<iframe src="' . $url . '" height="100%"></iframe>';
-                                                return str($iframe)->toHtmlString();
-                                            }
-
-                                            if ($operation === 'edit' && is_string($value)) {
-                                                $src = asset('storage/' . $value);
-                                                $iframe = '<iframe src="' . $src . '" height="100%"></iframe>';
-                                                return str($iframe)->toHtmlString();
-                                            }
+                        Forms\Components\Section::make('Ayah')
+                            ->schema([
+                                Forms\Components\TextInput::make('father_name')
+                                    ->label('Nama Lengkap')
+                                    ->placeholder('Bambang Susanto')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('father_nik')
+                                    ->label('NIK')
+                                    ->placeholder('331504090919990001')
+                                    ->required()
+                                    ->length(16),
+                                Forms\Components\TextInput::make('father_job')
+                                    ->label('Pekerjaan')
+                                    ->placeholder('Petani/Wiraswasta/Wirausaha/dll')
+                                    ->required(),
+                                Forms\Components\TextInput::make('father_phone')
+                                    ->label('Nomor Telepon (Whatsapp)')
+                                    ->tel()
+                                    ->required()
+                                    ->placeholder('6281234567890')
+                                    ->helperText('Ganti awalan 0 menjadi 62. Seperti nomor 08123456789 ke 628123456789.')
+                                    ->maxLength(255),
+                                Forms\Components\Textarea::make('father_address')
+                                    ->label('Alamat Lengkap')
+                                    ->placeholder('Jl. Senangsari, Dusun Sendangsari, RT 005, RW 007, Desa Tambirejo, Kec. Toroh, Kab. Grobogan, Prov. Jawa Tengah.')
+                                    ->autosize()
+                                    ->maxLength(255)
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(2),
+                        Forms\Components\Section::make('Ibu')
+                            ->schema([
+                                Forms\Components\TextInput::make('mother_name')
+                                    ->label('Nama Lengkap')
+                                    ->placeholder('Bambang Susanto')
+                                    ->required()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('mother_nik')
+                                    ->label('NIK')
+                                    ->placeholder('331504090919990001')
+                                    ->required()
+                                    ->length(16),
+                                Forms\Components\TextInput::make('mother_job')
+                                    ->label('Pekerjaan')
+                                    ->placeholder('Petani/Wiraswasta/Wirausaha/dll')
+                                    ->required(),
+                                Forms\Components\TextInput::make('mother_phone')
+                                    ->label('Nomor Telepon (Whatsapp)')
+                                    ->tel()
+                                    ->required()
+                                    ->placeholder('6281234567890')
+                                    ->helperText('Ganti awalan 0 menjadi 62. Seperti nomor 08123456789 ke 628123456789.')
+                                    ->maxLength(255),
+                                Forms\Components\Textarea::make('mother_address')
+                                    ->label('Alamat Lengkap')
+                                    ->placeholder('Jl. Senangsari, Dusun Sendangsari, RT 005, RW 007, Desa Tambirejo, Kec. Toroh, Kab. Grobogan, Prov. Jawa Tengah.')
+                                    ->autosize()
+                                    ->maxLength(255)
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(2),
+                        Forms\Components\Section::make('Wali Lainnya (Opsional)')
+                            ->description('Isi ini jika walinya bukan Orang Tua (Ayah dan Ibu).')
+                            ->schema([
+                                Forms\Components\Repeater::make('guardians')
+                                    ->label(false)
+                                    ->schema([
+                                        Forms\Components\TextInput::make('name')
+                                            ->label('Nama Lengkap')
+                                            ->placeholder('Bambang Susanto')
+                                            ->required()
+                                            ->maxLength(255),
+                                        Forms\Components\Select::make('relationship')
+                                            ->label('Hubungan Keluarga')
+                                            ->options([
+                                                'Ayah' => '<span class="text-blue-600 dark:text-blue-400">Ayah</span>',
+                                                'Ibu' => '<span class="text-pink-600 dark:text-pink-400">Ibu</span>',
+                                                'Saudara Laki-Laki' => '<span class="text-amber-600 dark:text-amber-400">Saudara Laki-Laki</span>',
+                                                'Saudara Perempuan' => '<span class="text-red-600 dark:text-red-400">Saudara Perempuan</span>',
+                                            ])
+                                            ->native(false)
+                                            ->allowHtml(true)
+                                            ->createOptionForm([
+                                                Forms\Components\TextInput::make('name')
+                                                    ->label('Hubungan Keluarga')
+                                                    ->required()
+                                                    ->placeholder('Paman / Bude / Kakek / Nenek')
+                                                    ->maxLength(255),
+                                            ])
+                                            ->createOptionUsing(function (array $data) {
+                                                if (!isset($data['name'])) {
+                                                    return 'Ayah';
+                                                }
+                                                return ucwords($data['name']);
+                                            })
+                                            ->required(),
+                                        Forms\Components\TextInput::make('nik')
+                                            ->label('NIK')
+                                            ->placeholder('331504090919990001')
+                                            ->required()
+                                            ->length(16),
+                                        Forms\Components\TextInput::make('job')
+                                            ->label('Pekerjaan')
+                                            ->placeholder('Petani/Wiraswasta/Wirausaha/dll')
+                                            ->required(),
+                                        Forms\Components\TextInput::make('phone')
+                                            ->label('Nomor Telepon (Whatsapp)')
+                                            ->tel()
+                                            ->required()
+                                            ->placeholder('6281234567890')
+                                            ->helperText('Ganti awalan 0 menjadi 62. Seperti nomor 08123456789 ke 628123456789.')
+                                            ->maxLength(255),
+                                        Forms\Components\Textarea::make('address')
+                                            ->label('Alamat Lengkap')
+                                            ->placeholder('Jl. Senangsari, Dusun Sendangsari, RT 005, RW 007, Desa Tambirejo, Kec. Toroh, Kab. Grobogan, Prov. Jawa Tengah.')
+                                            ->autosize()
+                                            ->maxLength(255),
+                                    ])
+                                    ->defaultItems(0)
+                                    // ->collapsed()
+                                    ->columns(2)
+                                    ->itemLabel(fn (array $state): ?string => $state['relationship'] . ' : ' . $state['name'] ?? null)
+                                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data, Component $livewire, $record, string $operation): array|null {
+                                        $guardian = \App\Models\Guardian::where('nik', $data['nik'])
+                                            ->where('phone', $data['phone'])
+                                            ->first();
+                                        dump(['Before Create', $data, $livewire->data, $record, $guardian, $operation]);
+                                        // dd(['Before Create', $data, $livewire->data, $record, $guardian, $operation]);
+                                        // dump($guardian);
+                                        if ($guardian) {
+                                            // dd(['Before Create', $data, $livewire->data, $record->id, $guardian]);
+                                            $guardian->students()->syncWithoutDetaching($record->id);
+                                            return null;
+                                        } else {
+                                            return $data;
                                         }
-                                    )
-                                    ->slideOver()
-                                    ->modalSubmitAction(false)
-                                    ->modalCancelAction(false),
-                            ]),
-                        Forms\Components\FileUpload::make('skhun')
-                            ->label('SKHUN Terlegalisir')
-                            ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
-                            ->getUploadedFileNameForStorageUsing(
-                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'akta-kelahiran');
-                                }
-                            )
-                            ->acceptedFileTypes(['application/pdf'])
-                            ->downloadable()
-                            ->directory('skhun'),
-                        Forms\Components\FileUpload::make('ijazah')
-                            ->label('Ijazah Terlegalisir')
-                            ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
-                            ->getUploadedFileNameForStorageUsing(
-                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'akta-kelahiran');
-                                }
-                            )
-                            ->acceptedFileTypes(['application/pdf'])
-                            ->downloadable()
-                            ->directory('ijazah'),
-                    ])
-                    ->columns(2),
-                // Forms\Components\Section::make('Orang Tua/Wali')
-                //     ->schema([
-                //         Forms\Components\Repeater::make('guardians')
-                //             ->label(false)
-                //             ->schema([
-                //                 Forms\Components\TextInput::make('name')
-                //                     ->label('Nama Lengkap')
-                //                     ->required()
-                //                     ->maxLength(255),
-                //                 Forms\Components\Select::make('relationship')
-                //                     ->label('Hubungan Keluarga')
-                //                     ->native(false)
-                //                     ->options([
-                //                         'Ayah' => '<span class="text-blue-600 dark:text-blue-400">Ayah</span>',
-                //                         'Ibu' => '<span class="text-pink-600 dark:text-pink-400">Ibu</span>',
-                //                     ])
-                //                     ->allowHtml(true)
-                //                     ->createOptionForm([
-                //                         Forms\Components\TextInput::make('name')
-                //                             ->label('Hubungan Keluarga')
-                //                             ->required()
-                //                             ->placeholder('Paman / Bude / Kakek / Nenek')
-                //                             ->maxLength(255),
-                //                     ])
-                //                     ->createOptionUsing(function (array $data) {
-                //                         if (!isset($data['name'])) {
-                //                             return 'Ayah';
-                //                         }
-                //                         return ucwords($data['name']);
-                //                     })
-                //                     ->required(),
-                //                 Forms\Components\Textarea::make('address')
-                //                     ->default(function ($livewire) {
-                //                         if (isset($livewire->data["address"])) {
-                //                             return $livewire->data["address"];
-                //                         }
-                //                     })
-                //                     ->label('Alamat')
-                //                     ->autosize()
-                //                     ->maxLength(255),
-                //                 Forms\Components\TextInput::make('phone')
-                //                     ->label('Nomor Telepon')
-                //                     ->tel()
-                //                     ->required()
-                //                     ->placeholder('081234567890')
-                //                     ->maxLength(255),
-                //             ])
-                //             ->relationship('guardians')
-                //             // ->collapsed()
-                //             ->columns(2)
-                //             ->itemLabel(fn (array $state): ?string => $state['relationship'] . ' : ' . $state['name'] ?? null)
-                //     ])
-                //     ->collapsible(),
-                Forms\Components\Section::make('Pernyataan Persetujuan')
-                    ->schema([
-                        Forms\Components\Checkbox::make('term_01')
-                            ->label('Saya bersedia melunasi biaya pendidikan diawal karena putra/putri kami tidak mendaftar sebagai Santri Khidmah.')
-                            ->live(onBlur: true)
-                            ->visible(fn (Forms\Get $get) => $get('type') === 'Santri Reguler'),
-                        Forms\Components\Checkbox::make('term_02')
-                            ->label('Saya meridhoi putra/putri kami sebagai Santri Khidmah dengan ketentuan - ketentuan yang telah ditetapkan.')
-                            ->live()
-                            ->visible(fn (Forms\Get $get) => $get('type') === 'Santri Khidmah'),
-                        Forms\Components\Checkbox::make('term_03')
-                            ->label('Apabila dikemudian hari putra/putri kami mengundurkan diri dengan alasan apapun, biaya pendidikan yang sudah dibayarkan tidak bisa ditarik kembali.'),
-                        Forms\Components\Checkbox::make('term_04')
-                            ->label('Sanggup mematuhi tata tertib dan Undang Undang Pondok Pesantren Darul Falah Ki Ageng Mbodo.'),
-                        Forms\Components\Checkbox::make('term_05')
-                            ->label('Bersedia tinggal di Asrama Pondok dan mengikuti semua kegiatan pesantren.'),
-                        Forms\Components\Checkbox::make('term_06')
-                            ->label('Mengikuti sistem uang saku Pondok Pesantren Darul Falah Ki Ageng Mbodo.'),
-                        Forms\Components\Checkbox::make('term_07')
-                            ->label('Dengan mengirim data pendaftaran ini, kami setuju dengan semua peraturan Madrasah dan Pesantren yang berlaku.'),
-
+                                    })
+                                // ->mutateRelationshipDataBeforeSaveUsing(function (array $data, Livewire $livewire, $record, string $operation): array|null {
+                                //     $guardian = Guardian::where('nik', $data['nik'])
+                                //         ->where('phone', $data['phone'])
+                                //         ->first();
+                                //     dump(['Before Save', $data, $livewire->data, $record, $guardian, $operation]);
+                                //     // dd(['Before Create', $data, $livewire->data, $record, $guardian]);
+                                //     if ($guardian) {
+                                //         dump('ini jalan');
+                                //         $guardian->students()->syncWithoutDetaching($livewire->data['id']);
+                                //         return $data;
+                                //     } else {
+                                //         return $data;
+                                //     }
+                                // }),
+                            ])
                     ])
                     ->collapsible(),
+
+                Forms\Components\Section::make('Pernyataan Persetujuan')
+                    ->description('Baca dan setujui semua syarat dan ketentuan.')
+                    ->aside()
+                    ->schema([
+                        Forms\Components\Checkbox::make('term_01')
+                            ->label('Saya bersedia melunasi biaya pendidikan diawal karena putra/putri kami tidak mendaftar sebagai Santri Ndalem.')
+                            ->live(onBlur: true)
+                            ->visible(fn (Forms\Get $get) => $get('category') === 'Santri Reguler')
+                            ->accepted(fn (Forms\Get $get) => $get('category') === 'Santri Reguler'),
+                        Forms\Components\Checkbox::make('term_02')
+                            ->label('Saya meridhoi putra/putri kami sebagai Santri Ndalem dengan ketentuan - ketentuan yang telah ditetapkan.')
+                            ->live()
+                            ->visible(fn (Forms\Get $get) => $get('category') === 'Santri Ndalem')
+                            ->accepted(fn (Forms\Get $get) => $get('category') === 'Santri Ndalem'),
+                        Forms\Components\Checkbox::make('term_03')
+                            ->label('Apabila dikemudian hari putra/putri kami mengundurkan diri dengan alasan apapun, biaya pendidikan yang sudah dibayarkan tidak bisa ditarik kembali.')
+                            ->accepted(),
+                        Forms\Components\Checkbox::make('term_04')
+                            ->label('Sanggup mematuhi tata tertib dan Undang Undang Pondok Pesantren Darul Falah Ki Ageng Mbodo.')
+                            ->accepted(),
+                        Forms\Components\Checkbox::make('term_05')
+                            ->label('Bersedia tinggal di Asrama Pondok dan mengikuti semua kegiatan pesantren.')
+                            ->accepted(),
+                        Forms\Components\Checkbox::make('term_06')
+                            ->label('Mengikuti sistem uang saku Pondok Pesantren Darul Falah Ki Ageng Mbodo.')
+                            ->accepted(),
+                        Forms\Components\Checkbox::make('term_07')
+                            ->label('Dengan mengirim data pendaftaran ini, kami setuju dengan semua peraturan Madrasah dan Pesantren yang berlaku.')
+                            ->accepted(),
+                    ])
+                    ->collapsible(),
+
                 Forms\Components\Section::make('Lainnya')
+                    ->aside()
                     ->schema([
                         Forms\Components\Placeholder::make('syarat_pendaftaran')
                             ->content(new HtmlString('
