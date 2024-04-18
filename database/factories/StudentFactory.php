@@ -72,8 +72,9 @@ class StudentFactory extends Factory
             'rw' => $this->faker->randomElement($rtRwArray),
             'postcode' => $this->faker->postcode(),
             'user_id' => $user->id,
-            'status' => $this->faker->randomElement(['Aktif', 'Lulus', 'Tidak Aktif']),
-            'current_school' => $this->faker->randomElement(['PAUD', 'TK', 'SD', 'SMP', 'SMK']),
+            'status' => $this->faker->randomElement(['Mendaftar', 'Aktif', 'Lulus', 'Tidak Aktif']),
+            'current_school' => $this->faker->randomElement(['PAUD/TK', 'MI', 'SMP', 'MA', 'Takhasus']),
+            'category' => $this->faker->randomElement(['Santri Reguler', 'Santri Ndalem', 'Santri Berprestasi']),
         ];
     }
 }

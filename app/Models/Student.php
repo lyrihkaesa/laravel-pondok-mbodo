@@ -39,8 +39,8 @@ class Student extends Model
             ->using(StudentProduct::class)->withPivot('id');
     }
 
-    public function guardians()
+    public function guardians(): BelongsToMany
     {
-        return $this->hasMany(Guardian::class, 'student_id', 'id');
+        return $this->belongsToMany(Guardian::class);
     }
 }

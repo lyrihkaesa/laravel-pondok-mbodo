@@ -34,6 +34,7 @@ class EditStudent extends EditRecord
 
     protected function handleRecordUpdate(Model $record, $data): Model
     {
+        // dd([$data, $record]);
         $record->user->update([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -69,10 +70,5 @@ class EditStudent extends EditRecord
         ]);
 
         return $record;
-    }
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->previousUrl ?? $this->getResource()::getUrl('index');
     }
 }

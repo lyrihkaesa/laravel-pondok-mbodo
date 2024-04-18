@@ -15,9 +15,10 @@ class CreateStudent extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
+        // dd($data);
         // Generate password berdasarkan nama, 4 angka nomor handphone terakhir, dan tanggal lahir
         $password = $data['password'] ?? \App\Utilities\PasswordUtility::generatePassword($data['name'], $data['phone'], $data['birth_date']);
-        dd($password);
+        // dd($password);
 
         // Create User
         $user = User::create([
@@ -34,22 +35,34 @@ class CreateStudent extends CreateRecord
         // Create Student
         $record = static::getModel()::create([
             'name' => $data['name'],
-            'nis' => $data['nis'],
+            'nik' => $data['nik'],
             'gender' => $data['gender'],
+            'birth_place' => $data['birth_place'],
             'birth_date' => $data['birth_date'],
+            'profile_picture_1x1' => $data['profile_picture_1x1'],
             'province' => $data['province'],
             'regency' => $data['regency'],
             'district' => $data['district'],
             'village' => $data['village'],
+            'address' => $data['address'],
+            'rt' => $data['rt'],
+            'rw' => $data['rw'],
             'postcode' => $data['postcode'],
+            'nis' => $data['nis'],
+            'nisn' => $data['nisn'],
+            'kip' => $data['kip'],
+            'current_name_school' => $data['current_name_school'],
+            'category' => $data['category'],
+            'current_school' => $data['current_school'],
+            'status' => $data['status'],
+            'birth_certificate' => $data['birth_certificate'],
+            'family_card' => $data['family_card'],
+            // 'number_family_card' => $data['number_family_card'],
+            // 'skhun' => $data['skhun'],
+            // 'ijazah' => $data['ijazah'],
             'user_id' => $user->id,
         ]);
 
         return $record;
-    }
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->previousUrl ?? $this->getResource()::getUrl('index');
     }
 }

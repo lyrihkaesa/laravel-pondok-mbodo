@@ -38,7 +38,7 @@ class ProductsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('product_name'),
-                Tables\Columns\TextColumn::make('product_price')->currency('IDR', true),
+                Tables\Columns\TextColumn::make('product_price'),
                 Tables\Columns\ToggleColumn::make('validated_at')
                     ->label('Validasi')
                     ->updateStateUsing(function ($state, $record) {
@@ -73,7 +73,8 @@ class ProductsRelationManager extends RelationManager
                         }),
                     Forms\Components\TextInput::make('product_name')->live()->required(),
                     Forms\Components\TextInput::make('product_price')->live()->required(),
-                ])->preloadRecordSelect(),
+                ])
+                    ->preloadRecordSelect(),
             ])
             ->actions([
                 Tables\Actions\DetachAction::make(),

@@ -2,21 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Guardian extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'name',
-        'relationship',
-        'address',
-        'phone',
-    ];
 
-    public function student()
+    protected $guarded = [];
+
+    public function students(): BelongsToMany
     {
-        return $this->belongsTo(Student::class, 'student_id', 'id');
+        return $this->belongsToMany(Student::class);
     }
 }
