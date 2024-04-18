@@ -8,8 +8,6 @@
             .matches)
     }">
 
-
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,16 +22,12 @@
     {{-- Image Icons --}}
     <link rel="icon" type="image/png" href="/favicon-150x150.png">
 
-
-
-    @filamentStyles()
-    @vite('resources/css/filament/admin/theme.css')
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    {{-- @filamentStyles() --}}
+    {{-- @vite('resources/css/filament/admin/theme.css') --}}
     @isset($css)
         {{ $css }}
     @endisset
+    @vite('resources/css/app.css')
 </head>
 
 <body class="font-sans antialiased">
@@ -73,7 +67,8 @@
     @isset($script)
         {{ $script }}
     @endisset
-    @filamentScripts()
+    {{-- @filamentScripts() --}}
+    @vite('resources/js/app.js')
 </body>
 
 </html>
