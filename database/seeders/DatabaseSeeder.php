@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
             EmployeeSeeder::class,
             AcademicYearSeeder::class,
+            CategorySeeder::class,
             ProductSeeder::class,
             PackageSeeder::class,
             ExtracurricularSeeder::class,

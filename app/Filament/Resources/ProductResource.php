@@ -6,13 +6,9 @@ use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Support\RawJs;
 use Filament\Tables;
-use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,9 +24,20 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->label('Nama')->required(),
-                TextInput::make('price')->label('Harga')->required()->numeric(),
-                Select::make('payment_term')
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->live(onBlur: true)
+                    ->maxLength(255)
+                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', str()->slug($state)) : null),
+                Forms\Components\TextInput::make('slug')
+                    ->dehydrated()
+                    ->required()
+                    ->maxLength(255)
+                    ->unique(Product::class, 'slug', ignoreRecord: true),
+                Forms\Components\TextInput::make('price')->label('Harga')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\Select::make('payment_term')
                     ->label('Jangka Waktu')
                     ->options([
                         'Sekali' => 'Sekali',
@@ -45,7 +52,11 @@ class ProductResource extends Resource
                     ->createOptionUsing(function (array $data): string {
                         // dd($data['name']);
                         return $data['name'];
-                    })
+                    }),
+                Forms\Components\Select::make('categories')
+                    ->relationship('categories', 'name')
+                    ->multiple()
+                    ->searchable(),
             ]);
     }
 
@@ -53,9 +64,13 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Nama'),
-                TextColumn::make('price')->label('Harga')->currency('IDR', true),
-                TextColumn::make('payment_term')->label('Jangka Waktu'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nama'),
+                Tables\Columns\TextColumn::make('price')
+                    ->label('Harga')
+                    ->currency('IDR', true),
+                Tables\Columns\TextColumn::make('payment_term')
+                    ->label('Jangka Waktu'),
             ])
             ->filters([
                 //

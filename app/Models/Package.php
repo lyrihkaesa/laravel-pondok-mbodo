@@ -19,8 +19,13 @@ class Package extends Model
         return $this->belongsToMany(Product::class, 'package_product')->withPivot('id')->withTimestamps();
     }
 
-    public function organizations()
+    public function organizations(): BelongsToMany
     {
         return $this->belongsToMany(Organization::class);
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class)->where('type', 'ILIKE', '%paket%');
     }
 }

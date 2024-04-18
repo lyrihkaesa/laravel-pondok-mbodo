@@ -26,4 +26,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Package::class, 'package_product')->withPivot('id')->withTimestamps();
     }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class)->where('type', 'ILIKE', '%produk%');
+    }
 }

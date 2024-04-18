@@ -58,7 +58,7 @@ class StudentFactory extends Factory
         return [
             'name' => $user->name,
             'nik' => $nik,
-            'nis' => '23' . $this->faker->unique()->numberBetween(10000000, 99999999),
+            'nip' => '23' . $this->faker->unique()->numberBetween(10000000, 99999999),
             'nisn' => $this->faker->unique()->numberBetween(10000000, 9999999999),
             'gender' => $parseNik->gender,
             'birth_place' => $regency->name ?? 'Unknown',
