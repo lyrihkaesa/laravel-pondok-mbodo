@@ -26,14 +26,17 @@ class StudentProductResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('student_id')
+                    ->label('Santri')
+                    ->required()
                     ->relationship('student', 'name')
-                    ->searchable()
-                    ->required(),
+                    ->searchable(),
                 Forms\Components\Select::make('product_id')
+                    ->label('Produk')
+                    ->required()
                     ->relationship('product', 'name')
                     ->searchable()
                     ->preload()
-                    ->required()
+                    ->live()
                     ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $old, ?string $state) {
                         if ($state === null) {
                             return;
@@ -43,9 +46,15 @@ class StudentProductResource extends Resource
                         $set('product_name', $product->name . ' ' . now()->format('F Y'));
                         $set('product_price', $product->price);
                         return $state;
-                    })->live(),
-                Forms\Components\TextInput::make('product_name')->required()->live(),
-                Forms\Components\TextInput::make('product_price')->required()->live(),
+                    }),
+                Forms\Components\TextInput::make('product_name')
+                    ->label('Nama Produk')
+                    ->required()
+                    ->live(),
+                Forms\Components\TextInput::make('product_price')
+                    ->label('Harga Produk')
+                    ->required()
+                    ->live(),
             ]);
     }
 
@@ -53,11 +62,18 @@ class StudentProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('product_name'),
-                Tables\Columns\TextColumn::make('product_price')->money('IDR'),
-                Tables\Columns\TextColumn::make('student.name')->searchable(),
-                Tables\Columns\TextColumn::make('student.current_school'),
-                Tables\Columns\TextColumn::make('student.lastEnrolledClassroom.name'),
+                Tables\Columns\TextColumn::make('product_name')
+                    ->label('Nama Produk'),
+                Tables\Columns\TextColumn::make('product_price')
+                    ->label('Harga Produk')
+                    ->money('IDR'),
+                Tables\Columns\TextColumn::make('student.name')
+                    ->label('Santri')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('student.current_school')
+                    ->label('Sekolah'),
+                Tables\Columns\TextColumn::make('student.lastEnrolledClassroom.name')
+                    ->label('Kelas'),
                 Tables\Columns\ToggleColumn::make('validated_at')
                     ->label('Validasi')
                     ->updateStateUsing(function ($state, $record) {
@@ -78,11 +94,11 @@ class StudentProductResource extends Resource
                 Tables\Filters\SelectFilter::make('current_school')
                     ->label('Sekolah')
                     ->options([
-                        'PAUD' => 'PAUD',
-                        'TK' => 'TK',
-                        'SD' => 'SD',
+                        'PAUD/TK' => 'PAUD/TK',
+                        'MI' => 'MI',
                         'SMP' => 'SMP',
-                        'SMK' => 'SMK',
+                        'MA' => 'MA',
+                        'Takhasus' => 'Takhasus',
                     ])->modifyQueryUsing(
                         function (Builder $query, $data) {
                             if (!$data['values']) {
@@ -123,11 +139,11 @@ class StudentProductResource extends Resource
 
     public static function getPluralModelLabel(): string
     {
-        return 'Santri Produk';
+        return 'Administrasi Santri';
     }
 
     public static function getModelLabel(): string
     {
-        return 'Santri Produk';
+        return 'Administrasi Santri';
     }
 }

@@ -20,7 +20,7 @@ class ListStudentProducts extends ListRecords
         return [
             Actions\CreateAction::make(),
             Actions\Action::make('generateStudentsProducts')
-                ->label("Generate Masal SPP Santri")
+                ->label("Administrasi Umum")
                 ->fillForm(fn ($record): array => [
                     'suffix' => now()->format('F Y'),
                 ])
@@ -28,10 +28,10 @@ class ListStudentProducts extends ListRecords
                     Forms\Components\TextInput::make('suffix')
                         ->label('Akhiran')
                         ->helperText(fn ($state): string => 'Contoh: Catering ' . $state)
-                        ->live()
+                        ->live(onBlur: true)
                         ->required(),
                     Forms\Components\Select::make('product')
-                        ->label('Produk')
+                        ->label('Jenis Biaya')
                         ->relationship('product', 'name')
                         ->multiple()
                         ->preload()
@@ -40,18 +40,28 @@ class ListStudentProducts extends ListRecords
                     Forms\Components\Select::make('current_school')
                         ->label('Sekolah')
                         ->options([
-                            'PAUD' => 'PAUD',
-                            'TK' => 'TK',
-                            'SD' => 'SD',
+                            'PAUD/TK' => 'PAUD/TK',
+                            'MI' => 'MI',
                             'SMP' => 'SMP',
-                            'SMK' => 'SMK',
+                            'MA' => 'MA',
+                            'Takhasus' => 'Takhasus',
+                        ])
+                        ->multiple()
+                        ->required(),
+                    Forms\Components\Select::make('category')
+                        ->label('Kategori')
+                        ->options([
+                            'Santri Reguler' => 'Santri Reguler',
+                            'Santri Ndalem' => 'Santri Ndalem',
+                            'Santri Berprestasi' => 'Santri Berprestasi',
                         ])
                         ->multiple()
                         ->required(),
                 ])
                 ->action(function (Component $livewire): void {
                     $currentSchool = $livewire->mountedActionsData[0]["current_school"];
-                    $students = Student::query()->where('status', '=', 'Aktif')->whereIn('current_school', $currentSchool)->get();
+                    $category = $livewire->mountedActionsData[0]["category"];
+                    $students = Student::query()->where('status', '=', 'Aktif')->whereIn('current_school', $currentSchool)->whereIn('category', $category)->get();
 
                     $product_ids = $livewire->mountedActionsData[0]["product"];
                     $products = Product::query()->whereIn('id', $product_ids)->get();
