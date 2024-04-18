@@ -35,7 +35,8 @@ class ProdcutsRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('price')->currency('IDR', true),
+                Tables\Columns\TextColumn::make('price')
+                    ->money('IDR'),
             ])
             ->filters([
                 //

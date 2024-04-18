@@ -68,7 +68,7 @@ class ProductResource extends Resource
                     ->label('Nama'),
                 Tables\Columns\TextColumn::make('price')
                     ->label('Harga')
-                    ->currency('IDR', true),
+                    ->money('IDR'),
                 Tables\Columns\TextColumn::make('payment_term')
                     ->label('Jangka Waktu'),
             ])
