@@ -38,7 +38,8 @@ class ProductsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('product_name'),
-                Tables\Columns\TextColumn::make('product_price'),
+                Tables\Columns\TextColumn::make('product_price')
+                    ->money('IDR'),
                 Tables\Columns\ToggleColumn::make('validated_at')
                     ->label('Validasi')
                     ->updateStateUsing(function ($state, $record) {

@@ -20,12 +20,26 @@
             <x-slot name="heading">
 
             </x-slot>
-            <x-filament::button type="submit" class="w-full" size="lg">
-                Daftar
+            <x-filament::button type="submit" class="w-full" size="lg" wire:loading.attr="disabled">
+                <span wire:loading.remove>Daftar</span>
+                <span wire:loading>Proses Mendaftar...</span>
             </x-filament::button>
         </x-filament::section>
 
     </form>
 
     <x-filament-actions::modals />
+
+    <x-filament::modal alignment="center"
+        icon="{{ $this->isSuccessful ? 'heroicon-o-check-badge' : 'heroicon-o-exclamation-triangle' }}"
+        icon-color="{{ $this->isSuccessful ? 'success' : 'danger' }}" id="final-create-student">
+        <x-slot name="heading">
+            {{ $this->isSuccessful ? 'Pendaftaran Berhasil' : 'Pendaftaran Gagal' }}
+        </x-slot>
+        <x-slot name="description">
+            {{ $this->isSuccessful ? 'Tunggu konfirmasi dari petugas pendaftaran, yaa. 😊' : 'Pastikan data yang dimasukan benar dan daftar lagi nanti, jika masih gagal silahkan kosultasikan ke petugas pendaftaran. 😢' }}
+        </x-slot>
+        {{-- Modal content --}}
+        <span class="yb-4"></span>
+    </x-filament::modal>
 </div>

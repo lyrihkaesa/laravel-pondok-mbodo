@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('profile_picture_1x1')->nullable();
             $table->string('profile_picture_3x4')->nullable();
             $table->string('profile_picture_4x6')->nullable();
-            $table->string('nip')->unique(); // Nomor Induk Siswa atau Nomor Induk Pesantren
+            $table->string('nip')->unique()->nullable(); // Nomor Induk Siswa atau Nomor Induk Pesantren
             $table->string('nisn')->unique()->nullable();
             $table->string('kip')->unique()->nullable();
             $table->enum('gender', ['Laki-Laki', 'Perempuan'])->nullable();

@@ -60,13 +60,14 @@ class PackageResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama'),
-                Tables\Columns\TextColumn::make('categories.name')
-                    ->label('Kategori')
-                    ->badge(),
                 Tables\Columns\TextColumn::make('products_sum_price')
                     ->sum('products', 'price')
                     ->money('IDR')
                     ->label('Total Biaya'),
+                Tables\Columns\TextColumn::make('categories.name')
+                    ->label('Kategori')
+                    ->badge(),
+
             ])
             ->filters([
                 //

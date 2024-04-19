@@ -17,7 +17,7 @@ class PackageSeeder extends Seeder
     {
         $packages = [
             [
-                'name' => 'Pendaftaran PAUD/TK Putra (Reguler)',
+                'name' => 'Pendaftaran PAUD/TK Putra Reguler',
                 'product_names' => [
                     'Pendaftaran PAUD',
                     'SPP PAUD',
@@ -29,10 +29,12 @@ class PackageSeeder extends Seeder
                     'PAUD/TK',
                     'Santri Reguler',
                     'Biaya Pendidikan',
+                    'Biaya Pendaftaran',
+                    'Laki-Laki',
                 ]
             ],
             [
-                'name' => 'Pendaftaran PAUD/TK Putri (Reguler)',
+                'name' => 'Pendaftaran PAUD/TK Putri Reguler',
                 'product_names' => [
                     'Pendaftaran PAUD',
                     'SPP PAUD',
@@ -44,10 +46,12 @@ class PackageSeeder extends Seeder
                     'PAUD/TK',
                     'Santri Reguler',
                     'Biaya Pendidikan',
+                    'Biaya Pendaftaran',
+                    'Perempuan',
                 ]
             ],
             [
-                'name' => 'Pendaftaran MI Putra (Reguler)',
+                'name' => 'Pendaftaran MI Putra Reguler',
                 'product_names' => [
                     'Pendaftaran MI',
                     'SPP MI',
@@ -62,10 +66,12 @@ class PackageSeeder extends Seeder
                     'MI',
                     'Santri Reguler',
                     'Biaya Pendidikan',
+                    'Biaya Pendaftaran',
+                    'Laki-Laki',
                 ]
             ],
             [
-                'name' => 'Pendaftaran MI Putri (Reguler)',
+                'name' => 'Pendaftaran MI Putri Reguler',
                 'product_names' => [
                     'Pendaftaran MI',
                     'SPP MI',
@@ -80,10 +86,12 @@ class PackageSeeder extends Seeder
                     'MI',
                     'Santri Reguler',
                     'Biaya Pendidikan',
+                    'Biaya Pendaftaran',
+                    'Perempuan',
                 ]
             ],
             [
-                'name' => 'Pendaftaran SMP (Reguler)',
+                'name' => 'Pendaftaran SMP Reguler',
                 'product_names' => [
                     'Pendaftaran SMP/MA',
                     'Pelatihan Tradisi Pesantren',
@@ -104,10 +112,13 @@ class PackageSeeder extends Seeder
                     'SMP',
                     'Santri Reguler',
                     'Biaya Pendidikan',
+                    'Biaya Pendaftaran',
+                    'Laki-Laki',
+                    'Perempuan',
                 ]
             ],
             [
-                'name' => 'Pendaftaran MA (Reguler)',
+                'name' => 'Pendaftaran MA Reguler',
                 'product_names' => [
                     'Pendaftaran SMP/MA',
                     'Pelatihan Tradisi Pesantren',
@@ -128,6 +139,9 @@ class PackageSeeder extends Seeder
                     'MA',
                     'Santri Reguler',
                     'Biaya Pendidikan',
+                    'Biaya Pendaftaran',
+                    'Laki-Laki',
+                    'Perempuan',
                 ]
             ],
         ];

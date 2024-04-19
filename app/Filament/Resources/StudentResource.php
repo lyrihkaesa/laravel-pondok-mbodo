@@ -536,8 +536,8 @@ class StudentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')->label('Nama')->searchable(),
-                Tables\Columns\TextColumn::make('nis')
-                    ->label('NIS')
+                Tables\Columns\TextColumn::make('nip')
+                    ->label('NIP')
                     ->badge()
                     ->color('neutral')
                     ->copyable()
@@ -566,6 +566,7 @@ class StudentResource extends Resource
                 Tables\Columns\TextColumn::make('status')->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
+                        'Mendaftar' => 'pink',
                         'Aktif' => 'success',
                         'Lulus' => 'warning',
                         'Tidak Aktif' => 'danger',

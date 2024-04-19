@@ -2,22 +2,28 @@
 
 namespace App\Livewire;
 
-use App\Models\Student;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Illuminate\Support\HtmlString;
+use App\Models\User;
+use App\Models\Student;
 use Livewire\Component;
+use App\Models\Guardian;
+use Filament\Forms\Form;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Validation\Rules\Unique;
+use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Illuminate\Contracts\View\View;
 
 class StudentRegistrationForm extends Component implements HasForms
 {
-
     use InteractsWithForms;
 
     public ?array $data = [];
+    public bool $isSuccessful = false;
 
     public function mount(): void
     {
@@ -177,13 +183,17 @@ class StudentRegistrationForm extends Component implements HasForms
                             ->schema([
                                 Forms\Components\TextInput::make('rt')
                                     ->label('RT')
-                                    ->placeholder('005'),
+                                    ->placeholder('005')
+                                    ->length(3),
                                 Forms\Components\TextInput::make('rw')
                                     ->label('RW')
-                                    ->placeholder('007'),
+                                    ->placeholder('007')
+                                    ->length(3),
                                 Forms\Components\TextInput::make('postcode')
                                     ->label('Kode Pos')
                                     ->placeholder('58171')
+                                    ->minLength(5)
+                                    ->maxLength(6)
                                     ->live()
                                     ->suffixActions([
                                         Forms\Components\Actions\Action::make('autoGeneratePostCode')
@@ -303,6 +313,12 @@ class StudentRegistrationForm extends Component implements HasForms
                     ->aside()
                     ->compact()
                     ->schema([
+                        Forms\Components\TextInput::make('number_family_card')
+                            ->label('Nomor KK')
+                            ->placeholder('3315042001011492')
+                            ->required()
+                            ->length(16)
+                            ->columnSpanFull(),
                         Forms\Components\Section::make('Ayah')
                             ->schema([
                                 Forms\Components\TextInput::make('father_name')
@@ -426,35 +442,6 @@ class StudentRegistrationForm extends Component implements HasForms
                                     // ->collapsed()
                                     ->columns(2)
                                     ->itemLabel(fn (array $state): ?string => $state['relationship'] . ' : ' . $state['name'] ?? null)
-                                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data, Component $livewire, $record, string $operation): array|null {
-                                        $guardian = \App\Models\Guardian::where('nik', $data['nik'])
-                                            ->where('phone', $data['phone'])
-                                            ->first();
-                                        dump(['Before Create', $data, $livewire->data, $record, $guardian, $operation]);
-                                        // dd(['Before Create', $data, $livewire->data, $record, $guardian, $operation]);
-                                        // dump($guardian);
-                                        if ($guardian) {
-                                            // dd(['Before Create', $data, $livewire->data, $record->id, $guardian]);
-                                            $guardian->students()->syncWithoutDetaching($record->id);
-                                            return null;
-                                        } else {
-                                            return $data;
-                                        }
-                                    })
-                                // ->mutateRelationshipDataBeforeSaveUsing(function (array $data, Livewire $livewire, $record, string $operation): array|null {
-                                //     $guardian = Guardian::where('nik', $data['nik'])
-                                //         ->where('phone', $data['phone'])
-                                //         ->first();
-                                //     dump(['Before Save', $data, $livewire->data, $record, $guardian, $operation]);
-                                //     // dd(['Before Create', $data, $livewire->data, $record, $guardian]);
-                                //     if ($guardian) {
-                                //         dump('ini jalan');
-                                //         $guardian->students()->syncWithoutDetaching($livewire->data['id']);
-                                //         return $data;
-                                //     } else {
-                                //         return $data;
-                                //     }
-                                // }),
                             ])
                     ])
                     ->collapsible(),
@@ -468,26 +455,33 @@ class StudentRegistrationForm extends Component implements HasForms
                             ->live(onBlur: true)
                             ->visible(fn (Forms\Get $get) => $get('category') === 'Santri Reguler')
                             ->accepted(fn (Forms\Get $get) => $get('category') === 'Santri Reguler'),
+
                         Forms\Components\Checkbox::make('term_02')
                             ->label('Saya meridhoi putra/putri kami sebagai Santri Ndalem dengan ketentuan - ketentuan yang telah ditetapkan.')
                             ->live()
                             ->visible(fn (Forms\Get $get) => $get('category') === 'Santri Ndalem')
                             ->accepted(fn (Forms\Get $get) => $get('category') === 'Santri Ndalem'),
+
                         Forms\Components\Checkbox::make('term_03')
                             ->label('Apabila dikemudian hari putra/putri kami mengundurkan diri dengan alasan apapun, biaya pendidikan yang sudah dibayarkan tidak bisa ditarik kembali.')
                             ->accepted(),
+
                         Forms\Components\Checkbox::make('term_04')
                             ->label('Sanggup mematuhi tata tertib dan Undang Undang Pondok Pesantren Darul Falah Ki Ageng Mbodo.')
                             ->accepted(),
+
                         Forms\Components\Checkbox::make('term_05')
                             ->label('Bersedia tinggal di Asrama Pondok dan mengikuti semua kegiatan pesantren.')
                             ->accepted(),
+
                         Forms\Components\Checkbox::make('term_06')
                             ->label('Mengikuti sistem uang saku Pondok Pesantren Darul Falah Ki Ageng Mbodo.')
                             ->accepted(),
+
                         Forms\Components\Checkbox::make('term_07')
                             ->label('Dengan mengirim data pendaftaran ini, kami setuju dengan semua peraturan Madrasah dan Pesantren yang berlaku.')
                             ->accepted(),
+
                     ])
                     ->collapsible(),
 
@@ -497,14 +491,16 @@ class StudentRegistrationForm extends Component implements HasForms
                         Forms\Components\Placeholder::make('syarat_pendaftaran')
                             ->content(new HtmlString('
                             <ul class="list-decimal px-4 text-gray-500 dark:text-gray-400">
-                                <li>Satu lembar Fotocopy Kartu Keluarga</li>
-                                <li>Satu lembar Fotocopy Akta Kelahiran</li>
-                                <li>Satu lembar Fotocopy SKHUN Terlegalisir</li>
-                                <li>Satu lembar Fotocopy Ijazah Terlegalisir</li>
-                                <li>Satu lembar Fotocopy KTP Orang Tua/Wali</li>
-                                <li>Masing-masing 6 lembar Pass Foto 3x4 dan 2x3</li>
+                                <li>Tiga lembar Fotocopy Kartu Keluarga</li>
+                                <li>Tiga lembar Fotocopy Akta Kelahiran</li>
+                                <li>Tiga lembar Fotocopy SKHUN Terlegalisir</li>
+                                <li>Tiga lembar Fotocopy Ijazah Terlegalisir</li>
+                                <li>Tiga lembar Fotocopy KTP Orang Tua/Wali</li>
+                                <li>Tiga lembar Pass Foto Berwarna 3x4</li>
+                                <li>Tiga lembar Pass Foto Berwarna 2x3</li>
                             </ul>
                         ')),
+
                         Forms\Components\Placeholder::make('hubungi')
                             ->content(new HtmlString('
                             <div class="text-gray-500 dark:text-gray-400">
@@ -516,6 +512,7 @@ class StudentRegistrationForm extends Component implements HasForms
                                 </ul>
                             </div>
                         ')),
+
                     ])
                     ->collapsible(),
             ])
@@ -525,7 +522,138 @@ class StudentRegistrationForm extends Component implements HasForms
 
     public function create(): void
     {
-        dd($this->form->getState());
+        // dd($this->form->getState());
+        // dd([$state, $user, $student, $guardians, $this->form->getModel()]);
+        $state = $this->form->getState();
+        try {
+            // Start transaction
+            DB::beginTransaction();
+
+            // Generate password
+            $password = $state['password'] ?? \App\Utilities\PasswordUtility::generatePassword($state['name'], $state['phone'], $state['birth_date']);
+            // dd($password);
+
+            // Membuat user
+            $user = [
+                "name" => $state["name"],
+                "email" => $state["email"],
+                "phone" => $state["phone"],
+                "password" => Hash::make($password),
+            ];
+
+            $userModel = User::create($user);
+
+            // Assign 'Student' Role
+            $roleModel = \Spatie\Permission\Models\Role::where('name', 'Santri')->first();
+            $userModel->assignRole($roleModel);
+
+            // Membuat santri
+            $student = [
+                "user_id" => $userModel->id,
+                "name" => $state["name"],
+                "nik" => $state["nik"],
+                "gender" => $state["gender"],
+                "birth_place" => $state["birth_place"],
+                "birth_date" => $state["birth_date"],
+                "province" => $state["province"],
+                "regency" => $state["regency"],
+                "district" => $state["district"],
+                "village" => $state["village"],
+                "address" => $state["address"],
+                "rt" => $state["rt"],
+                "rw" => $state["rw"],
+                "postcode" => $state["postcode"],
+                "nisn" => $state["nisn"],
+                "kip" => $state["kip"],
+                "current_name_school" => $state["current_name_school"],
+                'number_family_card' => $state["number_family_card"],
+                "category" => $state["category"],
+                "current_school" => $state["current_school"],
+                "status" => "Mendaftar",
+            ];
+
+            $studentModel = $this->form->getModel()::create($student);
+
+            // Membuat guardian
+            $guardians = [];
+
+            $father = [
+                'name' => $state['father_name'],
+                "relationship" => "Ayah",
+                'nik' => $state['father_nik'],
+                'job' => $state['father_job'],
+                'phone' => $state['father_phone'],
+                'address' => $state['father_address'],
+            ];
+            $guardians[] = $father;
+
+            $mother = [
+                "name" => $state['mother_name'],
+                "relationship" => "Ibu",
+                "nik" => $state['mother_nik'],
+                "job" => $state['mother_job'],
+                "phone" => $state['mother_phone'],
+                "address" => $state['mother_address'],
+            ];
+            $guardians[] = $mother;
+
+            // Tambahkan data wali lainnya dari $state['guardians'] ke dalam array guardians
+            foreach ($state['guardians'] as $guardian) {
+                $guardians[] = $guardian;
+            }
+
+            // Proses membuat dan meng-attach guardians ke student
+            foreach ($guardians as $guardian) {
+                // Cek apakah guardian dengan NIK dan nomor telepon sudah ada dalam database
+                $existingGuardian = Guardian::where('nik', $guardian['nik'])
+                    ->where('phone', $guardian['phone'])
+                    ->first();
+
+                // Jika guardian belum ada, buat guardian baru
+                if (!$existingGuardian) {
+                    $newGuardian = Guardian::create([
+                        'name' => $guardian['name'],
+                        'relationship' => $guardian['relationship'],
+                        'nik' => $guardian['nik'],
+                        'job' => $guardian['job'],
+                        'phone' => $guardian['phone'],
+                        'address' => $guardian['address'],
+                    ]);
+                } else {
+                    $newGuardian = $existingGuardian;
+                }
+
+                // Attach guardian ke student jika belum ter-attach
+                if (!$studentModel->guardians->contains($newGuardian)) {
+                    $studentModel->guardians()->attach($newGuardian);
+                }
+            }
+
+            // Melakukan attach products ke student
+            $package = \App\Models\Package::with('products')->whereHas('categories', function ($query) use ($state) {
+                $query->whereIn('name', ['Biaya Pendaftaran', $state["gender"], $state["category"], $state["current_school"]]);
+            }, '=', 4)->first();
+
+            if ($package) {
+                foreach ($package->products as $product) {
+                    $studentModel->products()->attach($product, ['product_name' => $product->name . ' Awal ' . now()->format('F Y'), 'product_price' => $product->price]);
+                }
+            }
+
+            // Commit transaction jika tidak ada error
+            DB::commit();
+
+            $this->isSuccessful = true;
+            $this->dispatch('open-modal', id: 'final-create-student');
+        } catch (\Exception $e) {
+            // Rollback transaction jika terjadi error
+            DB::rollBack();
+            // Log error
+            Log::error('Error creating student: ' . $e->getMessage());
+            // Atau lakukan penanganan error sesuai kebutuhan
+            $this->isSuccessful = false;
+            $this->dispatch('open-modal', id: 'final-create-student');
+        }
     }
 
     public function render(): View
