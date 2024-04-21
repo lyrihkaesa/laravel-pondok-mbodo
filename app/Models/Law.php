@@ -25,6 +25,11 @@ class Law extends Model
         return "BAB {$this->convertToRoman($this->chapter)} {$this->chapter_title}";
     }
 
+    public function getChapterConvertedAttribute()
+    {
+        return "BAB {$this->convertToRoman($this->chapter)}";
+    }
+
     public function getSectionDetailsAttribute()
     {
         return "Pasal {$this->section} {$this->section_title}";

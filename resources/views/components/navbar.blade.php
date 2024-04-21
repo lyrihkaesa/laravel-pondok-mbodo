@@ -34,11 +34,34 @@
         <div id="navbar-image-and-text-2"
             class="hs-collapse hidden grow basis-full overflow-hidden transition-all duration-300 sm:block">
             <div class="mt-5 flex flex-col gap-5 sm:mt-0 sm:flex-row sm:items-center sm:justify-end sm:ps-5">
-                <a
-                    class="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                    href="{{ route('about') }}">Profile Pondok</a>
                 <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                    href="#">Berita</a>
+                    href="{{ route('about') }}">Profile Pondok</a>
+                {{-- Navbar Item Dropdown --}}
+                <div class="hs-dropdown [--adaptive:none] [--strategy:static] sm:[--strategy:fixed]">
+                    <button id="hs-mega-menu-basic-dr" type="button"
+                        class="flex w-full items-center font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500">
+                        Informasi
+                        <svg class="size-4 ms-1 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+
+                    <div class="hs-dropdown-menu top-full z-10 hidden rounded-lg bg-white p-2 opacity-0 transition-[opacity,margin] duration-[0.1ms] before:absolute before:-top-5 before:start-0 before:h-5 before:w-full hs-dropdown-open:opacity-100 dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800 sm:w-48 sm:border sm:shadow-md sm:duration-[150ms] sm:dark:border"
+                        style="">
+                        <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                            href="#">
+                            Pawarto
+                        </a>
+                        <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                            href="{{ route('law.index') }}">
+                            Peraturan (Tata Tertib)
+                        </a>
+                    </div>
+                </div>
+                {{-- End Navbar Item Dropdown --}}
+                {{-- Navbar Item Dropdown --}}
                 <div class="hs-dropdown [--adaptive:none] [--strategy:static] sm:[--strategy:fixed]">
                     <button id="hs-mega-menu-basic-dr" type="button"
                         class="flex w-full items-center font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500">
@@ -128,38 +151,16 @@
                                     Madrasah Aliyah Plus Islam Al Hawi
                                 </a>
                             </div>
+                            <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                href="#">
+                                Ekstrakurikuler
+                            </a>
                         </div>
-                        <div
-                            class="hs-dropdown relative [--adaptive:none] [--strategy:static] sm:[--strategy:absolute]">
-                            <button type="button"
-                                class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300">
-                                Extrakulikuler
-                                <svg class="size-4 ms-2 flex-shrink-0 text-gray-600 sm:-rotate-90"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="m6 9 6 6 6-6" />
-                                </svg>
-                            </button>
 
-                            <div
-                                class="hs-dropdown-menu end-full top-0 z-10 !mx-[10px] hidden rounded-lg bg-white p-2 opacity-0 transition-[opacity,margin] duration-[0.1ms] before:absolute before:-end-5 before:top-0 before:h-full before:w-5 hs-dropdown-open:opacity-100 dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800 sm:mt-2 sm:w-48 sm:border sm:shadow-md sm:duration-[150ms] sm:dark:border">
-                                <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    About
-                                </a>
-                                <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Downloads
-                                </a>
-                                <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Team Account
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
+                {{-- End Navbar Item Dropdown --}}
+                {{-- Navbar Item Dropdown --}}
                 <div class="hs-dropdown [--adaptive:none] [--strategy:static] sm:[--strategy:fixed]">
                     <button id="hs-mega-menu-basic-dr" type="button"
                         class="flex w-full items-center font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500">
@@ -195,6 +196,7 @@
                         </a>
                     </div>
                 </div>
+                {{-- End Navbar Item Dropdown --}}
             </div>
         </div>
         <x-dark-mode-button class="hidden sm:block" />
