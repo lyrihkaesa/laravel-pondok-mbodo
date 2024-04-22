@@ -16,8 +16,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class LawResource extends Resource
 {
     protected static ?string $model = Law::class;
+    protected static ?string $navigationIcon = 'heroicon-o-check-badge';
+    protected static ?string $navigationGroup = 'Manajemen Yayasan';
+    protected static ?string $label = 'Tata Tertib';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
