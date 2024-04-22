@@ -40,6 +40,7 @@ class StudentResource extends Resource
                                 ->label('NIK')
                                 ->placeholder('331504090919990001')
                                 ->required()
+                                ->unique(ignoreRecord: true)
                                 ->length(16)
                                 // ->helperText(fn (?string $state, Forms\Components\TextInput $component) => strlen($state) . '/' . $component->getMaxLength())
                                 ->hintActions([

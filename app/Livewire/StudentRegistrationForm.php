@@ -46,6 +46,7 @@ class StudentRegistrationForm extends Component implements HasForms
                             ->label('NIK')
                             ->placeholder('331504090919990001')
                             ->required()
+                            ->unique()
                             ->length(16)
                             ->hintActions([
                                 Forms\Components\Actions\Action::make('autoInputAddress')
