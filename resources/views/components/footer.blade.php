@@ -30,21 +30,28 @@
             <h4 class="text-xs font-semibold uppercase text-gray-900 dark:text-gray-100">Sekolah Non Formal</h4>
             <div class="mt-3 grid space-y-3 text-sm">
                 <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        href="#">Pesantren Putra</a></p>
+                        href="{{ route('organizations.show', ['slug' => 'pesantren-putra']) }}">Pesantren Putra</a></p>
                 <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        href="#">Pesantren Putri</a></p>
+                        href="{{ route('organizations.show', ['slug' => 'pesantren-putri']) }}">Pesantren Putri</a></p>
                 <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        href="#">Pesantren Tahfidzul Quran Putri
+                        href="{{ route('organizations.show', ['slug' => 'pesantren-tahfidzul-quran-putri']) }}">Pesantren
+                        Tahfidzul Quran Putri
                         {{-- <span class="inline text-blue-600 dark:text-blue-500">— We're hiring</span> --}}
                     </a></p>
                 <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        href="#">Jurusan Mahir Kitab</a></p>
+                        href="{{ route('organizations.show', ['slug' => 'jurusan-mahir-kitab']) }}">Jurusan Mahir
+                        Kitab</a></p>
                 <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        href="#">Jurusan Tahsin Quran</a></p>
+                        href="{{ route('organizations.show', ['slug' => 'jurusan-tahsin-quran']) }}">Jurusan Tahsin
+                        Quran</a></p>
                 <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        href="#">Jurusan Suwuk</a></p>
+                        href="{{ route('organizations.show', ['slug' => 'jurusan-suwuk']) }}">Jurusan Suwuk</a></p>
                 <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        href="#">Madarasah Wustho Dan Ulya</a></p>
+                        href="{{ route('organizations.show', ['slug' => 'madarasah-wustho']) }}">Madarasah Wustho</a>
+                </p>
+                <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                        href="{{ route('organizations.show', ['slug' => 'madarasah-ulya']) }}">Madarasah Ulya</a>
+                </p>
             </div>
         </div>
         <!-- End Col -->

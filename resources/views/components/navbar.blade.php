@@ -1,5 +1,5 @@
 {{-- Navbar --}}
-<nav x-cloak x-data :class="{ 'backdrop-blur bg-white/75 dark:bg-gray-800/75 ': isScrolled }"
+<nav @if (!request()->is('ppdb')) x-cloak x-data :class="{ 'backdrop-blur bg-white/75 dark:bg-gray-800/75 ': isScrolled }" @endif
     class="mx-auto w-full max-w-[85rem] border-b-2 border-gray-100 bg-white px-4 py-2 transition-colors duration-500 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
     aria-label="Global">
     <div class="flex items-center justify-between">
@@ -27,15 +27,23 @@
                 </svg>
             </button>
             <x-dark-mode-button />
-            <x-ppdb-button class="inline-flex" />
+            @if (!request()->is('ppdb'))
+                <x-ppdb-button class="inline-flex" />
+            @endif
         </div>
     </div>
     <div class="flex items-center justify-end gap-4">
         <div id="navbar-image-and-text-2"
             class="hs-collapse hidden grow basis-full overflow-hidden transition-all duration-300 sm:block">
             <div class="mt-5 flex flex-col gap-5 sm:mt-0 sm:flex-row sm:items-center sm:justify-end sm:ps-5">
-                <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                    href="{{ route('about') }}">Profile Pondok</a>
+                @if (!request()->is('ppdb/*') && !request()->is('ppdb'))
+                    <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                        href="{{ route('about') }}">Profile Pondok</a>
+                @endif
+                @if (request()->is('ppdb/*') || request()->is('ppdb'))
+                    <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                        href="{{ route('ppdb.price') }}">Biaya Pendidikan</a>
+                @endif
                 {{-- Navbar Item Dropdown --}}
                 <div class="hs-dropdown [--adaptive:none] [--strategy:static] sm:[--strategy:fixed]">
                     <button id="hs-mega-menu-basic-dr" type="button"
@@ -75,11 +83,12 @@
 
                     <div class="hs-dropdown-menu top-full z-10 hidden rounded-lg bg-white p-2 opacity-0 transition-[opacity,margin] duration-[0.1ms] before:absolute before:-top-5 before:start-0 before:h-5 before:w-full hs-dropdown-open:opacity-100 dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800 sm:w-48 sm:border sm:shadow-md sm:duration-[150ms] sm:dark:border"
                         style="">
+
                         <div
                             class="hs-dropdown relative [--adaptive:none] [--strategy:static] sm:[--strategy:absolute]">
                             <button type="button"
                                 class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300">
-                                Non Formal
+                                Formal
                                 <svg class="size-4 ms-2 flex-shrink-0 text-gray-600 sm:-rotate-90"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -87,35 +96,24 @@
                                     <path d="m6 9 6 6 6-6" />
                                 </svg>
                             </button>
+
                             <div
                                 class="hs-dropdown-menu end-full top-0 z-10 !mx-[10px] hidden rounded-lg bg-white p-2 opacity-0 transition-[opacity,margin] duration-[0.1ms] before:absolute before:-end-5 before:top-0 before:h-full before:w-5 hs-dropdown-open:opacity-100 dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800 sm:mt-2 sm:w-48 sm:border sm:shadow-md sm:duration-[150ms] sm:dark:border">
                                 <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Pesantren Putra
+                                    href="{{ route('organizations.show', ['slug' => 'paudtk']) }}">
+                                    Paud Quran Al Hawi
                                 </a>
                                 <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Pesantren Putri
+                                    href="{{ route('organizations.show', ['slug' => 'sdmi']) }}">
+                                    Madrasah Ibtidiyah (SD)
                                 </a>
                                 <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Pesantren Tahfidzul Quran Putri
+                                    href="{{ route('organizations.show', ['slug' => 'smp-islam-al-hawi']) }}">
+                                    SMP Islam Al Hawi
                                 </a>
                                 <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Jurusan Mahir Kitab
-                                </a>
-                                <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Jurusan Tahsin Quran
-                                </a>
-                                <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Jurusan Suwuk
-                                </a>
-                                <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Madarasah Wustho Dan Ulya
+                                    href="{{ route('organizations.show', ['slug' => 'madrasah-aliyah-plus-islam-al-hawi']) }}">
+                                    Madrasah Aliyah Plus Islam Al Hawi
                                 </a>
                             </div>
                         </div>
@@ -123,7 +121,7 @@
                             class="hs-dropdown relative [--adaptive:none] [--strategy:static] sm:[--strategy:absolute]">
                             <button type="button"
                                 class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300">
-                                Formal
+                                Non Formal
                                 <svg class="size-4 ms-2 flex-shrink-0 text-gray-600 sm:-rotate-90"
                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -131,76 +129,99 @@
                                     <path d="m6 9 6 6 6-6" />
                                 </svg>
                             </button>
-
                             <div
                                 class="hs-dropdown-menu end-full top-0 z-10 !mx-[10px] hidden rounded-lg bg-white p-2 opacity-0 transition-[opacity,margin] duration-[0.1ms] before:absolute before:-end-5 before:top-0 before:h-full before:w-5 hs-dropdown-open:opacity-100 dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800 sm:mt-2 sm:w-48 sm:border sm:shadow-md sm:duration-[150ms] sm:dark:border">
                                 <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Paud Quran Al Hawi
+                                    href="{{ route('organizations.show', ['slug' => 'pesantren-putra']) }}">
+                                    Pesantren Putra
                                 </a>
                                 <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Madrasah Ibtidiyah (Sekolah Dasar)
+                                    href="{{ route('organizations.show', ['slug' => 'pesantren-putri']) }}">
+                                    Pesantren Putri
                                 </a>
                                 <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    SMP Islam Al Hawi
+                                    href="{{ route('organizations.show', ['slug' => 'pesantren-tahfidzul-quran-putri']) }}">
+                                    Pesantren Tahfidzul Quran Putri
                                 </a>
                                 <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                    href="#">
-                                    Madrasah Aliyah Plus Islam Al Hawi
+                                    href="{{ route('organizations.show', ['slug' => 'jurusan-mahir-kitab']) }}">
+                                    Jurusan Mahir Kitab
+                                </a>
+                                <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                    href="{{ route('organizations.show', ['slug' => 'jurusan-tahsin-quran']) }}">
+                                    Jurusan Tahsin Quran
+                                </a>
+                                <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                    href="{{ route('organizations.show', ['slug' => 'jurusan-suwuk']) }}">
+                                    Jurusan Suwuk
+                                </a>
+                                <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                    href="{{ route('organizations.show', ['slug' => 'madarasah-wustho']) }}">
+                                    Madarasah Wustho
+                                </a>
+                                <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                    href="{{ route('organizations.show', ['slug' => 'madarasah-ulya']) }}">
+                                    Madarasah Ulya
                                 </a>
                             </div>
+                        </div>
+                        <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                            href="#">
+                            Ekstrakurikuler
+                        </a>
+                    </div>
+                </div>
+                {{-- End Navbar Item Dropdown --}}
+                @if (!request()->is('ppdb/*') && !request()->is('ppdb'))
+                    {{-- Navbar Item Dropdown --}}
+                    <div class="hs-dropdown [--adaptive:none] [--strategy:static] sm:[--strategy:fixed]">
+                        <button id="hs-mega-menu-basic-dr" type="button"
+                            class="flex w-full items-center font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500">
+                            Badan Lembaga
+                            <svg class="size-4 ms-1 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m6 9 6 6 6-6" />
+                            </svg>
+                        </button>
+
+                        <div class="hs-dropdown-menu top-full z-10 hidden rounded-lg bg-white p-2 opacity-0 transition-[opacity,margin] duration-[0.1ms] before:absolute before:-top-5 before:start-0 before:h-5 before:w-full hs-dropdown-open:opacity-100 dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800 sm:w-48 sm:border sm:shadow-md sm:duration-[150ms] sm:dark:border"
+                            style="">
                             <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                                href="#">
-                                Ekstrakurikuler
+                                href="{{ route('organizations.show', ['slug' => 'majelis-lapanan-ahad-kliwon-jimad-sholawat']) }}">
+                                Majelis Lapanan Ahad Kliwon Jimad Sholawat
+                            </a>
+                            <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                href="{{ route('organizations.show', ['slug' => 'jamiyah-thoriqoh-qodiriyah-al-jaelaniyah']) }}">
+                                Jamiyah Thoriqoh Qodiriyah Al Jaelaniyah
+                            </a>
+                            <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                href="{{ route('organizations.show', ['slug' => 'langit-tour']) }}">
+                                Langit Tour
+                            </a>
+                            <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                href="{{ route('organizations.show', ['slug' => 'taman-suwuk-nusantara']) }}">
+                                Taman Suwuk Nusantara
+                            </a>
+                            <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+                                href="{{ route('organizations.show', ['slug' => 'padepokan-satrio-mbodo']) }}">
+                                Padepokan Satrio Mbodo
                             </a>
                         </div>
-
                     </div>
-                </div>
-                {{-- End Navbar Item Dropdown --}}
-                {{-- Navbar Item Dropdown --}}
-                <div class="hs-dropdown [--adaptive:none] [--strategy:static] sm:[--strategy:fixed]">
-                    <button id="hs-mega-menu-basic-dr" type="button"
-                        class="flex w-full items-center font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500">
-                        Badan Lembaga
-                        <svg class="size-4 ms-1 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24"
-                            height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m6 9 6 6 6-6" />
-                        </svg>
-                    </button>
-
-                    <div class="hs-dropdown-menu top-full z-10 hidden rounded-lg bg-white p-2 opacity-0 transition-[opacity,margin] duration-[0.1ms] before:absolute before:-top-5 before:start-0 before:h-5 before:w-full hs-dropdown-open:opacity-100 dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800 sm:w-48 sm:border sm:shadow-md sm:duration-[150ms] sm:dark:border"
-                        style="">
-                        <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                            href="#">
-                            Majelis Lapanan Ahad Kliwon Jimad Sholawat
-                        </a>
-                        <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                            href="#">
-                            Jamiyah Thoriqoh Qodiriyah Al Jaelaniyah
-                        </a>
-                        <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                            href="#">
-                            Langit Tour
-                        </a>
-                        <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                            href="#">
-                            Taman Suwuk Nusantara
-                        </a>
-                        <a class="flex items-center gap-x-3.5 rounded-lg px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                            href="#">
-                            Padepokan Satrio Mbodo
-                        </a>
-                    </div>
-                </div>
-                {{-- End Navbar Item Dropdown --}}
+                    {{-- End Navbar Item Dropdown --}}
+                @endif
+                @if (request()->is('ppdb'))
+                    <x-ppdb.form-button class="inline-flex sm:hidden" />
+                @endif
             </div>
         </div>
         <x-dark-mode-button class="hidden sm:block" />
-        <x-ppdb-button class="hidden" />
+        @if (!request()->is('ppdb'))
+            <x-ppdb-button class="hidden" />
+        @else
+            <x-ppdb.form-button class="hidden" />
+        @endif
     </div>
 </nav>
 {{-- End Navbar --}}

@@ -104,7 +104,10 @@ class OrganizationResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama'),
-                Tables\Columns\TextColumn::make('slug'),
+                Tables\Columns\TextColumn::make('slug')
+                    ->badge()
+                    ->color('neutral')
+                    ->copyable(),
                 Tables\Columns\TextColumn::make('category')
                     ->label('Kategori'),
             ])
