@@ -18,17 +18,18 @@ class OrganizationResource extends Resource
     protected static ?string $model = Organization::class;
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
     protected static ?string $navigationGroup = 'Manajemen Akademik';
+    protected static ?string $label = 'Badan Lembaga';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Profile Organisasi')
+                Forms\Components\Section::make('Profile')
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->label('Nama')
                             ->required()
-                            ->debounce()
+                            ->live(onBlur: true)
                             ->minLength(1)
                             ->maxLength(255)
                             ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
@@ -44,11 +45,23 @@ class OrganizationResource extends Resource
                             ->maxLength(255)
                             ->unique(ignoreRecord: true)
                             ->required(),
-                        Forms\Components\MarkdownEditor::make('description')
-                            ->label('Deskripsi')
+                        Forms\Components\MarkdownEditor::make('vision')
+                            ->label('Visi')
                             ->disableToolbarButtons([
                                 'attachFiles',
-                            ]),
+                            ])
+                            ->columnSpanFull(),
+                        Forms\Components\MarkdownEditor::make('mission')
+                            ->label('Misi')
+                            ->disableToolbarButtons([
+                                'attachFiles',
+                            ])
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(2)
+                    ->columnSpan(2),
+                Forms\Components\Section::make('Metadata')
+                    ->schema([
                         Forms\Components\Select::make('category')
                             ->label('Kategori')
                             ->required()
@@ -57,21 +70,20 @@ class OrganizationResource extends Resource
                                 'Sekolah Madarasah' => 'Sekolah Madarasah',
                                 'Program Jurusan' => 'Program Jurusan',
                                 'Badan Lembaga' => 'Badan Lembaga',
+                                'Pondok Pesantren' => 'Pondok Pesantren',
                             ])
                             ->default('Badan Lembaga')
                             ->native(false),
-                        Forms\Components\MarkdownEditor::make('vision')
-                            ->label('Visi')
+                        Forms\Components\MarkdownEditor::make('description')
+                            ->label('Deskripsi')
                             ->disableToolbarButtons([
                                 'attachFiles',
-                            ]),
-                        Forms\Components\MarkdownEditor::make('mission')
-                            ->label('Misi')
-                            ->disableToolbarButtons([
-                                'attachFiles',
-                            ]),
-                    ]),
-            ]);
+                            ])
+                            ->columnSpanFull(),
+                    ])
+                    ->columnSpan(1),
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -80,6 +92,7 @@ class OrganizationResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama'),
+                Tables\Columns\TextColumn::make('slug'),
                 Tables\Columns\TextColumn::make('category')
                     ->label('Kategori'),
             ])

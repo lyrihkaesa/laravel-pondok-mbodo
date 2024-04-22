@@ -16,16 +16,24 @@ class OrganizationSeeder extends Seeder
     {
         $academicYear = AcademicYear::where('name', '2023/2024')->first();
         $categories = [
+            'Pondok Pesantren' => [
+                "Yayasan Pondok Pesantren Ki Ageng Mbodo" => [],
+            ],
             'Sekolah Formal' => [
-                'Paud/TK' => ['Paud Besar', 'Paud Kecil', 'TK Kecil', 'TK Besar'],
+                'Paud/TK' => [
+                    'Paud Besar',
+                    'Paud Kecil',
+                    'TK Kecil',
+                    'TK Besar',
+                ],
                 'MI/SD' => [
-                    'SD Kelas' => 6,
+                    'MI Kelas' => 6,
                 ],
                 'SMP Islam Al Hawi' => [
                     'SMP Kelas' => 3,
                 ],
-                'SMK Islam Al Hawi' => [
-                    'SMK Kelas' => 3,
+                'Madrasah Aliyah Plus Islam Al Hawi' => [
+                    'MA Kelas' => 3,
                 ],
             ],
             'Sekolah Madarasah' => [
@@ -60,7 +68,11 @@ class OrganizationSeeder extends Seeder
 
         foreach ($categories as $category => $schools) {
             foreach ($schools as $schoolName => $classrooms) {
-                $organization = Organization::create(['name' => $schoolName, 'category' => $category, 'slug' => str()->slug($schoolName)]);
+                $organization = Organization::create([
+                    'name' => $schoolName,
+                    'category' => $category,
+                    'slug' => str()->slug($schoolName)
+                ]);
 
                 // foreach ($classrooms as $className => $count) {
                 //     for ($i = 1; $i <= $count; $i++) {

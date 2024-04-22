@@ -14,6 +14,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 class UsersRelationManager extends RelationManager
 {
     protected static string $relationship = 'users';
+    protected static ?string $title = 'Struktur Organisasi';
 
     public function form(Form $form): Form
     {

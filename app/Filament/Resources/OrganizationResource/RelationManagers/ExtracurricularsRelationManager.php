@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ExtracurricularsRelationManager extends RelationManager
 {
     protected static string $relationship = 'extracurriculars';
+    protected static ?string $title = 'Ekstrakurikuler';
 
     public function form(Form $form): Form
     {
