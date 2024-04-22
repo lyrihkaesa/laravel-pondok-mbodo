@@ -8,20 +8,19 @@ use App\Models\Organization;
 class OrganizationShow extends Component
 {
     public $slug;
+    public $organization;
 
     public function mount($slug): void
     {
         $this->slug = $slug;
+        $this->organization = Organization::where('slug', $this->slug)->first();
     }
     public function render()
     {
-        $organization = Organization::where('slug', $this->slug)->first();
-        if (!$organization) {
+        if (!$this->organization) {
             abort(404);
         }
 
-        return view('livewire.organization-show', [
-            'organization' => $organization,
-        ]);
+        return view('livewire.organization-show');
     }
 }

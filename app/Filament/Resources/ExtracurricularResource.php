@@ -26,7 +26,7 @@ class ExtracurricularResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->label('Nama Kegiatan')
                     ->required()
-                    ->debounce()
+                    ->live(onBlur: true)
                     ->minLength(1)
                     ->maxLength(255)
                     ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {

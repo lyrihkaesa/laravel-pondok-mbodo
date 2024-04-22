@@ -49,6 +49,10 @@ class User extends Authenticatable implements FilamentUser
         'password' => 'hashed',
     ];
 
+    protected $with = [
+        'roles',
+    ];
+
     public function canAccessPanel(Panel $panel): bool
     {
         // return str_ends_with($this->email, '@pondokmbodo.com') && $this->hasVerifiedEmail();

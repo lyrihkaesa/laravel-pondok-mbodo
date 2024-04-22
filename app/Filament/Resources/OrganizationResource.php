@@ -80,6 +80,18 @@ class OrganizationResource extends Resource
                                 'attachFiles',
                             ])
                             ->columnSpanFull(),
+                        Forms\Components\FileUpload::make('thumbnail')
+                            ->label('Gambar Thumbnail')
+                            ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: ''))
+                            ->getUploadedFileNameForStorageUsing(
+                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
+                                    return \App\Utilities\FileUtility::generateFileName($get('slug'), $file->getFileName());
+                                }
+                            )
+                            ->image()
+                            ->downloadable()
+                            ->openable()
+                            ->directory('organizations/thumbnails'),
                     ])
                     ->columnSpan(1),
             ])
@@ -117,6 +129,7 @@ class OrganizationResource extends Resource
             RelationManagers\PackagesRelationManager::class,
             RelationManagers\ExtracurricularsRelationManager::class,
             RelationManagers\FacilitiesRelationManager::class,
+            RelationManagers\ClassroomsRelationManager::class,
         ];
     }
 
