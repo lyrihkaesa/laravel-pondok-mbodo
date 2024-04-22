@@ -7,12 +7,13 @@ use Livewire\Component;
 
 class Price extends Component
 {
+    public $packages;
+    public function mount()
+    {
+        $this->packages = Package::with('products')->get();
+    }
     public function render()
     {
-        $packages = Package::with('products')->get();
-
-        return view('livewire.ppdb.price', [
-            'packages' => $packages,
-        ]);
+        return view('livewire.ppdb.price');
     }
 }

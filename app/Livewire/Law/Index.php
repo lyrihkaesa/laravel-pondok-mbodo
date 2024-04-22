@@ -7,7 +7,20 @@ use Livewire\Component;
 
 class Index extends Component
 {
+
+    public $laws;
+
+    public function mount()
+    {
+        $this->formatLawsData();
+    }
+
     public function render()
+    {
+        return view('livewire.law.index');
+    }
+
+    private function formatLawsData()
     {
         // Ambil semua data hukum dari database, diurutkan berdasarkan bab, pasal, dan ayat
         $laws = Law::orderBy('chapter')
@@ -58,9 +71,6 @@ class Index extends Component
             ];
         }
 
-
-        return view('livewire.law.index', [
-            'laws' => collect($formattedLaws),
-        ]);
+        $this->laws = $formattedLaws;
     }
 }
