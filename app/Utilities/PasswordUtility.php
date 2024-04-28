@@ -13,14 +13,10 @@ class PasswordUtility
     }
 
     /**
-     * Generate password berdasarkan nama, 4 angka nomor handphone terakhir, dan tanggal lahir format: 'dmY', contoh: 09092002
+     * Generate password berdasarkan tanggal lahir dan 4 angka nomor handphone terakhir
      */
     public static function generatePassword(string $name, string $phone, string $birthDate): string
     {
-        // Generate password berdasarkan nama, 4 angka nomor handphone terakhir, dan tanggal lahir
-        $name_parts = explode(" ", $name ?? 'Unnamed'); // Pisahkan string berdasarkan spasi
-        $firstName = $name_parts[0]; // Ambil bagian pertama
-        $firstName = strtolower($firstName); // Ubah ke huruf kecil jika diperlukan
-        return $firstName . substr($phone, -4) . date('dmY', strtotime($birthDate));
+        return date('dmY', strtotime($birthDate)) . substr($phone, -4);
     }
 }

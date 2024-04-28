@@ -42,32 +42,12 @@ class EditStudent extends EditRecord
             'password' => $data['password'] ? Hash::make($data['password']) : $record->user->password,
         ]);
 
-        $record->update([
-            'name' => $data['name'],
-            'nik' => $data['nik'],
-            'nis' => $data['nis'],
-            'nisn' => $data['nisn'],
-            'profile_picture_1x1' => $data['profile_picture_1x1'],
-            'profile_picture_3x4' => $data['profile_picture_3x4'],
-            'profile_picture_4x6' => $data['profile_picture_4x6'],
-            'gender' => $data['gender'],
-            'birth_place' => $data['birth_place'],
-            'birth_date' => $data['birth_date'],
-            'province' => $data['province'],
-            'regency' => $data['regency'],
-            'district' => $data['district'],
-            'village' => $data['village'],
-            'postcode' => $data['postcode'],
-            'address' => $data['address'],
-            'rt' => $data['rt'],
-            'rw' => $data['rw'],
-            // 'full_address' => $data['full_address'],
-            'status' => $data['status'],
-            'current_school' => $data['current_school'],
-            'birth_certificate' => $data['birth_certificate'],
-            'family_card' => $data['family_card'],
-            // 'nip' => $data['nip'],
-        ]);
+        // Menghilangkan data yang tidak diperlukan
+        unset($data['email']);
+        unset($data['phone']);
+        unset($data['password']);
+
+        $record->update($data);
 
         return $record;
     }

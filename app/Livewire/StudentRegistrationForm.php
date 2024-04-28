@@ -34,32 +34,31 @@ class StudentRegistrationForm extends Component implements HasForms
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Identitas Pribadi')
-                    ->description('Informasi tentang data diri calon santri. Klik auto input data dari NIK untuk memasukkan beberapa data secara otomatis.')
+                Forms\Components\Section::make(__('Personal Identity'))
+                    ->description(__('Personal Identity Description'))
                     ->aside()
                     ->schema([
                         Forms\Components\TextInput::make('name')
-                            ->label('Nama Lengkap')
-                            ->placeholder('Ahmad Nur Rohman')
+                            ->label(__('Full Name'))
+                            ->placeholder(__('Full Name Placeholder Student'))
                             ->required(),
                         Forms\Components\TextInput::make('nik')
-                            ->label('NIK')
-                            ->placeholder('331504090919990001')
+                            ->label(__('Nik'))
+                            ->placeholder(__('Nik Placeholder'))
                             ->required()
                             ->unique()
                             ->length(16)
                             ->hintActions([
-                                Forms\Components\Actions\Action::make('autoInputAddress')
-                                    ->label('Auto Input Data dari NIK')
+                                Forms\Components\Actions\Action::make('autoInputFormNik')
+                                    ->label(__('Auto Input Form Nik'))
                                     ->badge()
                                     ->icon('heroicon-c-paint-brush')
                                     ->color('warning')
-                                    ->closeModalByClickingAway(false)
                                     ->requiresConfirmation()
                                     ->modalIcon('heroicon-c-paint-brush')
-                                    ->modalHeading('Auto Input Data dari NIK')
-                                    ->modalDescription('Apakah anda yakin ingin auto input data "Jenis Kelamin, Tempat dan Tanggal Lahir, Provinsi, Kabupaten/Kota, Kecamatan" dari NIK?')
-                                    ->modalSubmitActionLabel('Ya, input semuanya')
+                                    ->modalHeading(__('Auto Input Form Nik'))
+                                    ->modalDescription(__('Auto Input Form Nik Description'))
+                                    ->modalSubmitActionLabel(__('Auto Input Form Nik Submit Action Label'))
                                     ->action(function (?String $state, Forms\Get $get, Forms\Set $set) {
                                         if ($state !== null) {
                                             if (strlen($state) === 16) {
@@ -75,10 +74,10 @@ class StudentRegistrationForm extends Component implements HasForms
                                     }),
                             ]),
                         Forms\Components\ToggleButtons::make('gender')
-                            ->label('Jenis Kelamin')
+                            ->label(__('Gender'))
                             ->options([
-                                'Laki-Laki' => 'Laki-Laki',
-                                'Perempuan' => 'Perempuan',
+                                'Laki-Laki' => __('Male'),
+                                'Perempuan' => __('Female'),
                             ])->colors([
                                 'Laki-Laki' => 'info',
                                 'Perempuan' => 'pink',
@@ -91,20 +90,23 @@ class StudentRegistrationForm extends Component implements HasForms
                             'sm' => 2,
                         ])->schema([
                             Forms\Components\TextInput::make('birth_place')
-                                ->label('Tempat Lahir')
-                                ->placeholder('Grobogan'),
+                                ->label(__('Birth Place'))
+                                ->placeholder(__('Birth Place Placeholder'))
+                                ->required(),
                             Forms\Components\DatePicker::make('birth_date')
-                                ->label('Tanggal Lahir'),
+                                ->label(__('Birth Date'))
+                                ->default(now())
+                                ->required(),
                         ])->columnSpan(1),
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Informasi Alamat')
-                    ->description('Informasi tempat tinggal calon santri. Klik auto input data dari NIK untuk memasukkan beberapa data secara otomatis.')
+                Forms\Components\Section::make(__('Address Information'))
+                    ->description(__('Address Information Description'))
                     ->aside()
                     ->schema([
                         Forms\Components\Select::make('province')
-                            ->label('Provinsi')
+                            ->label(__('Province'))
                             ->options(\App\Utilities\NikUtility::$provinces)
                             ->live()
                             ->afterStateUpdated(function (?string $state, ?string $old, Forms\Set $set) {
@@ -118,7 +120,7 @@ class StudentRegistrationForm extends Component implements HasForms
                             })
                             ->searchable(),
                         Forms\Components\Select::make('regency')
-                            ->label('Kabupaten/Kota')
+                            ->label(__('Regency'))
                             ->disabled(fn (Forms\Get $get): bool => $get('province') == null)
                             ->options(function (Forms\Get $get, ?string $state) {
                                 if ($get('province') !== null) {
@@ -140,7 +142,7 @@ class StudentRegistrationForm extends Component implements HasForms
                             })
                             ->searchable(fn (Forms\Get $get): bool => $get('province') != null),
                         Forms\Components\Select::make('district')
-                            ->label('Kecamatan')
+                            ->label(__('District'))
                             ->disabled(fn (Forms\Get $get): bool => $get('regency') == null)
                             ->options(function (?string $state, Forms\Get $get) {
                                 if ($get('regency') !== null) {
@@ -160,7 +162,7 @@ class StudentRegistrationForm extends Component implements HasForms
                             })
                             ->searchable(fn (Forms\Get $get): bool => $get('regency') != null),
                         Forms\Components\Select::make('village')
-                            ->label('Desa/Kelurahan')
+                            ->label(__('Village'))
                             ->disabled(fn (Forms\Get $get): bool => $get('district') == null)
                             ->options(function (?string $state, Forms\Get $get) {
                                 $villages = [];
@@ -174,31 +176,31 @@ class StudentRegistrationForm extends Component implements HasForms
                             })
                             ->searchable(fn (Forms\Get $get): bool => $get('district') != null),
                         Forms\Components\Textarea::make('address')
-                            ->label('Alamat Lengkap')
+                            ->label(__('Full Address'))
                             ->autosize()
-                            ->placeholder('Dusun Sendangsari, Jl Sendangsari'),
+                            ->placeholder(__('Full Address Placeholder')),
                         Forms\Components\Grid::make([
                             'default' => 1,
                             'sm' => 3,
                         ])
                             ->schema([
                                 Forms\Components\TextInput::make('rt')
-                                    ->label('RT')
-                                    ->placeholder('005')
+                                    ->label(__('RT'))
+                                    ->placeholder(__('RT Placeholder'))
                                     ->length(3),
                                 Forms\Components\TextInput::make('rw')
-                                    ->label('RW')
-                                    ->placeholder('007')
+                                    ->label(__('RW'))
+                                    ->placeholder(__('RW Placeholder'))
                                     ->length(3),
-                                Forms\Components\TextInput::make('postcode')
-                                    ->label('Kode Pos')
-                                    ->placeholder('58171')
+                                Forms\Components\TextInput::make('postal_code')
+                                    ->label(__('Postal Code'))
+                                    ->placeholder(__('Postal Code Placeholder'))
                                     ->minLength(5)
                                     ->maxLength(6)
                                     ->live()
                                     ->suffixActions([
-                                        Forms\Components\Actions\Action::make('autoGeneratePostCode')
-                                            ->label('Auto Generate Kode Post')
+                                        Forms\Components\Actions\Action::make('autoGeneratePostalCode')
+                                            ->label(__('Auto Generate Postal Code'))
                                             ->badge()
                                             ->iconButton()
                                             ->icon('heroicon-c-paint-brush')
@@ -208,7 +210,7 @@ class StudentRegistrationForm extends Component implements HasForms
                                                 if ($villageField !== null) {
                                                     $village = \Creasi\Nusa\Models\Village::where('code', $villageField)->first();
                                                     if ($village !== null) {
-                                                        $set('postcode', $village->postal_code);
+                                                        $set('postal_code', $village->postal_code);
                                                     }
                                                 }
                                             }),
@@ -217,79 +219,79 @@ class StudentRegistrationForm extends Component implements HasForms
 
                     ])->columns(2),
 
-                Forms\Components\Section::make('Informasi Akademik')
-                    ->description('Informasi tentang data akademis calon santri, serta memilih kategori santri dan sekolah.')
+                Forms\Components\Section::make(__('Academic Information'))
+                    ->description(__('Academic Information Description'))
                     ->aside()
                     ->schema([
                         Forms\Components\Group::make()
                             ->schema([
                                 Forms\Components\TextInput::make('nisn')
-                                    ->label('NISN (Nomor Induk Siswa Nasional)')
+                                    ->label(__('Nisn'))
+                                    ->placeholder(__('Nisn Placeholder'))
                                     ->unique(ignoreRecord: true),
                                 Forms\Components\TextInput::make('kip')
-                                    ->label('KIP (Kartu Indonesia Pintar)')
+                                    ->label(__('Kip'))
+                                    ->placeholder(__('Kip Placeholder'))
                                     ->unique(ignoreRecord: true),
-                                Forms\Components\TextInput::make('current_name_school')
-                                    ->label('Asal Sekolah')
-                                    ->placeholder('SD Negeri 2 Danyang'),
                             ])
-                            ->columns(3),
-                        Forms\Components\Group::make()
-                            ->schema([
-                                Forms\Components\ToggleButtons::make('category')
-                                    ->label('Kategori')
-                                    ->inline()
-                                    ->options([
-                                        'Santri Reguler' => 'Santri Reguler',
-                                        'Santri Ndalem' => 'Santri Ndalem',
-                                        'Santri Berprestasi' => 'Santri Berprestasi',
-                                    ])
-                                    ->colors([
-                                        'Santri Reguler' => 'info',
-                                        'Santri Ndalem' => 'warning',
-                                        'Santri Berprestasi' => 'success',
-                                    ])
-                                    ->required()
-                                    ->default('Santri Reguler'),
-                                Forms\Components\ToggleButtons::make('current_school')
-                                    ->label('Sekolah')
-                                    ->inline()
-                                    ->options([
-                                        'PAUD/TK' => 'PAUD/TK',
-                                        'MI' => 'MI',
-                                        'SMP' => 'SMP',
-                                        'MA' => 'MA',
-                                        'Takhasus' => 'Takhasus',
-                                    ])
-                                    ->colors([
-                                        'PAUD/TK' => 'pink',
-                                        'MI' => 'danger',
-                                        'SMP' => 'warning',
-                                        'MA' => 'success',
-                                        'Takhasus' => 'info',
-                                    ])
-                                    ->required()
-                                    ->default('PAUD/TK'),
-                            ]),
+                            ->columns(2),
+                        Forms\Components\TextInput::make('current_name_school')
+                            ->label(__('Current Name School'))
+                            ->placeholder(__('Current Name School Placeholder')),
+                        Forms\Components\ToggleButtons::make('category')
+                            ->label(__('Category'))
+                            ->inline()
+                            ->options([
+                                'Santri Reguler' => __('Santri Reguler'),
+                                'Santri Ndalem' => __('Santri Ndalem'),
+                                'Santri Berprestasi' => __('Santri Berprestasi'),
+                            ])
+                            ->colors([
+                                'Santri Reguler' => 'info',
+                                'Santri Ndalem' => 'warning',
+                                'Santri Berprestasi' => 'success',
+                            ])
+                            ->required()
+                            ->default('Santri Reguler'),
+                        Forms\Components\ToggleButtons::make('current_school')
+                            ->label(__('Current School'))
+                            ->inline()
+                            ->options([
+                                'PAUD/TK' => __('PAUD/TK'),
+                                'MI' => __('MI'),
+                                'SMP' => __('SMP'),
+                                'MA' => __('MA'),
+                                'Takhasus' => __('Takhasus'),
+                            ])
+                            ->colors([
+                                'PAUD/TK' => 'pink',
+                                'MI' => 'danger',
+                                'SMP' => 'warning',
+                                'MA' => 'success',
+                                'Takhasus' => 'info',
+                            ])
+                            ->required()
+                            ->default('PAUD/TK'),
                     ]),
 
-                Forms\Components\Section::make('Informasi Kontak dan keamanan')
-                    ->description('Digunakan untuk konfirmasi pendafaran dan login sebagai santri.')
+                Forms\Components\Section::make(__('Contact and Security Information'))
+                    ->description(__('Contact and Security Information Description'))
                     ->aside()
                     ->schema([
                         Forms\Components\TextInput::make('phone')
-                            ->label('Nomor Telepon (Whatsapp)')
+                            ->label(__('Phone'))
+                            ->placeholder(__('Phone Placeholder'))
                             ->required()
                             ->tel()
-                            ->placeholder('628123456789')
-                            ->helperText('Ganti awalan 0 menjadi 62. Seperti nomor 08123456789 ke 628123456789.')
+                            ->helperText(__('Phone Helper Text'))
                             ->unique(table: 'users', column: 'phone', modifyRuleUsing: function (Unique $rule,  Component $livewire, string $operation) {
                                 if ($operation === 'edit') {
                                     return $rule->ignore($livewire->data['user_id'], "id");
                                 }
                             }),
                         Forms\Components\TextInput::make('email')
-                            ->label('Email')
+                            ->label(__('Email'))
+                            ->placeholder(__('Email Placeholder'))
                             ->email()
                             ->unique(table: 'users', column: 'email', modifyRuleUsing: function (Unique $rule,  Component $livewire, string $operation) {
                                 if ($operation === 'edit') {
@@ -297,104 +299,97 @@ class StudentRegistrationForm extends Component implements HasForms
                                 }
                             }),
                         Forms\Components\TextInput::make('password')
-                            ->label('Kata Sandi')
+                            ->label(__('Password'))
                             ->password()
                             ->revealable()
-                            ->helperText(function (string $operation, Forms\Get $get) {
-                                if ($operation === 'create') {
-                                    return 'Jika kata sandi tidak di isi, kata sandi akan dibuat secara automatis, nama depan dengan huruf kecil + 4 angka terakhir nomor telepon + tanggal lahir dengan format: 09092002';
-                                }
-                                if ($operation === 'edit') {
-                                    return 'Jika kata sandi tidak di isi, kata sandi tidak akan diubah';
-                                }
-                            }),
+                            ->helperText(__('Password Helper Text Create')),
                     ])->columns(2),
-                Forms\Components\Section::make('Informasi Orang Tua')
-                    ->description('Informasi tentang data orang tua calon santri.')
+                Forms\Components\Section::make(__('Parent Information'))
+                    ->description(__('Parent Information Description'))
                     ->aside()
                     ->compact()
                     ->schema([
-                        Forms\Components\TextInput::make('number_family_card')
-                            ->label('Nomor KK')
-                            ->placeholder('3315042001011492')
+                        Forms\Components\TextInput::make('family_card_number')
+                            ->label(__('Family Card Number'))
+                            ->placeholder(__('Family Card Number Placeholder'))
                             ->required()
                             ->length(16)
                             ->columnSpanFull(),
-                        Forms\Components\Section::make('Ayah')
+                        Forms\Components\Section::make(__('Father'))
                             ->schema([
                                 Forms\Components\TextInput::make('father_name')
-                                    ->label('Nama Lengkap')
-                                    ->placeholder('Bambang Susanto')
+                                    ->label(__('Full Name'))
+                                    ->placeholder('Marmin Suparjo')
                                     ->required()
                                     ->maxLength(255),
                                 Forms\Components\TextInput::make('father_nik')
-                                    ->label('NIK')
-                                    ->placeholder('331504090919990001')
+                                    ->label(__('Nik'))
+                                    ->placeholder(__('Nik Placeholder'))
                                     ->required()
                                     ->length(16),
                                 Forms\Components\TextInput::make('father_job')
-                                    ->label('Pekerjaan')
-                                    ->placeholder('Petani/Wiraswasta/Wirausaha/dll')
+                                    ->label(__('Job'))
+                                    ->placeholder(__('Job Placeholder'))
                                     ->required(),
                                 Forms\Components\TextInput::make('father_phone')
-                                    ->label('Nomor Telepon (Whatsapp)')
+                                    ->label(__('Phone'))
                                     ->tel()
                                     ->required()
-                                    ->placeholder('6281234567890')
-                                    ->helperText('Ganti awalan 0 menjadi 62. Seperti nomor 08123456789 ke 628123456789.')
+                                    ->placeholder(__('Phone Placeholder'))
+                                    ->helperText(__('Phone Helper Text'))
                                     ->maxLength(255),
                                 Forms\Components\Textarea::make('father_address')
-                                    ->label('Alamat Lengkap')
-                                    ->placeholder('Jl. Senangsari, Dusun Sendangsari, RT 005, RW 007, Desa Tambirejo, Kec. Toroh, Kab. Grobogan, Prov. Jawa Tengah.')
+                                    ->label(__('Full Address'))
+                                    ->placeholder(__('Guardian Full Address Placeholder'))
                                     ->autosize()
                                     ->maxLength(255)
                                     ->columnSpanFull(),
                             ])
                             ->columns(2),
-                        Forms\Components\Section::make('Ibu')
+                        Forms\Components\Section::make(__('Mother'))
                             ->schema([
                                 Forms\Components\TextInput::make('mother_name')
-                                    ->label('Nama Lengkap')
-                                    ->placeholder('Bambang Susanto')
+                                    ->label(__('Full Name'))
+                                    ->placeholder('Alis Susanti')
                                     ->required()
                                     ->maxLength(255),
                                 Forms\Components\TextInput::make('mother_nik')
-                                    ->label('NIK')
-                                    ->placeholder('331504090919990001')
+                                    ->label(__('Nik'))
+                                    ->placeholder(__('Nik Placeholder'))
                                     ->required()
                                     ->length(16),
                                 Forms\Components\TextInput::make('mother_job')
-                                    ->label('Pekerjaan')
-                                    ->placeholder('Petani/Wiraswasta/Wirausaha/dll')
+                                    ->label(__('Job'))
+                                    ->placeholder(__('Job Placeholder'))
                                     ->required(),
                                 Forms\Components\TextInput::make('mother_phone')
-                                    ->label('Nomor Telepon (Whatsapp)')
+                                    ->label(__('Phone'))
+                                    ->placeholder(__('Phone Placeholder'))
+                                    ->helperText(__('Phone Helper Text'))
+                                    ->maxLength(18)
                                     ->tel()
-                                    ->required()
-                                    ->placeholder('6281234567890')
-                                    ->helperText('Ganti awalan 0 menjadi 62. Seperti nomor 08123456789 ke 628123456789.')
-                                    ->maxLength(255),
+                                    ->required(),
                                 Forms\Components\Textarea::make('mother_address')
-                                    ->label('Alamat Lengkap')
-                                    ->placeholder('Jl. Senangsari, Dusun Sendangsari, RT 005, RW 007, Desa Tambirejo, Kec. Toroh, Kab. Grobogan, Prov. Jawa Tengah.')
+                                    ->label(__('Full Address'))
+                                    ->placeholder(__('Guardian Full Address Placeholder'))
                                     ->autosize()
                                     ->maxLength(255)
                                     ->columnSpanFull(),
                             ])
                             ->columns(2),
-                        Forms\Components\Section::make('Wali Lainnya (Opsional)')
-                            ->description('Isi ini jika walinya bukan Orang Tua (Ayah dan Ibu).')
+                        Forms\Components\Section::make(__('Guardian'))
+                            ->description(__('Guardian Description'))
                             ->schema([
                                 Forms\Components\Repeater::make('guardians')
                                     ->label(false)
                                     ->schema([
                                         Forms\Components\TextInput::make('name')
-                                            ->label('Nama Lengkap')
-                                            ->placeholder('Bambang Susanto')
+                                            ->label(__('Full Name'))
+                                            ->placeholder(__('Guardian Name Placeholder'))
                                             ->required()
                                             ->maxLength(255),
                                         Forms\Components\Select::make('relationship')
-                                            ->label('Hubungan Keluarga')
+                                            ->label(__('Relationship'))
                                             ->options([
                                                 'Ayah' => '<span class="text-blue-600 dark:text-blue-400">Ayah</span>',
                                                 'Ibu' => '<span class="text-pink-600 dark:text-pink-400">Ibu</span>',
@@ -404,38 +399,38 @@ class StudentRegistrationForm extends Component implements HasForms
                                             ->native(false)
                                             ->allowHtml(true)
                                             ->createOptionForm([
-                                                Forms\Components\TextInput::make('name')
-                                                    ->label('Hubungan Keluarga')
+                                                Forms\Components\TextInput::make('relationship')
+                                                    ->label(__('Relationship'))
+                                                    ->placeholder(__('Relationship Placeholder'))
                                                     ->required()
-                                                    ->placeholder('Paman / Bude / Kakek / Nenek')
                                                     ->maxLength(255),
                                             ])
                                             ->createOptionUsing(function (array $data) {
-                                                if (!isset($data['name'])) {
+                                                if (!isset($data['relationship'])) {
                                                     return 'Ayah';
                                                 }
-                                                return ucwords($data['name']);
+                                                return ucwords($data['relationship']);
                                             })
                                             ->required(),
                                         Forms\Components\TextInput::make('nik')
-                                            ->label('NIK')
-                                            ->placeholder('331504090919990001')
+                                            ->label(__('Nik'))
+                                            ->placeholder(__('Nik Placeholder'))
                                             ->required()
                                             ->length(16),
                                         Forms\Components\TextInput::make('job')
-                                            ->label('Pekerjaan')
-                                            ->placeholder('Petani/Wiraswasta/Wirausaha/dll')
+                                            ->label(__('Job'))
+                                            ->placeholder(__('Job Placeholder'))
                                             ->required(),
                                         Forms\Components\TextInput::make('phone')
-                                            ->label('Nomor Telepon (Whatsapp)')
+                                            ->label(__('Phone'))
+                                            ->placeholder(__('Phone Placeholder'))
+                                            ->helperText(__('Phone Helper Text'))
+                                            ->maxLength(18)
                                             ->tel()
-                                            ->required()
-                                            ->placeholder('6281234567890')
-                                            ->helperText('Ganti awalan 0 menjadi 62. Seperti nomor 08123456789 ke 628123456789.')
-                                            ->maxLength(255),
+                                            ->required(),
                                         Forms\Components\Textarea::make('address')
-                                            ->label('Alamat Lengkap')
-                                            ->placeholder('Jl. Senangsari, Dusun Sendangsari, RT 005, RW 007, Desa Tambirejo, Kec. Toroh, Kab. Grobogan, Prov. Jawa Tengah.')
+                                            ->label(__('Full Address'))
+                                            ->placeholder(__('Guardian Full Address Placeholder'))
                                             ->autosize()
                                             ->maxLength(255),
                                     ])
@@ -447,8 +442,8 @@ class StudentRegistrationForm extends Component implements HasForms
                     ])
                     ->collapsible(),
 
-                Forms\Components\Section::make('Pernyataan Persetujuan')
-                    ->description('Baca dan setujui semua syarat dan ketentuan.')
+                Forms\Components\Section::make(__('Terms and Conditions'))
+                    ->description(__('Terms and Conditions Description'))
                     ->aside()
                     ->schema([
                         Forms\Components\Checkbox::make('term_01')
@@ -482,38 +477,6 @@ class StudentRegistrationForm extends Component implements HasForms
                         Forms\Components\Checkbox::make('term_07')
                             ->label('Dengan mengirim data pendaftaran ini, kami setuju dengan semua peraturan Madrasah dan Pesantren yang berlaku.')
                             ->accepted(),
-
-                    ])
-                    ->collapsible(),
-
-                Forms\Components\Section::make('Lainnya')
-                    ->aside()
-                    ->schema([
-                        Forms\Components\Placeholder::make('syarat_pendaftaran')
-                            ->content(new HtmlString('
-                            <ul class="list-decimal px-4 text-gray-500 dark:text-gray-400">
-                                <li>Tiga lembar Fotocopy Kartu Keluarga</li>
-                                <li>Tiga lembar Fotocopy Akta Kelahiran</li>
-                                <li>Tiga lembar Fotocopy SKHUN Terlegalisir</li>
-                                <li>Tiga lembar Fotocopy Ijazah Terlegalisir</li>
-                                <li>Tiga lembar Fotocopy KTP Orang Tua/Wali</li>
-                                <li>Tiga lembar Pass Foto Berwarna 3x4</li>
-                                <li>Tiga lembar Pass Foto Berwarna 2x3</li>
-                            </ul>
-                        ')),
-
-                        Forms\Components\Placeholder::make('hubungi')
-                            ->content(new HtmlString('
-                            <div class="text-gray-500 dark:text-gray-400">
-                                <p>Syarat pendaftaran bisa dibawa saat mengantar santri ke pesantren.</p>
-                                <p>Setelah mengisi formulir pendaftaran online, harap konfirmasi ke salah satu nomor: </p>
-                                <ul class="list-disc px-4">
-                                    <li><a class="text-blue-600 dark:text-blue-500" href="#">Mbak Yani : 0882136687558</a></li>
-                                    <li><a class="text-blue-600 dark:text-blue-500" href="#">Mbak Ulfa : 0882134125855</a></li>
-                                </ul>
-                            </div>
-                        ')),
-
                     ])
                     ->collapsible(),
             ])
@@ -534,7 +497,7 @@ class StudentRegistrationForm extends Component implements HasForms
             $password = $state['password'] ?? \App\Utilities\PasswordUtility::generatePassword($state['name'], $state['phone'], $state['birth_date']);
             // dd($password);
 
-            // Membuat user
+            // Create User
             $user = [
                 "name" => $state["name"],
                 "email" => $state["email"],
@@ -563,11 +526,11 @@ class StudentRegistrationForm extends Component implements HasForms
                 "address" => $state["address"],
                 "rt" => $state["rt"],
                 "rw" => $state["rw"],
-                "postcode" => $state["postcode"],
+                "postal_code" => $state["postal_code"],
                 "nisn" => $state["nisn"],
                 "kip" => $state["kip"],
                 "current_name_school" => $state["current_name_school"],
-                'number_family_card' => $state["number_family_card"],
+                'family_card_number' => $state["family_card_number"],
                 "category" => $state["category"],
                 "current_school" => $state["current_school"],
                 "status" => "Mendaftar",

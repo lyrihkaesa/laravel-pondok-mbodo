@@ -70,7 +70,7 @@ class StudentFactory extends Factory
             'address' => $this->faker->address(),
             'rt' => $this->faker->randomElement($rtRwArray),
             'rw' => $this->faker->randomElement($rtRwArray),
-            'postcode' => $this->faker->postcode(),
+            'postal_code' => $this->faker->postcode(),
             'user_id' => $user->id,
             'status' => $this->faker->randomElement(['Mendaftar', 'Aktif', 'Lulus', 'Tidak Aktif']),
             'current_school' => $this->faker->randomElement(['PAUD/TK', 'MI', 'SMP', 'MA', 'Takhasus']),

@@ -58,7 +58,7 @@
     </div>
     <!-- End Grid -->
 
-    <div class="mt-5 border-t border-gray-200 pt-5 dark:border-gray-700">
+    <div class="mt-5 border-t border-gray-400 pt-5 dark:border-gray-700">
         <div class="flex items-center justify-center">
 
             <div class="text-sm text-gray-600 dark:text-gray-400">

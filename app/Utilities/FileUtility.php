@@ -14,14 +14,24 @@ class FileUtility
         //
     }
 
-    public static function getImageHelperText(string $prefix = '', string $suffix = ' Untuk backgorund warna merah gunakan **#DB1514** dan biru gunakan **#0090FF**.'): HtmlString
+    public static function getImageHelperText(string $prefix = '', string $suffix = ''): HtmlString
     {
-        return str($prefix . 'File harus berformat **.jpg**, **.jpeg**, **.png** dan berukuran maksimal **500KB**.' . $suffix)->inlineMarkdown()->toHtmlString();
+        $result = __('Image Helper Text', [
+            'prefix' => $prefix === '' ? '' : $prefix,
+            'suffix' => $suffix === '' ?  __('Image Helper Suffix') : $suffix,
+            'file_size' => '500KB',
+        ]);
+        return str($result)->trim()->inlineMarkdown()->toHtmlString();
     }
 
-    public static function getPdfHelperText(string $prefix = ''): HtmlString
+    public static function getPdfHelperText(string $prefix = '', string $suffix = ''): HtmlString
     {
-        return str($prefix . 'File harus berformat **.pdf** dan berukuran maksimal **500KB**.')->inlineMarkdown()->toHtmlString();
+        $result = __('PDF Helper Text', [
+            'prefix' => $prefix === '' ? '' : $prefix,
+            'suffix' => $suffix === '' ?  '' : $suffix,
+            'file_size' => '500KB',
+        ]);
+        return str($result)->trim()->inlineMarkdown()->toHtmlString();
     }
 
     public static function generateFileName(string $uniqueValue, string $fileNameWithExtension, ?string $suffixLabel = null): string

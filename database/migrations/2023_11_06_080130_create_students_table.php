@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('address')->nullable(); // Dusun
             $table->string('rt')->nullable();
             $table->string('rw')->nullable();
-            $table->string('postcode')->nullable();
+            $table->string('postal_code')->nullable();
             $table->string('full_address')->nullable();
             $table->enum('status', ['Mendaftar', 'Aktif', 'Lulus', 'Tidak Aktif'])->default('Mendaftar');
             $table->string('current_name_school')->nullable();
@@ -41,7 +41,7 @@ return new class extends Migration
             $table->enum('category', ['Santri Reguler', 'Santri Ndalem', 'Santri Berprestasi'])->nullable();
             $table->string('birth_certificate')->nullable();
             $table->string('family_card')->nullable();
-            $table->string('number_family_card')->nullable();
+            $table->string('family_card_number')->nullable();
             $table->string('skhun')->nullable();
             $table->string('ijazah')->nullable();
             $table->timestamps();

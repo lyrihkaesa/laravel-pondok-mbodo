@@ -28,32 +28,36 @@ class StudentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Informasi pribadi')
-                    ->description('Informasi pribadi yang dimiliki oleh santri')
+                Forms\Components\Section::make(__('Personal Information'))
+                    ->description(__(
+                        'Personal Information Description',
+                        [
+                            'entity' => 'Santri',
+                        ]
+                    ))
                     ->schema([
                         Forms\Components\Grid::make(1)->schema([
                             Forms\Components\TextInput::make('name')
-                                ->label('Nama Lengkap')
-                                ->placeholder('Muhammad Faishal')
+                                ->label(__('Full Name'))
+                                ->placeholder(__('Full Name Placeholder Student'))
                                 ->required(),
                             Forms\Components\TextInput::make('nik')
-                                ->label('NIK')
-                                ->placeholder('331504090919990001')
+                                ->label(__('Nik'))
+                                ->placeholder(__('Nik Placeholder'))
                                 ->required()
                                 ->unique(ignoreRecord: true)
                                 ->length(16)
-                                // ->helperText(fn (?string $state, Forms\Components\TextInput $component) => strlen($state) . '/' . $component->getMaxLength())
                                 ->hintActions([
-                                    Forms\Components\Actions\Action::make('autoInputAddress')
-                                        ->label('Auto Input Data dari NIK')
+                                    Forms\Components\Actions\Action::make('autoInputFormNik')
+                                        ->label(__('Auto Input Form Nik'))
                                         ->badge()
                                         ->icon('heroicon-c-paint-brush')
                                         ->color('warning')
                                         ->requiresConfirmation()
                                         ->modalIcon('heroicon-c-paint-brush')
-                                        ->modalHeading('Auto Input Data dari NIK')
-                                        ->modalDescription('Apakah anda yakin ingin auto input data "Jenis Kelamin, Tempat dan Tanggal Lahir, Provinsi, Kabupaten/Kota, Kecamatan" dari NIK?')
-                                        ->modalSubmitActionLabel('Ya, input semuanya')
+                                        ->modalHeading(__('Auto Input Form Nik'))
+                                        ->modalDescription(__('Auto Input Form Nik Description'))
+                                        ->modalSubmitActionLabel(__('Auto Input Form Nik Submit Action Label'))
                                         ->action(function (?String $state, Forms\Get $get, Forms\Set $set) {
                                             if ($state !== null) {
                                                 if (strlen($state) === 16) {
@@ -69,10 +73,10 @@ class StudentResource extends Resource
                                         }),
                                 ]),
                             Forms\Components\ToggleButtons::make('gender')
-                                ->label('Jenis Kelamin')
+                                ->label(__('Gender'))
                                 ->options([
-                                    'Laki-Laki' => 'Laki-Laki',
-                                    'Perempuan' => 'Perempuan',
+                                    'Laki-Laki' => __('Male'),
+                                    'Perempuan' => __('Female'),
                                 ])->colors([
                                     'Laki-Laki' => 'info',
                                     'Perempuan' => 'pink',
@@ -85,15 +89,18 @@ class StudentResource extends Resource
                                 'sm' => 2,
                             ])->schema([
                                 Forms\Components\TextInput::make('birth_place')
-                                    ->label('Tempat Lahir')
-                                    ->placeholder('Grobogan'),
+                                    ->label(__('Birth Place'))
+                                    ->placeholder(__('Birth Place Placeholder'))
+                                    ->required(),
                                 Forms\Components\DatePicker::make('birth_date')
-                                    ->label('Tanggal Lahir'),
+                                    ->label(__('Birth Date'))
+                                    ->default(now())
+                                    ->required(),
                             ])->columnSpan(1),
                         ])->columnSpan(1),
                         Forms\Components\Grid::make(1)->schema([
                             Forms\Components\FileUpload::make('profile_picture_1x1')
-                                ->label('Foto Profil 1x1')
+                                ->label(__('Profile Picture 1x1'))
                                 ->helperText(\App\Utilities\FileUtility::getImageHelperText())
                                 ->getUploadedFileNameForStorageUsing(
                                     function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
@@ -103,14 +110,14 @@ class StudentResource extends Resource
                                 ->image()
                                 ->downloadable()
                                 ->openable()
-                                ->directory('profile_picture'),
+                                ->directory('profile_pictures'),
                         ])->columnSpan(1),
                     ])
                     ->columns(2),
-                Forms\Components\Section::make('Alamat')
+                Forms\Components\Section::make(__('Address Information'))
                     ->schema([
                         Forms\Components\Select::make('province')
-                            ->label('Provinsi')
+                            ->label(__('Province'))
                             ->options(\App\Utilities\NikUtility::$provinces)
                             ->live()
                             ->afterStateUpdated(function (?string $state, ?string $old, Forms\Set $set) {
@@ -123,7 +130,7 @@ class StudentResource extends Resource
                             })
                             ->searchable(),
                         Forms\Components\Select::make('regency')
-                            ->label('Kabupaten/Kota')
+                            ->label(__('Regency'))
                             ->disabled(fn (Forms\Get $get): bool => $get('province') == null)
                             ->options(function (Forms\Get $get, ?string $state) {
                                 if ($get('province') !== null) {
@@ -144,7 +151,7 @@ class StudentResource extends Resource
                             })
                             ->searchable(fn (Forms\Get $get): bool => $get('province') != null),
                         Forms\Components\Select::make('district')
-                            ->label('Kecamatan')
+                            ->label(__('District'))
                             ->disabled(fn (Forms\Get $get): bool => $get('regency') == null)
                             ->options(function (?string $state, Forms\Get $get) {
                                 if ($get('regency') !== null) {
@@ -164,7 +171,7 @@ class StudentResource extends Resource
                             })
                             ->searchable(fn (Forms\Get $get): bool => $get('regency') != null),
                         Forms\Components\Select::make('village')
-                            ->label('Desa/Kelurahan')
+                            ->label(__('Village'))
                             ->disabled(fn (Forms\Get $get): bool => $get('district') == null)
                             ->options(function (?string $state, Forms\Get $get) {
                                 $villages = [];
@@ -176,38 +183,32 @@ class StudentResource extends Resource
                                 }
                                 return $villages;
                             })
-                            // ->live()
-                            // ->afterStateUpdated(function (?string $state, Forms\Set $set) {
-                            //     if ($state !== null) {
-                            //         $village = \Creasi\Nusa\Models\Village::where('code', $state)->first();
-                            //         if ($village !== null) {
-                            //             $set('postcode', $village->postal_code);
-                            //         }
-                            //     }
-                            //     return $state;
-                            // })
                             ->searchable(fn (Forms\Get $get): bool => $get('district') != null),
                         Forms\Components\Textarea::make('address')
-                            ->label('Alamat Lengkap')
+                            ->label(__('Full Address'))
                             ->autosize()
-                            ->placeholder('Dusun Sendangsari, Jl Sendangsari'),
+                            ->placeholder(__('Full Address Placeholder')),
                         Forms\Components\Grid::make([
                             'default' => 1,
                             'sm' => 3,
                         ])
                             ->schema([
                                 Forms\Components\TextInput::make('rt')
-                                    ->label('RT')
-                                    ->placeholder('005'),
+                                    ->label(__('RT'))
+                                    ->placeholder(__('RT Placeholder'))
+                                    ->length(3),
                                 Forms\Components\TextInput::make('rw')
-                                    ->label('RW')
-                                    ->placeholder('007'),
-                                Forms\Components\TextInput::make('postcode')
-                                    ->label('Kode Pos')
-                                    ->placeholder('58171')
+                                    ->label(__('RW'))
+                                    ->placeholder(__('RW Placeholder'))
+                                    ->length(3),
+                                Forms\Components\TextInput::make('postal_code')
+                                    ->label(__('Postal Code'))
+                                    ->placeholder(__('Postal Code Placeholder'))
+                                    ->minLength(5)
+                                    ->maxLength(6)
                                     ->suffixActions([
-                                        Forms\Components\Actions\Action::make('autoGeneratePostCode')
-                                            ->label('Auto Generate Kode Post')
+                                        Forms\Components\Actions\Action::make('autoGeneratePostalCode')
+                                            ->label(__('Auto Generate Postal Code'))
                                             ->badge()
                                             ->iconButton()
                                             ->icon('heroicon-c-paint-brush')
@@ -217,7 +218,7 @@ class StudentResource extends Resource
                                                 if ($villageField !== null) {
                                                     $village = \Creasi\Nusa\Models\Village::where('code', $villageField)->first();
                                                     if ($village !== null) {
-                                                        $set('postcode', $village->postal_code);
+                                                        $set('postal_code', $village->postal_code);
                                                     }
                                                 }
                                             }),
@@ -225,28 +226,30 @@ class StudentResource extends Resource
                             ])->columnSpan(1),
 
                     ])->columns(2),
-                Forms\Components\Section::make('Status Akademik')
+                Forms\Components\Section::make(__('Academic Information'))
                     ->schema([
                         Forms\Components\TextInput::make('nip')
-                            ->label('Nomor Induk Pesantren')
-                            ->required()
+                            ->label(__('Nip'))
+                            ->placeholder(__('Nip Placeholder'))
                             ->unique(ignoreRecord: true),
                         Forms\Components\TextInput::make('nisn')
-                            ->label('NISN (Nomor Induk Siswa Nasional)')
+                            ->label(__('Nisn'))
+                            ->placeholder(__('Nisn Placeholder'))
                             ->unique(ignoreRecord: true),
                         Forms\Components\TextInput::make('kip')
-                            ->label('KIP (Kartu Indonesia Pintar)')
+                            ->label(__('Kip'))
+                            ->placeholder(__('Kip Placeholder'))
                             ->unique(ignoreRecord: true),
                         Forms\Components\TextInput::make('current_name_school')
-                            ->label('Asal Sekolah')
-                            ->placeholder('SD/SMP/SMA/SMK Negeri 1 Purwodadi'),
+                            ->label(__('Current Name School'))
+                            ->placeholder(__('Current Name School Placeholder')),
                         Forms\Components\ToggleButtons::make('category')
-                            ->label('Kategori')
+                            ->label(__('Category'))
                             ->inline()
                             ->options([
-                                'Santri Reguler' => 'Santri Reguler',
-                                'Santri Ndalem' => 'Santri Ndalem',
-                                'Santri Berprestasi' => 'Santri Berprestasi',
+                                'Santri Reguler' => __('Santri Reguler'),
+                                'Santri Ndalem' => __('Santri Ndalem'),
+                                'Santri Berprestasi' => __('Santri Berprestasi'),
                             ])
                             ->colors([
                                 'Santri Reguler' => 'info',
@@ -256,14 +259,14 @@ class StudentResource extends Resource
                             ->required()
                             ->default('Santri Reguler'),
                         Forms\Components\ToggleButtons::make('current_school')
-                            ->label('Sekolah')
+                            ->label(__('Current School'))
                             ->inline()
                             ->options([
-                                'PAUD/TK' => 'PAUD/TK',
-                                'MI' => 'MI',
-                                'SMP' => 'SMP',
-                                'MA' => 'MA',
-                                'Takhasus' => 'Takhasus',
+                                'PAUD/TK' => __('PAUD/TK'),
+                                'MI' => __('MI'),
+                                'SMP' => __('SMP'),
+                                'MA' => __('MA'),
+                                'Takhasus' => __('Takhasus'),
                             ])
                             ->colors([
                                 'PAUD/TK' => 'pink',
@@ -275,13 +278,13 @@ class StudentResource extends Resource
                             ->required()
                             ->default('PAUD/TK'),
                         Forms\Components\ToggleButtons::make('status')
-                            ->label('Status')
+                            ->label(__('Status'))
                             ->inline()
                             ->options([
-                                'Mendaftar' => 'Mendaftar',
-                                'Aktif' => 'Aktif',
-                                'Lulus' => 'Lulus',
-                                'Tidak Aktif' => 'Tidak Aktif',
+                                'Mendaftar' => __('Enrolled'),
+                                'Aktif' => __('Active'),
+                                'Lulus' => __('Graduated'),
+                                'Tidak Aktif' => __('Inactive'),
                             ])
                             ->colors([
                                 'Mendaftar' => 'pink',
@@ -293,21 +296,22 @@ class StudentResource extends Resource
                             ->default('Aktif'),
                     ])
                     ->columns(2),
-                Forms\Components\Section::make('Kontak dan keamanan')
+                Forms\Components\Section::make(__('Contact and Security Information'))
                     ->schema([
                         Forms\Components\TextInput::make('phone')
-                            ->label('Nomor Telepon (Whatsapp)')
+                            ->label(__('Phone'))
+                            ->placeholder(__('Phone Placeholder'))
                             ->required()
                             ->tel()
-                            ->placeholder('628123456789')
-                            ->helperText('Ganti awalan 0 menjadi 62 seperti: 08123456789 menjadi 628123456789.')
+                            ->helperText(__('Phone Helper Text'))
                             ->unique(table: 'users', column: 'phone', modifyRuleUsing: function (Unique $rule,  Livewire $livewire, string $operation) {
                                 if ($operation === 'edit') {
                                     return $rule->ignore($livewire->data['user_id'], "id");
                                 }
                             }),
                         Forms\Components\TextInput::make('email')
-                            ->label('Email')
+                            ->label(__('Email'))
+                            ->placeholder(__('Email Placeholder'))
                             ->email()
                             ->unique(table: 'users', column: 'email', modifyRuleUsing: function (Unique $rule,  Livewire $livewire, string $operation) {
                                 if ($operation === 'edit') {
@@ -315,28 +319,28 @@ class StudentResource extends Resource
                                 }
                             }),
                         Forms\Components\TextInput::make('password')
-                            ->label('Kata Sandi')
+                            ->label(__('Password'))
                             ->password()
                             ->revealable()
                             ->helperText(function (string $operation, Forms\Get $get) {
                                 if ($operation === 'create') {
-                                    return 'Jika kata sandi tidak di isi, kata sandi akan dibuat secara automatis, nama depan dengan huruf kecil + 4 angka terakhir nomor telepon + tanggal lahir dengan format: 09092002';
+                                    return __('Password Helper Text Create');
                                 }
                                 if ($operation === 'edit') {
-                                    return 'Jika kata sandi tidak di isi, kata sandi tidak akan diubah';
+                                    return __('Password Helper Text Edit');
                                 }
                             }),
                     ])->columns(2),
-                Forms\Components\Section::make('Berkas')
+                Forms\Components\Section::make(__('Files'))
                     ->schema([
-                        Forms\Components\TextInput::make('number_family_card')
-                            ->label('Nomor KK')
-                            ->placeholder('3315042001011492')
+                        Forms\Components\TextInput::make('family_card_number')
+                            ->label(__('Family Card Number'))
+                            ->placeholder(__('Family Card Number Placeholder'))
                             ->required()
                             ->length(16)
                             ->columnSpanFull(),
                         Forms\Components\FileUpload::make('profile_picture_3x4')
-                            ->label('Foto Profil 3x4')
+                            ->label(__('Profile Picture 3x4'))
                             ->helperText(\App\Utilities\FileUtility::getImageHelperText())
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
@@ -346,9 +350,9 @@ class StudentResource extends Resource
                             ->image()
                             ->downloadable()
                             ->openable()
-                            ->directory('profile_picture'),
+                            ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('profile_picture_4x6')
-                            ->label('Foto Profil 4x6')
+                            ->label(__('Profile Picture 4x6'))
                             ->helperText(\App\Utilities\FileUtility::getImageHelperText())
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
@@ -358,9 +362,9 @@ class StudentResource extends Resource
                             ->image()
                             ->downloadable()
                             ->openable()
-                            ->directory('profile_picture'),
+                            ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('birth_certificate')
-                            ->label('Akta Kelahiran')
+                            ->label(__('Birth Certificate'))
                             ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
@@ -369,9 +373,9 @@ class StudentResource extends Resource
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->directory('akta_kelahiran'),
+                            ->directory('birth_certificates'),
                         Forms\Components\FileUpload::make('family_card')
-                            ->label('Kartu Keluarga (KK)')
+                            ->label(__('Family Card'))
                             ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
@@ -380,7 +384,7 @@ class StudentResource extends Resource
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->directory('kartu_keluarga')
+                            ->directory('family_cards')
                             ->hintActions([
                                 Forms\Components\Actions\Action::make('preview-fc')
                                     ->label('Lihat Berkas')
@@ -415,7 +419,7 @@ class StudentResource extends Resource
                                     ->modalCancelAction(false),
                             ]),
                         Forms\Components\FileUpload::make('skhun')
-                            ->label('SKHUN Terlegalisir')
+                            ->label(__('Skhun'))
                             ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
@@ -426,7 +430,7 @@ class StudentResource extends Resource
                             ->downloadable()
                             ->directory('skhun'),
                         Forms\Components\FileUpload::make('ijazah')
-                            ->label('Ijazah Terlegalisir')
+                            ->label(__('Ijazah'))
                             ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
@@ -438,59 +442,59 @@ class StudentResource extends Resource
                             ->directory('ijazah'),
                     ])
                     ->columns(2),
-                Forms\Components\Section::make('Orang Tua/Wali')
+                Forms\Components\Section::make(__('Parent/Guardian Information'))
                     ->schema([
                         Forms\Components\Repeater::make('guardians')
                             ->label(false)
                             ->schema([
                                 Forms\Components\TextInput::make('name')
-                                    ->label('Nama Lengkap')
-                                    ->placeholder('Bambang Susanto')
+                                    ->label(__('Full Name'))
+                                    ->placeholder(__('Guardian Name Placeholder'))
                                     ->required()
                                     ->maxLength(255),
                                 Forms\Components\Select::make('relationship')
-                                    ->label('Hubungan Keluarga')
+                                    ->label(__('Relationship'))
                                     ->options([
-                                        'Ayah' => '<span class="text-blue-600 dark:text-blue-400">Ayah</span>',
-                                        'Ibu' => '<span class="text-pink-600 dark:text-pink-400">Ibu</span>',
-                                        'Saudara Laki-Laki' => '<span class="text-amber-600 dark:text-amber-400">Saudara Laki-Laki</span>',
-                                        'Saudara Perempuan' => '<span class="text-red-600 dark:text-red-400">Saudara Perempuan</span>',
+                                        'Ayah' => '<span class="text-blue-600 dark:text-blue-400">' . __('Father') . '</span>',
+                                        'Ibu' => '<span class="text-pink-600 dark:text-pink-400">' . __('Mother') . '</span>',
+                                        'Saudara Laki-Laki' => '<span class="text-amber-600 dark:text-amber-400">' . __('Brother') . '</span>',
+                                        'Saudara Perempuan' => '<span class="text-red-600 dark:text-red-400">' . __('Sister') . '</span>',
                                     ])
                                     ->native(false)
                                     ->allowHtml(true)
                                     ->createOptionForm([
-                                        Forms\Components\TextInput::make('name')
-                                            ->label('Hubungan Keluarga')
+                                        Forms\Components\TextInput::make('relationship')
+                                            ->label(__('Relationship'))
+                                            ->placeholder(__('Relationship Placeholder'))
                                             ->required()
-                                            ->placeholder('Paman / Bude / Kakek / Nenek')
                                             ->maxLength(255),
                                     ])
                                     ->createOptionUsing(function (array $data) {
-                                        if (!isset($data['name'])) {
+                                        if (!isset($data['relationship'])) {
                                             return 'Ayah';
                                         }
-                                        return ucwords($data['name']);
+                                        return ucwords($data['relationship']);
                                     })
                                     ->required(),
                                 Forms\Components\TextInput::make('nik')
-                                    ->label('NIK')
-                                    ->placeholder('331504090919990001')
+                                    ->label(__('Nik'))
+                                    ->placeholder(__('Nik Placeholder'))
                                     ->required()
                                     ->length(16),
                                 Forms\Components\TextInput::make('job')
-                                    ->label('Pekerjaan')
-                                    ->placeholder('Petani/Wiraswasta/Wirausaha/dll')
+                                    ->label(__('Job'))
+                                    ->placeholder(__('Job Placeholder'))
                                     ->required(),
                                 Forms\Components\TextInput::make('phone')
-                                    ->label('Nomor Telepon (Whatsapp)')
+                                    ->label(__('Phone'))
+                                    ->placeholder(__('Phone Placeholder'))
+                                    ->helperText(__('Phone Helper Text'))
+                                    ->maxLength(18)
                                     ->tel()
-                                    ->required()
-                                    ->placeholder('6281234567890')
-                                    ->helperText('Ganti awalan 0 menjadi 62. Seperti nomor 08123456789 ke 628123456789.')
-                                    ->maxLength(255),
+                                    ->required(),
                                 Forms\Components\Textarea::make('address')
-                                    ->label('Alamat Lengkap')
-                                    ->placeholder('Jl. Senangsari, Dusun Sendangsari, RT 005, RW 007, Desa Tambirejo, Kec. Toroh, Kab. Grobogan, Prov. Jawa Tengah.')
+                                    ->label(__('Full Address'))
+                                    ->placeholder(__('Guardian Full Address Placeholder'))
                                     ->autosize()
                                     ->maxLength(255),
                             ])
@@ -502,7 +506,7 @@ class StudentResource extends Resource
                                 $guardian = Guardian::where('nik', $data['nik'])
                                     ->where('phone', $data['phone'])
                                     ->first();
-                                dump(['Before Create', $data, $livewire->data, $record, $guardian, $operation]);
+                                // dump(['Before Create', $data, $livewire->data, $record, $guardian, $operation]);
                                 // dd(['Before Create', $data, $livewire->data, $record, $guardian, $operation]);
                                 // dump($guardian);
                                 if ($guardian) {
@@ -536,17 +540,19 @@ class StudentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')->label('Nama')->searchable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label(__('Full Name'))
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('nip')
-                    ->label('NIP')
+                    ->label(__('Nip Column'))
                     ->badge()
                     ->color('neutral')
                     ->copyable()
-                    ->copyMessage('Nomor Induk Santri telah disalin!')
+                    ->copyMessage(__('Nip Copy Message'))
                     ->copyMessageDuration(1000)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('gender')
-                    ->label('Jenis Kelamin')
+                    ->label(__('Gender'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Laki-Laki' => 'info',
@@ -554,7 +560,7 @@ class StudentResource extends Resource
                     })
                     ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('current_school')
-                    ->label('Sekolah')
+                    ->label(__('Current School'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'PAUD/TK' => 'pink',
@@ -564,7 +570,8 @@ class StudentResource extends Resource
                         'Takhasus' => 'info',
                     })
                     ->visibleFrom('md'),
-                Tables\Columns\TextColumn::make('status')->label('Status')
+                Tables\Columns\TextColumn::make('status')
+                    ->label(__('Status'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Mendaftar' => 'pink',
@@ -574,14 +581,14 @@ class StudentResource extends Resource
                     })
                     ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('user.phone')
-                    ->label('Nomor Telepon')
+                    ->label(__('Phone Column'))
                     ->searchable()
                     ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('user.email')
-                    ->label('Email')
+                    ->label(__('Email'))
                     ->searchable()
                     ->copyable()
-                    ->copyMessage('Alamat email telah disalin!')
+                    ->copyMessage(__('Email Copy Message'))
                     ->copyMessageDuration(1500)
                     ->visibleFrom('md'),
             ])
