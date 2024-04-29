@@ -38,6 +38,12 @@ class EmployeeFactory extends Factory
         $user->syncRoles($roles);
         $user->assignRole($rolePengurus);
 
+        $user->wallets()->create([
+            'id' => $user->phone,
+            'name' => 'Dompet Utama',
+            'balance' => 0,
+        ]);
+
         $nik = $this->faker->nik();
         $parseNik = NikUtility::parseNIK($nik);
         $district = District::where('code', $parseNik->district)->first();
@@ -74,7 +80,7 @@ class EmployeeFactory extends Factory
             'rw' => $this->faker->randomElement($rtRwArray),
             'postal_code' => $this->faker->postcode(),
             'start_employment_date' => now(),
-            'sallary' => $this->faker->numberBetween(300000, 1000000),
+            'salary' => $this->faker->numberBetween(300000, 1000000),
         ];
     }
 }

@@ -194,6 +194,12 @@ class OrganizationSeeder extends Seeder
                     'mission' => $organization['mission'],
                 ]);
 
+                $organizationModel->wallets()->create([
+                    'id' => $organizationModel->id,
+                    'name' => 'Dompte Utama',
+                    'balance' => 0,
+                ]);
+
                 foreach ($organization['classrooms'] as $className => $count) {
                     for ($i = 1; $i <= $count; $i++) {
                         if ($homeroom_teacher_last_id == 100) {

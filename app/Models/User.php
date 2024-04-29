@@ -73,4 +73,12 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->belongsToMany(Organization::class);
     }
+
+    /**
+     * Get the wallets owned by the user.
+     */
+    public function wallets()
+    {
+        return $this->hasMany(Wallet::class, 'user_id');
+    }
 }

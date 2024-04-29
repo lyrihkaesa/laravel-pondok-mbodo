@@ -49,4 +49,12 @@ class Organization extends Model
     {
         return $this->hasMany(Classroom::class);
     }
+
+    /**
+     * Get the wallets owned by the organization.
+     */
+    public function wallets(): HasMany
+    {
+        return $this->hasMany(Wallet::class, 'organization_id');
+    }
 }

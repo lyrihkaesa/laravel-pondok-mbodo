@@ -36,6 +36,12 @@ class StudentFactory extends Factory
         $studentRole = Role::where('name', 'Santri')->first();
         $user->assignRole($studentRole);
 
+        $user->wallets()->create([
+            'id' => $user->phone,
+            'name' => 'Dompet Utama',
+            'balance' => 0,
+        ]);
+
         $nik = $this->faker->nik();
         $parseNik = NikUtility::parseNIK($nik);
         $district = District::where('code', $parseNik->district)->first();
