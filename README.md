@@ -4,7 +4,7 @@ Website Sistem Informasi Yayasan Pondok Pesantren Ki Ageng Mbodo, digunakan untu
 
 ## Fitur
 
-### Modul Publik dan Informasi
+### Modul Informasi Publik
 
 -   [ ] Home/Beranda/Landing Page `/`
 -   [ ] About/Profile Page `/tentang`

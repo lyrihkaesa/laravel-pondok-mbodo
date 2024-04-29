@@ -36,7 +36,6 @@ class StudentFactory extends Factory
         $studentRole = Role::where('name', 'Santri')->first();
         $user->assignRole($studentRole);
 
-
         $nik = $this->faker->nik();
         $parseNik = NikUtility::parseNIK($nik);
         $district = District::where('code', $parseNik->district)->first();
@@ -52,10 +51,12 @@ class StudentFactory extends Factory
         }
         $parseNik = NikUtility::parseNIK($nik);
         $regency = Regency::where('code', $parseNik->regency)->first();
+        $district = District::where('code', $parseNik->district)->first();
 
         $rtRwArray = ["001", "002", "003", "004", "005", "006", "007", "008", "009"];
 
         return [
+            'user_id' => $user->id,
             'name' => $user->name,
             'nik' => $nik,
             'nip' => '23' . $this->faker->unique()->numberBetween(10000000, 99999999),
@@ -66,12 +67,11 @@ class StudentFactory extends Factory
             'province' => $parseNik->province,
             'regency' => $parseNik->regency,
             'district' => $parseNik->district,
-            // 'village' => $this->faker->randomElement(\Creasi\Nusa\Models\Village::all()->pluck('name')->toArray()),
+            'village' => $this->faker->randomElement($district->villages->pluck('code')->toArray()),
             'address' => $this->faker->address(),
             'rt' => $this->faker->randomElement($rtRwArray),
             'rw' => $this->faker->randomElement($rtRwArray),
             'postal_code' => $this->faker->postcode(),
-            'user_id' => $user->id,
             'status' => $this->faker->randomElement(['Mendaftar', 'Aktif', 'Lulus', 'Tidak Aktif']),
             'current_school' => $this->faker->randomElement(['PAUD/TK', 'MI', 'SMP', 'MA', 'Takhasus']),
             'category' => $this->faker->randomElement(['Santri Reguler', 'Santri Ndalem', 'Santri Berprestasi']),

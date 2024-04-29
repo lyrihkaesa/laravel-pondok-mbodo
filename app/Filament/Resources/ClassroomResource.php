@@ -75,7 +75,7 @@ class ClassroomResource extends Resource
                     ->label('Kombinasi Nama')
                     ->required()
                     ->live()
-                    ->unique(),
+                    ->unique(ignoreRecord: true),
                 Select::make('homeroom_teacher_id')
                     ->required()
                     ->relationship('homeroomTeacher', 'name')

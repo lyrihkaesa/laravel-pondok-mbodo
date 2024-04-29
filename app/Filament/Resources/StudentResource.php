@@ -10,7 +10,6 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Livewire\Component as Livewire;
-use Filament\Support\Enums\MaxWidth;
 use Illuminate\Validation\Rules\Unique;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\StudentResource\Pages;
@@ -32,7 +31,7 @@ class StudentResource extends Resource
                     ->description(__(
                         'Personal Information Description',
                         [
-                            'entity' => 'Santri',
+                            'entity' => __('Student'),
                         ]
                     ))
                     ->schema([
@@ -582,20 +581,26 @@ class StudentResource extends Resource
                     ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('user.phone')
                     ->label(__('Phone Column'))
+                    ->badge()
+                    ->color('success')
+                    ->copyable()
+                    ->copyMessage(__('Phone Copy Message'))
+                    ->copyMessageDuration(1000)
                     ->searchable()
-                    ->visibleFrom('md'),
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('user.email')
                     ->label(__('Email'))
                     ->searchable()
                     ->copyable()
                     ->copyMessage(__('Email Copy Message'))
                     ->copyMessageDuration(1500)
-                    ->visibleFrom('md'),
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
+                        'Mendaftar' => 'Mendaftar',
                         'Aktif' => 'Aktif',
                         'Lulus' => 'Lulus',
                         'Tidak Aktif' => 'Tidak Aktif',
@@ -609,11 +614,11 @@ class StudentResource extends Resource
                 Tables\Filters\SelectFilter::make('current_school')
                     ->label('Sekolah')
                     ->options([
-                        'PAUD' => 'PAUD',
-                        'TK' => 'TK',
-                        'SD' => 'SD',
+                        'PAUD/TK' => 'PAUD/TK',
+                        'MI' => 'MI',
                         'SMP' => 'SMP',
-                        'SMK' => 'SMK',
+                        'MA' => 'MA',
+                        'Takhasus' => 'Takhasus',
                     ]),
             ])
             ->actions([

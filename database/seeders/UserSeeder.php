@@ -28,10 +28,9 @@ class UserSeeder extends Seeder
         Employee::create([
             'user_id' => $adminSuper->id,
             'name' => 'Kaesa Lyrih',
-            'email' => 'admin@gmail.com',
-            'phone' => '628111222333',
+            'nik' => '3315040202020002',
             'address' => 'Dusun Sendangsari, Desa Tambirejo, Kec. Toroh, Kab. Grobogan',
-            'gender' => 'MALE',
+            'gender' => 'Laki-Laki',
             'birth_date' => '1990-01-01',
         ]);
 

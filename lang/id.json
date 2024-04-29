@@ -1,4 +1,6 @@
 {
+    "Employee": "Pengurus",
+    "Student": "Santri",
     "Personal Information": "Informasi pribadi",
     "Personal Information Description": "Informasi pribadi yang dimiliki oleh :entity.",
     "Full Name": "Nama Lengkap",
@@ -114,5 +116,17 @@
     "Register": "Daftar",
     "Registering...": "Proses Mendaftar...",
     "Registration Requirement": "Syarat Pendaftaran",
-    "Registration Contact": "Hubungi"
+    "Registration Contact": "Hubungi",
+    "Niy": "NIY (Nomor Induk Yayasan)",
+    "Niy Placeholder": "1234567890",
+    "Role": "Peran",
+    "Start Employment Date": "Tanggal Mulai Bekerja",
+    "Salary": "Gaji",
+    "Phone Copy Message": "'No. Telepon (WA) telah disalin!",
+    "Niy Copy Message": "'NIY (Nomor Induk Yayasan) telah disalin!",
+    "Niy Column": "NIY",
+    "Homeroom Teacher": "Wali Kelas",
+    "Combined Name": "Kombinasi Nama",
+    "Classroom": "Kelas",
+    "Students Count": "Jumlah Santri"
 }

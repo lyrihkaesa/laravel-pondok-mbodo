@@ -3,9 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use App\Utilities\NikUtility;
+use Creasi\Nusa\Models\Regency;
+use Creasi\Nusa\Models\District;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Employee>
@@ -24,7 +28,7 @@ class EmployeeFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'phone' => '628' . $this->faker->unique()->numberBetween(100000000, 999999999),
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => Hash::make('password'), // password
             'remember_token' => Str::random(10),
         ]);
 
@@ -32,16 +36,45 @@ class EmployeeFactory extends Factory
         $rolePengurus = Role::where('name', 'Pengurus')->first();
 
         $user->syncRoles($roles);
-        $user->syncRoles($rolePengurus);
+        $user->assignRole($rolePengurus);
+
+        $nik = $this->faker->nik();
+        $parseNik = NikUtility::parseNIK($nik);
+        $district = District::where('code', $parseNik->district)->first();
+
+        // Lakukan pengecekan apakah $district ada dalam database
+        if (!$district) {
+            // Jika tidak ditemukan, buat NIK baru
+            do {
+                $nik = $this->faker->nik();
+                $parseNik = NikUtility::parseNIK($nik);
+                $district = District::where('code', $parseNik->district)->first();
+            } while (!$district);
+        }
+        $parseNik = NikUtility::parseNIK($nik);
+        $regency = Regency::where('code', $parseNik->regency)->first();
+        $district = District::where('code', $parseNik->district)->first();
+
+        $rtRwArray = ["001", "002", "003", "004", "005", "006", "007", "008", "009"];
 
         return [
-            'name' => $user->name,
-            'email' => $user->email,
-            'phone' => $user->phone,
-            'gender' => $this->faker->randomElement(['MALE', 'FAMALE']),
-            'birth_date' => $this->faker->date,
-            'address' => $this->faker->address,
             'user_id' => $user->id,
+            'name' => $user->name,
+            'nik' => $nik,
+            'niy' => '23' . $this->faker->unique()->numberBetween(10000000, 99999999),
+            'gender' => $parseNik->gender,
+            'birth_place' => $regency->name ?? 'Unknown',
+            'birth_date' => $parseNik->birthDate,
+            'province' => $parseNik->province,
+            'regency' => $parseNik->regency,
+            'district' => $parseNik->district,
+            'village' => $this->faker->randomElement($district->villages->pluck('code')->toArray()),
+            'address' => $this->faker->address(),
+            'rt' => $this->faker->randomElement($rtRwArray),
+            'rw' => $this->faker->randomElement($rtRwArray),
+            'postal_code' => $this->faker->postcode(),
+            'start_employment_date' => now(),
+            'sallary' => $this->faker->numberBetween(300000, 1000000),
         ];
     }
 }

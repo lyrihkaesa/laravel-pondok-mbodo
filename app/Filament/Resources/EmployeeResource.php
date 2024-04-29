@@ -7,13 +7,12 @@ use App\Filament\Resources\EmployeeResource\RelationManagers;
 use App\Models\Employee;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Components;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\SelectColumn;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Livewire\Component as Livewire;
+use Illuminate\Validation\Rules\Unique;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Spatie\Permission\Models\Role;
@@ -30,22 +29,388 @@ class EmployeeResource extends Resource
     {
         return $form
             ->schema([
-                Components\Section::make('Informasi pribadi')
-                    ->description('Informasi pribadi yang dimiliki oleh santri')
+                Forms\Components\Section::make(__('Personal Information'))
+                    ->description(__(
+                        'Personal Information Description',
+                        [
+                            'entity' => __('Employee'),
+                        ]
+                    ))
                     ->schema([
-                        Components\TextInput::make('name')->required(),
-                        Components\TextInput::make('address')->required(),
-                        Components\Radio::make('gender')->label('Jenis Kelamin')->options(['Laki-Laki' => 'Laki-Laki', 'Perempuan' => 'Perempuan'])->required()->default('Laki-Laki'),
-                        Components\DatePicker::make('birth_date')->required(),
+                        Forms\Components\Grid::make(1)->schema([
+                            Forms\Components\TextInput::make('name')
+                                ->label(__('Full Name'))
+                                ->placeholder(__('Full Name Placeholder Student'))
+                                ->required(),
+                            Forms\Components\TextInput::make('nik')
+                                ->label(__('Nik'))
+                                ->placeholder(__('Nik Placeholder'))
+                                ->required()
+                                ->unique(ignoreRecord: true)
+                                ->length(16)
+                                ->hintActions([
+                                    Forms\Components\Actions\Action::make('autoInputFormNik')
+                                        ->label(__('Auto Input Form Nik'))
+                                        ->badge()
+                                        ->icon('heroicon-c-paint-brush')
+                                        ->color('warning')
+                                        ->requiresConfirmation()
+                                        ->modalIcon('heroicon-c-paint-brush')
+                                        ->modalHeading(__('Auto Input Form Nik'))
+                                        ->modalDescription(__('Auto Input Form Nik Description'))
+                                        ->modalSubmitActionLabel(__('Auto Input Form Nik Submit Action Label'))
+                                        ->action(function (?String $state, Forms\Get $get, Forms\Set $set) {
+                                            if ($state !== null) {
+                                                if (strlen($state) === 16) {
+                                                    $result = \App\Utilities\NikUtility::parseNIK($state);
+                                                    $set('gender', $result->gender);
+                                                    $set('province', $result->province);
+                                                    $set('regency', $result->regency);
+                                                    $set('district', $result->district);
+                                                    $set('birth_place', \Creasi\Nusa\Models\Regency::where('code', $result->regency)->first()->name);
+                                                    $set('birth_date', $result->birthDate);
+                                                }
+                                            }
+                                        }),
+                                ]),
+                            Forms\Components\ToggleButtons::make('gender')
+                                ->label(__('Gender'))
+                                ->options([
+                                    'Laki-Laki' => __('Male'),
+                                    'Perempuan' => __('Female'),
+                                ])->colors([
+                                    'Laki-Laki' => 'info',
+                                    'Perempuan' => 'pink',
+                                ])
+                                ->required()
+                                ->default('Laki-Laki')
+                                ->inline(),
+                            Forms\Components\Grid::make([
+                                'default' => 1,
+                                'sm' => 2,
+                            ])->schema([
+                                Forms\Components\TextInput::make('birth_place')
+                                    ->label(__('Birth Place'))
+                                    ->placeholder(__('Birth Place Placeholder'))
+                                    ->required(),
+                                Forms\Components\DatePicker::make('birth_date')
+                                    ->label(__('Birth Date'))
+                                    ->default(now())
+                                    ->required(),
+                            ])->columnSpan(1),
+                        ])->columnSpan(1),
+                        Forms\Components\Grid::make(1)->schema([
+                            Forms\Components\FileUpload::make('profile_picture_1x1')
+                                ->label(__('Profile Picture 1x1'))
+                                ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                                ->getUploadedFileNameForStorageUsing(
+                                    function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
+                                        return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-1x1');
+                                    }
+                                )
+                                ->image()
+                                ->downloadable()
+                                ->openable()
+                                ->directory('profile_pictures'),
+                        ])->columnSpan(1),
+                    ])
+                    ->columns(2),
+                Forms\Components\Section::make(__('Address Information'))
+                    ->schema([
+                        Forms\Components\Select::make('province')
+                            ->label(__('Province'))
+                            ->options(\App\Utilities\NikUtility::$provinces)
+                            ->live()
+                            ->afterStateUpdated(function (?string $state, ?string $old, Forms\Set $set) {
+                                if ($state !== $old) {
+                                    $set('regency', NULL);
+                                    $set('district', NULL);
+                                    $set('village', NULL);
+                                }
+                                return $state;
+                            })
+                            ->searchable(),
+                        Forms\Components\Select::make('regency')
+                            ->label(__('Regency'))
+                            ->disabled(fn (Forms\Get $get): bool => $get('province') == null)
+                            ->options(function (Forms\Get $get, ?string $state) {
+                                if ($get('province') !== null) {
+                                    $province = \Creasi\Nusa\Models\Province::where('code', $get('province'))->first();
+                                    $regencies = $province->regencies->pluck('name', 'code');
+                                    return $regencies;
+                                } else {
+                                    return [];
+                                }
+                            })
+                            ->live()
+                            ->afterStateUpdated(function (?string $state, ?string $old, Forms\Set $set) {
+                                if ($state !== $old) {
+                                    $set('district', null);
+                                    $set('village', null);
+                                }
+                                return $state;
+                            })
+                            ->searchable(fn (Forms\Get $get): bool => $get('province') != null),
+                        Forms\Components\Select::make('district')
+                            ->label(__('District'))
+                            ->disabled(fn (Forms\Get $get): bool => $get('regency') == null)
+                            ->options(function (?string $state, Forms\Get $get) {
+                                if ($get('regency') !== null) {
+                                    $regency = \Creasi\Nusa\Models\Regency::where('code', $get('regency'))->first();
+                                    $districts = $regency->districts->pluck('name', 'code');
+                                    return $districts;
+                                } else {
+                                    return [];
+                                }
+                            })
+                            ->live()
+                            ->afterStateUpdated(function (?string $state, ?string $old, Forms\Set $set) {
+                                if ($state !== $old) {
+                                    $set('village', null);
+                                }
+                                return $state;
+                            })
+                            ->searchable(fn (Forms\Get $get): bool => $get('regency') != null),
+                        Forms\Components\Select::make('village')
+                            ->label(__('Village'))
+                            ->disabled(fn (Forms\Get $get): bool => $get('district') == null)
+                            ->options(function (?string $state, Forms\Get $get) {
+                                $villages = [];
+                                if ($get('district') != null) {
+                                    $district = \Creasi\Nusa\Models\District::where('code', $get('district'))->first();
+                                    if ($district !== null) {
+                                        $villages = $district->villages->pluck('name', 'code');
+                                    }
+                                }
+                                return $villages;
+                            })
+                            ->searchable(fn (Forms\Get $get): bool => $get('district') != null),
+                        Forms\Components\Textarea::make('address')
+                            ->label(__('Full Address'))
+                            ->autosize()
+                            ->placeholder(__('Full Address Placeholder')),
+                        Forms\Components\Grid::make([
+                            'default' => 1,
+                            'sm' => 3,
+                        ])
+                            ->schema([
+                                Forms\Components\TextInput::make('rt')
+                                    ->label(__('RT'))
+                                    ->placeholder(__('RT Placeholder'))
+                                    ->length(3),
+                                Forms\Components\TextInput::make('rw')
+                                    ->label(__('RW'))
+                                    ->placeholder(__('RW Placeholder'))
+                                    ->length(3),
+                                Forms\Components\TextInput::make('postal_code')
+                                    ->label(__('Postal Code'))
+                                    ->placeholder(__('Postal Code Placeholder'))
+                                    ->minLength(5)
+                                    ->maxLength(6)
+                                    ->suffixActions([
+                                        Forms\Components\Actions\Action::make('autoGeneratePostalCode')
+                                            ->label(__('Auto Generate Postal Code'))
+                                            ->badge()
+                                            ->iconButton()
+                                            ->icon('heroicon-c-paint-brush')
+                                            ->color('warning')
+                                            ->action(function (Forms\Get $get, Forms\Set $set) {
+                                                $villageField = $get('village');
+                                                if ($villageField !== null) {
+                                                    $village = \Creasi\Nusa\Models\Village::where('code', $villageField)->first();
+                                                    if ($village !== null) {
+                                                        $set('postal_code', $village->postal_code);
+                                                    }
+                                                }
+                                            }),
+                                    ]),
+                            ])->columnSpan(1),
+
                     ])->columns(2),
-                Components\Section::make('Kontak dan keamanan')->schema([
-                    Components\TextInput::make('phone')->required()->placeholder('Contoh: 628123456789')->unique(ignoreRecord: true),
-                    Components\TextInput::make('email')->email()->unique(ignoreRecord: true),
-                    Components\TextInput::make('password')->password(),
-                    Components\Select::make('roles')
-                        ->options(Role::whereNotIn('name', ['Super Admin', 'Santri'])->pluck('name', 'id'))
-                        ->searchable()->multiple()->label('Peran')->preload(),
-                ])->columns(2),
+                Forms\Components\Section::make(__('Academic Information'))
+                    ->schema([
+                        Forms\Components\TextInput::make('niy')
+                            ->label(__('Niy'))
+                            ->placeholder(__('Niy Placeholder'))
+                            ->unique(ignoreRecord: true),
+                        Forms\Components\TextInput::make('current_name_school')
+                            ->label(__('Current Name School'))
+                            ->placeholder(__('Current Name School Placeholder')),
+                        Forms\Components\DatePicker::make('start_employment_date')
+                            ->label(__('Start Employment Date'))
+                            ->default(now()),
+                        Forms\Components\TextInput::make('salary')
+                            ->label(__('Salary'))
+                            ->numeric()
+                            ->minValue(0)
+                            ->default(0),
+                        Forms\Components\Repeater::make('homeroomClassrooms')
+                            ->label(__('Homeroom Teacher'))
+                            ->relationship('homeroomClassrooms')
+                            ->schema([
+                                Forms\Components\TextInput::make('combined_name')
+                                    ->label(__('Classroom')),
+                                Forms\Components\Placeholder::make('students')
+                                    ->label(__('Students Count'))
+                                    ->content(fn ($record): string => $record ? $record->students->count() : '0'),
+                            ])
+                            ->disabled()
+                            ->columns(2)
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(2),
+                Forms\Components\Section::make(__('Contact and Security Information'))
+                    ->schema([
+                        Forms\Components\TextInput::make('phone')
+                            ->label(__('Phone'))
+                            ->placeholder(__('Phone Placeholder'))
+                            ->required()
+                            ->tel()
+                            ->helperText(__('Phone Helper Text'))
+                            ->unique(table: 'users', column: 'phone', modifyRuleUsing: function (Unique $rule,  Livewire $livewire, string $operation) {
+                                if ($operation === 'edit') {
+                                    return $rule->ignore($livewire->data['user_id'], "id");
+                                }
+                            }),
+                        Forms\Components\TextInput::make('email')
+                            ->label(__('Email'))
+                            ->placeholder(__('Email Placeholder'))
+                            ->email()
+                            ->unique(table: 'users', column: 'email', modifyRuleUsing: function (Unique $rule,  Livewire $livewire, string $operation) {
+                                if ($operation === 'edit') {
+                                    return $rule->ignore($livewire->data['user_id'], "id");
+                                }
+                            }),
+                        Forms\Components\TextInput::make('password')
+                            ->label(__('Password'))
+                            ->password()
+                            ->revealable()
+                            ->helperText(function (string $operation, Forms\Get $get) {
+                                if ($operation === 'create') {
+                                    return __('Password Helper Text Create');
+                                }
+                                if ($operation === 'edit') {
+                                    return __('Password Helper Text Edit');
+                                }
+                            }),
+                        Forms\Components\Select::make('roles')
+                            ->label(__('Role'))
+                            ->options(Role::whereNotIn('name', ['Super Admin'])->pluck('name', 'id'))
+                            ->preload()
+                            ->multiple()
+                            ->searchable(),
+                    ])->columns(2),
+                Forms\Components\Section::make(__('Files'))
+                    ->schema([
+                        Forms\Components\TextInput::make('family_card_number')
+                            ->label(__('Family Card Number'))
+                            ->placeholder(__('Family Card Number Placeholder'))
+                            ->required()
+                            ->length(16)
+                            ->columnSpanFull(),
+                        Forms\Components\FileUpload::make('profile_picture_3x4')
+                            ->label(__('Profile Picture 3x4'))
+                            ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                            ->getUploadedFileNameForStorageUsing(
+                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
+                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-3x4');
+                                }
+                            )
+                            ->image()
+                            ->downloadable()
+                            ->openable()
+                            ->directory('profile_pictures'),
+                        Forms\Components\FileUpload::make('profile_picture_4x6')
+                            ->label(__('Profile Picture 4x6'))
+                            ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                            ->getUploadedFileNameForStorageUsing(
+                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
+                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-4x6');
+                                }
+                            )
+                            ->image()
+                            ->downloadable()
+                            ->openable()
+                            ->directory('profile_pictures'),
+                        Forms\Components\FileUpload::make('birth_certificate')
+                            ->label(__('Birth Certificate'))
+                            ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
+                            ->getUploadedFileNameForStorageUsing(
+                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
+                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'akta-kelahiran');
+                                }
+                            )
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->downloadable()
+                            ->directory('birth_certificates'),
+                        Forms\Components\FileUpload::make('family_card')
+                            ->label(__('Family Card'))
+                            ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
+                            ->getUploadedFileNameForStorageUsing(
+                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
+                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'kk');
+                                }
+                            )
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->downloadable()
+                            ->directory('family_cards')
+                            ->hintActions([
+                                Forms\Components\Actions\Action::make('preview-fc')
+                                    ->label('Lihat Berkas')
+                                    ->icon('heroicon-c-eye')
+                                    ->color('warning')
+                                    // ->iconButton()
+                                    ->modal()
+                                    ->modalContent(
+                                        function (array $state, ?string $operation) {
+                                            if (empty($state)) {
+                                                return str('Berkas tidak ditemukan!')->toHtmlString();
+                                            }
+
+                                            // $value is string | TemporaryUploadedFile
+                                            $value = array_values($state)[0];
+
+                                            if ($operation === 'create' && $value instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile) {
+                                                $url = $value->temporaryUrl();
+                                                $iframe = '<iframe src="' . $url . '" height="100%"></iframe>';
+                                                return str($iframe)->toHtmlString();
+                                            }
+
+                                            if ($operation === 'edit' && is_string($value)) {
+                                                $src = asset('storage/' . $value);
+                                                $iframe = '<iframe src="' . $src . '" height="100%"></iframe>';
+                                                return str($iframe)->toHtmlString();
+                                            }
+                                        }
+                                    )
+                                    ->slideOver()
+                                    ->modalSubmitAction(false)
+                                    ->modalCancelAction(false),
+                            ]),
+                        Forms\Components\FileUpload::make('skhun')
+                            ->label(__('Skhun'))
+                            ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
+                            ->getUploadedFileNameForStorageUsing(
+                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
+                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'akta-kelahiran');
+                                }
+                            )
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->downloadable()
+                            ->directory('skhun'),
+                        Forms\Components\FileUpload::make('ijazah')
+                            ->label(__('Ijazah'))
+                            ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
+                            ->getUploadedFileNameForStorageUsing(
+                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
+                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'akta-kelahiran');
+                                }
+                            )
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->downloadable()
+                            ->directory('ijazah'),
+                    ])
+                    ->columns(2),
             ]);
     }
 
@@ -53,9 +418,30 @@ class EmployeeResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')->label('Nama')->searchable(),
-                TextColumn::make('user.phone')->label('Nomor Telepon')->searchable(),
-                TextColumn::make('user.roles.name')->label('Peran'),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label(__('Full Name'))
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('niy')
+                    ->label(__('Niy Column'))
+                    ->badge()
+                    ->color('neutral')
+                    ->copyable()
+                    ->copyMessage(__('Niy Copy Message'))
+                    ->copyMessageDuration(1000)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('user.phone')
+                    ->label(__('Phone Column'))
+                    ->badge()
+                    ->color('success')
+                    ->copyable()
+                    ->copyMessage(__('Phone Copy Message'))
+                    ->copyMessageDuration(1000)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('user.roles.name')
+                    ->label(__('Role'))
+                    ->badge()
+                    ->color('warning')
+                    ->toggleable(isToggledHiddenByDefault: false),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -75,7 +461,7 @@ class EmployeeResource extends Resource
             ])
             ->modifyQueryUsing(function (Builder $query) {
                 $query->whereHas('user.roles', function (Builder $query) {
-                    $query->whereNotIn('name', ['Super Admin', 'Santri']);
+                    $query->whereNotIn('name', ['Super Admin']);
                 });
             });
     }

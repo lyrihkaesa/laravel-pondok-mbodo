@@ -18,4 +18,9 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function homeroomClassrooms()
+    {
+        return $this->hasMany(Classroom::class, 'homeroom_teacher_id', 'id');
+    }
 }
