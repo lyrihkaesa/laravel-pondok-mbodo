@@ -40,4 +40,20 @@ class Wallet extends Model
     {
         return $this->belongsTo(Organization::class);
     }
+
+    /**
+     * Get the transactions for the wallet as the source.
+     */
+    public function transactions()
+    {
+        return $this->hasMany(FinancialTransaction::class, 'from_wallet_id');
+    }
+
+    /**
+     * Get the transactions for the wallet as the destination.
+     */
+    public function destinationTransactions()
+    {
+        return $this->hasMany(FinancialTransaction::class, 'to_wallet_id');
+    }
 }
