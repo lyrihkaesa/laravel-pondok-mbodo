@@ -196,7 +196,7 @@ class OrganizationSeeder extends Seeder
 
                 $organizationModel->wallets()->create([
                     'id' => $organizationModel->id,
-                    'name' => 'Dompte Utama',
+                    'name' => 'Dompet Utama',
                     'balance' => 0,
                 ]);
 

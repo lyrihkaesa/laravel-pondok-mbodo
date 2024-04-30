@@ -2,18 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\StudentProductResource\Pages;
-use App\Filament\Resources\StudentProductResource\RelationManagers;
-use App\Models\Product;
-use App\Models\StudentProduct;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use App\Models\Wallet;
+use App\Models\Product;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\StudentProduct;
+use Filament\Resources\Resource;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\StudentProductResource\Pages;
+use App\Filament\Resources\StudentProductResource\RelationManagers;
 
 class StudentProductResource extends Resource
 {
@@ -26,12 +28,16 @@ class StudentProductResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('student_id')
-                    ->label('Santri')
+                    ->label(__('Student'))
                     ->required()
                     ->relationship('student', 'name')
                     ->searchable(),
                 Forms\Components\Select::make('product_id')
-                    ->label('Produk')
+                    ->label(__('Product Name'))
+                    ->helperText(__('Product Name Helper Text', [
+                        'product_name' => __('Student Product Name'),
+                        'product_price' => __('Student Product Price'),
+                    ]))
                     ->required()
                     ->relationship('product', 'name')
                     ->searchable()
@@ -48,13 +54,70 @@ class StudentProductResource extends Resource
                         return $state;
                     }),
                 Forms\Components\TextInput::make('product_name')
-                    ->label('Nama Produk')
-                    ->required()
-                    ->live(),
+                    ->label(__('Student Product Name'))
+                    ->helperText(__('Student Product Name Helper Text', [
+                        'product' => __('Product Name'),
+                    ]))
+                    ->required(),
                 Forms\Components\TextInput::make('product_price')
-                    ->label('Harga Produk')
-                    ->required()
-                    ->live(),
+                    ->label(__('Student Product Price'))
+                    ->helperText(__('Student Product Price Helper Text', [
+                        'product' => __('Product Name'),
+                    ]))
+                    ->required(),
+                Forms\Components\Group::make()
+                    ->schema([
+                        Forms\Components\Toggle::make('is_validated')
+                            ->label(__('Is Validated'))
+                            ->inline(false)
+                            ->onColor('success')
+                            ->offColor('danger')
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (?string $state, Forms\Set $set, $record) {
+                                $set('validated_at', $state ? now(tz: 'Asia/Jakarta')->toDateTimeString() : null);
+                                $set('validated_by', $state ? auth()->id() : null);
+                                return $state;
+                            })
+                            ->afterStateHydrated(function (?string $operation, $record, $component) {
+                                if ($operation === 'edit') {
+                                    $component->state($record->validated_at ? true : false);
+                                }
+                            })
+                            ->disabled(fn (string $operation): bool => $operation === 'edit')
+                            ->columnSpan([
+                                'default' => 1,
+                            ]),
+                        Forms\Components\DateTimePicker::make('validated_at')
+                            ->timezone('Asia/Jakarta')
+                            ->label(__('Validated At'))
+                            ->helperText(__('Validated At Helper Text Edit'))
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (?string $state, ?string $old, ?string $operation, Forms\Set $set) {
+                                if ($operation === 'create') {
+                                    $set('is_validated', $state ? true : false);
+                                    $set('validated_by', $state ? auth()->id() : null);
+                                } else if ($operation === 'edit' && $state === null) {
+                                    return $old;
+                                }
+                                return $state;
+                            })
+                            // ->visible(fn (string $operation): bool => $operation === 'edit')
+                            ->disabled(fn ($state): bool => $state === null)
+                            ->columnSpan([
+                                'default' => 3,
+                            ]),
+                        Forms\Components\Select::make('validated_by')
+                            ->relationship('validator', 'name')
+                            ->label(__('Validated By'))
+                            ->disabled()
+                            // ->default(auth()->id())
+                            // ->visible(fn (string $operation): bool => $operation === 'edit')
+                            ->columnSpan([
+                                'default' => 3,
+                            ]),
+                    ])
+                    ->columns(7)
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -63,28 +126,87 @@ class StudentProductResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('product_name')
-                    ->label('Nama Produk'),
+                    ->label(__('Student Product Name')),
                 Tables\Columns\TextColumn::make('product_price')
-                    ->label('Harga Produk')
+                    ->label(__('Student Product Price'))
                     ->money('IDR'),
                 Tables\Columns\TextColumn::make('student.name')
-                    ->label('Santri')
+                    ->label(__('Student'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('student.current_school')
-                    ->label('Sekolah'),
-                Tables\Columns\TextColumn::make('student.lastEnrolledClassroom.name')
-                    ->label('Kelas'),
-                Tables\Columns\ToggleColumn::make('validated_at')
-                    ->label('Validasi')
+                    ->label(__('Student Product School'))
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'PAUD/TK' => 'pink',
+                        'MI' => 'danger',
+                        'SMP' => 'warning',
+                        'MA' => 'success',
+                        'Takhasus' => 'info',
+                    }),
+                Tables\Columns\ToggleColumn::make('is_validated')
+                    ->label(__('Is Validated'))
                     ->updateStateUsing(function ($state, $record) {
+                        // dd([$state, $record]);
                         $record->update([
                             'validated_at' => $state ? now() : null,
                             'validated_by' => $state ? auth()->id() : null,
                         ]);
-                        return $state;
+
+                        if ($state) {
+                            $wallet = Wallet::findOrFail('1');
+                            $wallet->balance += $record->product_price;
+                            $wallet->save();
+
+                            $student = $record->student;
+                            $wallet->destinationTransactions()->create([
+                                'student_product_id' => $record->id,
+                                'name' => $record->product_name,
+                                'type' => 'credit,validation,system',
+                                'amount' => $record->product_price,
+                                'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
+                            ]);
+
+                            Notification::make()
+                                ->title('Berhasil melakukan validasi ' . $record->product_name . ' - ' . $record->student->name)
+                                ->success()
+                                ->send();
+
+                            return true;
+                        } else {
+                            $wallet = Wallet::findOrFail('1');
+                            $wallet->balance -= $record->product_price;
+                            $wallet->save();
+
+                            $student = $record->student;
+                            $wallet->destinationTransactions()->create([
+                                'student_product_id' => $record->id,
+                                'name' => $record->product_name,
+                                'type' => 'debit,unvalidation,system',
+                                'amount' => $record->product_price,
+                                'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' membatalkan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
+                            ]);
+
+                            Notification::make()
+                                ->title('Berhasil membatalkan validasi ' . $record->product_name . ' - ' . $record->student->name)
+                                ->danger()
+                                ->send();
+
+                            return false;
+                        }
+                    })
+                    ->default(function ($record) {
+                        return $record->validated_at === null ? false : true;
                     }),
-                Tables\Columns\TextColumn::make('validator.name'),
-                Tables\Columns\TextColumn::make('created_at')->since()->sortable(),
+                Tables\Columns\TextColumn::make('validated_at')
+                    ->label(__('Validated At'))
+                    ->dateTime(format: 'd/m/Y H:i', timezone: 'Asia/Jakarta'),
+                Tables\Columns\TextColumn::make('validated_by')
+                    ->label(__('Validated By'))
+                    ->formatStateUsing(fn (string $state): string => $state ? User::find($state)->name : '-'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('Created At'))
+                    ->since()
+                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\Filter::make('validated_at')
@@ -115,9 +237,9 @@ class StudentProductResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ])->defaultSort('created_at', 'desc');
     }
 
@@ -132,8 +254,8 @@ class StudentProductResource extends Resource
     {
         return [
             'index' => Pages\ListStudentProducts::route('/'),
-            'create' => Pages\CreateStudentProduct::route('/create'),
-            'edit' => Pages\EditStudentProduct::route('/{record}/edit'),
+            // 'create' => Pages\CreateStudentProduct::route('/create'),
+            // 'edit' => Pages\EditStudentProduct::route('/{record}/edit'),
         ];
     }
 

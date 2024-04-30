@@ -24,7 +24,7 @@ class FinancialTransaction extends Model
         'transaction_date',
         'from_wallet_id',
         'to_wallet_id',
-        // Kolom lainnya sesuai kebutuhan aplikasi Anda
+        'student_product_id',
     ];
 
     /**
@@ -41,5 +41,10 @@ class FinancialTransaction extends Model
     public function toWallet()
     {
         return $this->belongsTo(Wallet::class, 'to_wallet_id');
+    }
+
+    public function studentProduct()
+    {
+        return $this->belongsTo(StudentProduct::class, 'student_product_id');
     }
 }

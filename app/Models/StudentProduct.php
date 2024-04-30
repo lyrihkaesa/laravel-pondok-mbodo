@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class StudentProduct extends Pivot
@@ -22,6 +23,13 @@ class StudentProduct extends Pivot
     protected $casts = [
         'validated_at' => 'datetime',
     ];
+
+    // public function isValidated(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn () => $this->validated_at === null ? false : true
+    //     );
+    // }
 
     public function student()
     {

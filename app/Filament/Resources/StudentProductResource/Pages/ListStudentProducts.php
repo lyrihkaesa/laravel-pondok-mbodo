@@ -2,14 +2,15 @@
 
 namespace App\Filament\Resources\StudentProductResource\Pages;
 
-use App\Filament\Resources\StudentProductResource;
+use Filament\Forms;
+use Filament\Actions;
+use App\Models\Wallet;
 use App\Models\Product;
 use App\Models\Student;
-use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
-use Filament\Forms;
-use Filament\Notifications\Notification;
 use Livewire\Component;
+use Filament\Notifications\Notification;
+use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\StudentProductResource;
 
 class ListStudentProducts extends ListRecords
 {
@@ -18,7 +19,35 @@ class ListStudentProducts extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->action(function (array $data) {
+
+                    if ($data['validated_at'] !== null) {
+                        $data['validated_by'] = auth()->id();
+                    }
+
+                    $record = self::getModel()::query()->create($data);
+
+                    if ($record->validated_at !== null) {
+                        $wallet = Wallet::findOrFail('1');
+                        $wallet->balance += $record->product_price;
+                        $wallet->save();
+
+                        $student = $record->student;
+                        $wallet->destinationTransactions()->create([
+                            'student_product_id' => $record->id,
+                            'name' => $record->product_name,
+                            'type' => 'credit,validation,system',
+                            'amount' => $record->product_price,
+                            'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
+                        ]);
+
+                        Notification::make()
+                            ->title('Berhasil melakukan validasi ' . $record->product_name . ' - ' . $record->student->name)
+                            ->success()
+                            ->send();
+                    }
+                }),
             Actions\Action::make('generateStudentsProducts')
                 ->label("Administrasi Umum")
                 ->fillForm(fn ($record): array => [

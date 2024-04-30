@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('product_name')->nullable();
             $table->integer('product_price')->nullable();
-            $table->date('validated_at')->nullable();
+            $table->datetime('validated_at')->nullable();
             $table->unsignedBigInteger('validated_by')->nullable();
             $table->timestamps();
 

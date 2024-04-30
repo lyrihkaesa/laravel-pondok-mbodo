@@ -134,5 +134,19 @@
     "Wallet": "Dompet",
     "Balance": "Saldo",
     "Wallet Id": "ID Dompet",
-    "Name": "Nama"
+    "Name": "Nama",
+    "Student Product Name": "Jenis Biaya",
+    "Student Product Price": "Besaran",
+    "Student Product School": "Tingkatan",
+    "Validated At": "Tanggal Validasi",
+    "Validated By": "Divalidasi Oleh",
+    "Is Validated": "Validasi",
+    "Amount": "Jumlah",
+    "Description": "Deskripsi",
+    "Type": "Tipe",
+    "Created At": "Dibuat",
+    "Validated At Helper Text Edit": "Jika ini terisi, sudah pasti tervalidasi.",
+    "Product Name Helper Text": "Isi ini, nanti sistem secara automatis membuatkan :product_name dan :product_price.",
+    "Student Product Name Helper Text": "Automatis terisi jika :product sudah dipilih.",
+    "Student Product Price Helper Text": "Automatis terisi jika :product sudah dipilih."
 }

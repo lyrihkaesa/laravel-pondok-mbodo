@@ -17,13 +17,14 @@ return new class extends Migration
             $table->string('type');
             $table->decimal('amount', 20, 2);
             $table->text('description')->nullable();
-            $table->timestamp('transaction_date')->default(now());
             $table->string('from_wallet_id')->nullable();
             $table->string('to_wallet_id')->nullable();
+            $table->unsignedBigInteger('student_product_id')->nullable();
             $table->timestamps();
 
             $table->foreign('from_wallet_id')->references('id')->on('wallets')->onDelete('set null');
             $table->foreign('to_wallet_id')->references('id')->on('wallets')->onDelete('set null');
+            $table->foreign('student_product_id')->references('id')->on('student_product')->onDelete('set null');
         });
     }
 
