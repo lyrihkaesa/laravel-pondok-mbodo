@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Ppdb;
 
 use Filament\Forms;
 use App\Models\User;
@@ -18,7 +18,7 @@ use Illuminate\Validation\Rules\Unique;
 use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
 
-class StudentRegistrationForm extends Component implements HasForms
+class Registration extends Component implements HasForms
 {
     use InteractsWithForms;
 
@@ -622,6 +622,6 @@ class StudentRegistrationForm extends Component implements HasForms
 
     public function render(): View
     {
-        return view('livewire.student-registration-form');
+        return view('livewire.ppdb.registration');
     }
 }

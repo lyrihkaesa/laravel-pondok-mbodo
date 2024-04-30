@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Organization;
 
 use Livewire\Component;
 use App\Models\Organization;
 
-class OrganizationShow extends Component
+class Show extends Component
 {
     public $slug;
     public $organization;
@@ -21,6 +21,6 @@ class OrganizationShow extends Component
             abort(404);
         }
 
-        return view('livewire.organization-show');
+        return view('livewire.organization.show');
     }
 }

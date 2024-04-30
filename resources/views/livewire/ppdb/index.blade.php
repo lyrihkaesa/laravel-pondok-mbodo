@@ -174,8 +174,6 @@
             <!-- End Col -->
         </div>
         <!-- End Grid -->
-</div>
-</section>
-{{-- End-Contact --}}
-
+    </section>
+    {{-- End-Contact --}}
 </div>

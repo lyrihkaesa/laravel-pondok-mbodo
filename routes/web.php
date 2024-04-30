@@ -8,10 +8,10 @@ Route::get('/tentang', \App\Livewire\About::class)->name('about');
 Route::get('/peraturan', \App\Livewire\Law\Index::class)->name('law.index');
 
 Route::get('/ppdb', \App\Livewire\Ppdb\Index::class)->name('ppdb.index');
-Route::get('/ppdb/formulir', \App\Livewire\StudentRegistrationForm::class)->name('student-registration');
+Route::get('/ppdb/formulir', \App\Livewire\Ppdb\Registration::class)->name('student-registration');
 Route::get('/ppdb/biaya', \App\Livewire\Ppdb\Price::class)->name('ppdb.price');
 
-Route::get('/lembaga/{slug}', App\Livewire\OrganizationShow::class)->name('organizations.show');
+Route::get('/lembaga/{slug}', \App\Livewire\Organization\Show::class)->name('organizations.show');
 
 
 Route::get('/dashboard', function () {

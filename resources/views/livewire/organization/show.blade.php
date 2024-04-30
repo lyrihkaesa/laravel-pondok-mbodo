@@ -196,12 +196,13 @@
                     {{-- @dd($user->employee) --}}
                     <div class="grid gap-x-4 gap-y-3 sm:flex sm:items-center">
                         @if (!$user->hasRole('Santri'))
+                            @dd($user->employee)
                             <img class="size-20 rounded-lg"
-                                src="{{ (isset($user->employee->profile_picture_1x1) ? asset('storage/' . $user->employee->profile_picture_1x1) : $user->employee->gender === 'FAMALE') ? asset('images/profile-picture/famale.jpg') : asset('images/profile-picture/male.jpg') }}"
+                                src="{{ isset($user->employee->profile_picture_1x1) ? asset('storage/' . $user->employee->profile_picture_1x1) : ($user->employee->gender === 'Perempuan' ? asset('images/profile-picture/female.jpg') : asset('images/profile-picture/male.jpg')) }}"
                                 alt="{{ $user->name }}">
                         @else
                             <img class="size-20 rounded-lg"
-                                src="{{ (isset($user->student->profile_picture_1x1) ? asset('storage/' . $user->student->profile_picture_1x1) : $user->student->gender === 'Perempuan') ? asset('images/profile-picture/famale.jpg') : asset('images/profile-picture/male.jpg') }}"
+                                src="{{ isset($user->student->profile_picture_1x1) ? asset('storage/' . $user->student->profile_picture_1x1) : ($user->student->gender === 'Perempuan' ? asset('images/profile-picture/female.jpg') : asset('images/profile-picture/male.jpg')) }}"
                                 alt="{{ $user->name }}">
                         @endif
 
