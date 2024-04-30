@@ -43,17 +43,16 @@ class EditEmployee extends EditRecord
             'password' => $data['password'] ? Hash::make($data['password']) : $record->user->password,
         ]);
 
-        $record->update([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'gender' => $data['gender'],
-            'birth_date' => $data['birth_date'],
-            'address' => $data['address'],
-        ]);
-
         // Menghapus semua peran yang dimiliki oleh user
         $record->user->syncRoles([Role::find($data['roles'])]);
+
+        // Menghilangkan data yang tidak diperlukan
+        unset($data['email']);
+        unset($data['phone']);
+        unset($data['password']);
+        unset($data['roles']);
+
+        $record->update($data);
 
         return $record;
     }

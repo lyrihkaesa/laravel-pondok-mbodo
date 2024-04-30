@@ -35,16 +35,16 @@ class CreateEmployee extends CreateRecord
             }
         }
 
+        // Menghilangkan data yang tidak diperlukan
+        unset($data['email']);
+        unset($data['phone']);
+        unset($data['password']);
+        unset($data['roles']);
+
+        $data['user_id'] = $user->id;
+
         // Create Student
-        $record = static::getModel()::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'gender' => $data['gender'],
-            'birth_date' => $data['birth_date'],
-            'address' => $data['address'],
-            'user_id' => $user->id,
-        ]);
+        $record = static::getModel()::create($data);
 
         return $record;
     }
