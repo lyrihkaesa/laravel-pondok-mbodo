@@ -11,6 +11,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\AttachAction;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ProductResource;
@@ -20,7 +21,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 class ProductsRelationManager extends RelationManager
 {
     protected static string $relationship = 'products';
-    protected static ?string $title = 'Keuangan';
+    protected static ?string $title = 'Administrasi';
     protected static ?string $recordTitleAttribute = 'name';
     protected bool $allowsDuplicates = true;
 
@@ -47,40 +48,66 @@ class ProductsRelationManager extends RelationManager
                     ->label(__('Is Validated'))
                     ->updateStateUsing(function ($state, $record) {
                         // dd([$state, $record, $record->pivot->pivotParent, $record->pivot->id]);
-                        $record->pivot->update([
+                        $studentProductModel = $record->pivot;
+                        $studentProductModel->update([
                             'validated_at' => $state ? now() : null,
                             'validated_by' => $state ? auth()->id() : null,
                         ]);
 
+                        $student = $studentProductModel->student;
+                        $studentProductId = $studentProductModel->id;
                         if ($state) {
-                            $wallet = Wallet::findOrFail('1');
-                            $wallet->balance += $record->product_price;
-                            $wallet->save();
+                            $formWallet = Wallet::findOrFail('SYSTEM');
+                            $formWallet->balance -= $record->product_price;
+                            $formWallet->save();
 
-                            $student = $record->pivot->pivotParent;
-                            $wallet->destinationTransactions()->create([
-                                'student_product_id' => $record->pivot->id,
+                            $toWallet = Wallet::findOrFail('YAYASAN');
+                            $toWallet->balance += $record->product_price;
+                            $toWallet->save();
+
+                            $toWallet->destinationTransactions()->create([
+                                'student_product_id' =>  $studentProductId,
                                 'name' => $record->product_name,
                                 'type' => 'credit,validation,system',
                                 'amount' => $record->product_price,
+                                'from_wallet_id' => $formWallet->id,
                                 'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
                             ]);
-                        } else {
-                            $wallet = Wallet::findOrFail('1');
-                            $wallet->balance -= $record->product_price;
-                            $wallet->save();
 
-                            $student = $record->pivot->pivotParent;
-                            $wallet->destinationTransactions()->create([
-                                'student_product_id' => $record->pivot->id,
+                            Notification::make()
+                                ->title('Melakukan Validasi')
+                                ->body('Berhasil melakukan validasi ' . $record->product_name . ' - ' . $student->name)
+                                ->success()
+                                ->send();
+
+                            return true;
+                        } else {
+                            $formWallet = Wallet::findOrFail('YAYASAN');
+                            $formWallet->balance -= $record->product_price;
+                            $formWallet->save();
+
+                            $toWallet = Wallet::findOrFail('SYSTEM');
+                            $toWallet->balance += $record->product_price;
+                            $toWallet->save();
+
+                            $formWallet->sourceTransactions()->create([
+                                'student_product_id' =>  $studentProductId,
                                 'name' => $record->product_name,
                                 'type' => 'debit,unvalidation,system',
                                 'amount' => $record->product_price,
+                                'to_wallet_id' => $toWallet->id,
                                 'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' membatalkan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
                             ]);
-                        }
 
-                        return $state;
+                            Notification::make()
+                                ->title('Membatalkan Validasi')
+                                ->body('Berhasil membatalkan validasi ' . $record->product_name . ' - ' . $student->name)
+                                ->success()
+                                ->iconColor('danger')
+                                ->send();
+
+                            return false;
+                        }
                     })
                     ->default(function ($record) {
                         return $record->validated_at === null ? false : true;
@@ -122,7 +149,8 @@ class ProductsRelationManager extends RelationManager
                     ->preloadRecordSelect(),
             ])
             ->actions([
-                Tables\Actions\DetachAction::make(),
+                Tables\Actions\DetachAction::make()
+                    ->visible(fn ($record): bool => $record->validated_at === null),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -134,11 +162,11 @@ class ProductsRelationManager extends RelationManager
 
     public static function getPluralModelLabel(): string
     {
-        return 'Keuangan';
+        return __('Financial');
     }
 
     public static function getModelLabel(): string
     {
-        return 'Keuangan';
+        return __('Financial');
     }
 }

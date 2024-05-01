@@ -82,6 +82,7 @@ class WalletResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('updated_at', 'desc')
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
@@ -100,7 +101,7 @@ class WalletResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\TransactionsRelationManager::class,
+            RelationManagers\SourceTransactionsRelationManager::class,
             RelationManagers\DestinationTransactionsRelationManager::class,
         ];
     }

@@ -10,9 +10,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class DestinationTransactionsRelationManager extends RelationManager
+class SourceTransactionsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'destinationTransactions';
+    protected static string $relationship = 'sourceTransactions';
 
     public function form(Form $form): Form
     {
@@ -81,6 +81,6 @@ class DestinationTransactionsRelationManager extends RelationManager
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('id', 'desc');;
     }
 }

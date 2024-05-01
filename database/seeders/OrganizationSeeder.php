@@ -22,6 +22,16 @@ class OrganizationSeeder extends Seeder
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
                     'classrooms' => [],
+                    'wallets' => [
+                        "YAYASAN" => [
+                            'name' => 'Dompet Utama',
+                            'balance' => 0,
+                        ],
+                        "SYSTEM" => [
+                            'name' => 'Dompet Sistem',
+                            'balance' => 0,
+                        ]
+                    ],
                 ],
                 "Pesantren Putra" => [
                     'description' => null,
@@ -194,11 +204,22 @@ class OrganizationSeeder extends Seeder
                     'mission' => $organization['mission'],
                 ]);
 
-                $organizationModel->wallets()->create([
-                    'id' => $organizationModel->id,
-                    'name' => 'Dompet Utama',
-                    'balance' => 0,
-                ]);
+                if (isset($organization['wallets'])) {
+                    foreach ($organization['wallets'] as $key => $value) {
+                        $organizationModel->wallets()->create([
+                            'id' => $key,
+                            'name' => $value['name'],
+                            'balance' => $value['balance'],
+                        ]);
+                    };
+                } else {
+                    $organizationModel->wallets()->create([
+                        'id' => str($organizationModel->name)->upper()->replace(' ', '_'),
+                        'name' => 'Dompet Utama',
+                        'balance' => 0,
+                    ]);
+                }
+
 
                 foreach ($organization['classrooms'] as $className => $count) {
                     for ($i = 1; $i <= $count; $i++) {

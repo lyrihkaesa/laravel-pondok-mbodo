@@ -152,43 +152,56 @@ class StudentProductResource extends Resource
                             'validated_by' => $state ? auth()->id() : null,
                         ]);
 
+                        $student = $record->student;
+                        $studentProductId = $record->id;
                         if ($state) {
-                            $wallet = Wallet::findOrFail('1');
-                            $wallet->balance += $record->product_price;
-                            $wallet->save();
+                            $formWallet = Wallet::findOrFail('SYSTEM');
+                            $formWallet->balance -= $record->product_price;
+                            $formWallet->save();
 
-                            $student = $record->student;
-                            $wallet->destinationTransactions()->create([
-                                'student_product_id' => $record->id,
+                            $toWallet = Wallet::findOrFail('YAYASAN');
+                            $toWallet->balance += $record->product_price;
+                            $toWallet->save();
+
+                            $toWallet->destinationTransactions()->create([
+                                'student_product_id' => $studentProductId,
                                 'name' => $record->product_name,
                                 'type' => 'credit,validation,system',
                                 'amount' => $record->product_price,
+                                'from_wallet_id' => $formWallet->id,
                                 'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
                             ]);
 
                             Notification::make()
-                                ->title('Berhasil melakukan validasi ' . $record->product_name . ' - ' . $record->student->name)
+                                ->title('Melakukan Validasi')
+                                ->body('Berhasil melakukan validasi ' . $record->product_name . ' - ' . $student->name)
                                 ->success()
                                 ->send();
 
                             return true;
                         } else {
-                            $wallet = Wallet::findOrFail('1');
-                            $wallet->balance -= $record->product_price;
-                            $wallet->save();
+                            $formWallet = Wallet::findOrFail('YAYASAN');
+                            $formWallet->balance -= $record->product_price;
+                            $formWallet->save();
 
-                            $student = $record->student;
-                            $wallet->destinationTransactions()->create([
-                                'student_product_id' => $record->id,
+                            $toWallet = Wallet::findOrFail('SYSTEM');
+                            $toWallet->balance += $record->product_price;
+                            $toWallet->save();
+
+                            $formWallet->sourceTransactions()->create([
+                                'student_product_id' => $studentProductId,
                                 'name' => $record->product_name,
                                 'type' => 'debit,unvalidation,system',
                                 'amount' => $record->product_price,
+                                'to_wallet_id' => $toWallet->id,
                                 'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' membatalkan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
                             ]);
 
                             Notification::make()
-                                ->title('Berhasil membatalkan validasi ' . $record->product_name . ' - ' . $record->student->name)
-                                ->danger()
+                                ->title('Membatalkan Validasi')
+                                ->body('Berhasil membatalkan validasi ' . $record->product_name . ' - ' . $student->name)
+                                ->success()
+                                ->iconColor('danger')
                                 ->send();
 
                             return false;
@@ -235,12 +248,14 @@ class StudentProductResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn ($record) => $record->validated_at === null),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
-            ])->defaultSort('created_at', 'desc');
+            ])->defaultSort('validated_at', 'desc');
     }
 
     public static function getRelations(): array
@@ -254,18 +269,16 @@ class StudentProductResource extends Resource
     {
         return [
             'index' => Pages\ListStudentProducts::route('/'),
-            // 'create' => Pages\CreateStudentProduct::route('/create'),
-            // 'edit' => Pages\EditStudentProduct::route('/{record}/edit'),
         ];
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Administrasi Santri';
+        return __('Student Financial');
     }
 
     public static function getModelLabel(): string
     {
-        return 'Administrasi Santri';
+        return __('Student Financial');
     }
 }

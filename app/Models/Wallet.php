@@ -44,7 +44,7 @@ class Wallet extends Model
     /**
      * Get the transactions for the wallet as the source.
      */
-    public function transactions()
+    public function sourceTransactions()
     {
         return $this->hasMany(FinancialTransaction::class, 'from_wallet_id');
     }

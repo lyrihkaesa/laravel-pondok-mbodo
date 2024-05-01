@@ -148,5 +148,7 @@
     "Validated At Helper Text Edit": "Jika ini terisi, sudah pasti tervalidasi.",
     "Product Name Helper Text": "Isi ini, nanti sistem secara automatis membuatkan :product_name dan :product_price.",
     "Student Product Name Helper Text": "Automatis terisi jika :product sudah dipilih.",
-    "Student Product Price Helper Text": "Automatis terisi jika :product sudah dipilih."
+    "Student Product Price Helper Text": "Automatis terisi jika :product sudah dipilih.",
+    "Student Financial": "Administrasi Santri",
+    "Financial": "Administrasi"
 }

@@ -28,22 +28,28 @@ class ListStudentProducts extends ListRecords
 
                     $record = self::getModel()::query()->create($data);
 
+                    $student = $record->student;
                     if ($record->validated_at !== null) {
-                        $wallet = Wallet::findOrFail('1');
-                        $wallet->balance += $record->product_price;
-                        $wallet->save();
+                        $formWallet = Wallet::findOrFail('SYSTEM');
+                        $formWallet->balance -= $record->product_price;
+                        $formWallet->save();
 
-                        $student = $record->student;
-                        $wallet->destinationTransactions()->create([
+                        $toWallet = Wallet::findOrFail('YAYASAN');
+                        $toWallet->balance += $record->product_price;
+                        $toWallet->save();
+
+                        $toWallet->destinationTransactions()->create([
                             'student_product_id' => $record->id,
                             'name' => $record->product_name,
                             'type' => 'credit,validation,system',
                             'amount' => $record->product_price,
+                            'from_wallet_id' => $formWallet->id,
                             'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
                         ]);
 
                         Notification::make()
-                            ->title('Berhasil melakukan validasi ' . $record->product_name . ' - ' . $record->student->name)
+                            ->title('Melakukan Validasi')
+                            ->body('Berhasil melakukan validasi ' . $record->product_name . ' - ' . $student->name)
                             ->success()
                             ->send();
                     }
