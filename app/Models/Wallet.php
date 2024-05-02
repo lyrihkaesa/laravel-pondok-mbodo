@@ -56,4 +56,14 @@ class Wallet extends Model
     {
         return $this->hasMany(FinancialTransaction::class, 'to_wallet_id');
     }
+
+    /**
+     * Get all financial transactions where this wallet is either the source or destination.
+     */
+    public function transactions()
+    {
+        return FinancialTransaction::where('from_wallet_id', $this->id)
+            ->orWhere('to_wallet_id', $this->id)
+            ->get();
+    }
 }

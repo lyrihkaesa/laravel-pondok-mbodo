@@ -150,5 +150,10 @@
     "Student Product Name Helper Text": "Automatis terisi jika :product sudah dipilih.",
     "Student Product Price Helper Text": "Automatis terisi jika :product sudah dipilih.",
     "Student Financial": "Administrasi Santri",
-    "Financial": "Administrasi"
+    "Financial": "Administrasi",
+    "Financial Transaction": "Transaksi Keuangan",
+    "The balance is not enough": "Saldo tidak mencukupi",
+    "From Wallet Id": "Dari ID",
+    "To Wallet Id": "Ke ID",
+    "ID copied!": "ID telah disalin!"
 }

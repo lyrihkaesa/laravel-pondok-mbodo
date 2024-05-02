@@ -10,7 +10,7 @@ use Database\Seeders\UserSeeder;
 use Database\Seeders\PackageSeeder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Artisan;
-use App\Livewire\StudentRegistrationForm;
+use App\Livewire\Ppdb\Registration;
 
 beforeEach(function () {
     // Bersihkan data dalam database sebelum setiap pengujian
@@ -18,12 +18,12 @@ beforeEach(function () {
 });
 
 it('renders successfully', function () {
-    Livewire::test(StudentRegistrationForm::class)
+    Livewire::test(Registration::class)
         ->assertStatus(200);
 });
 
 it('renders the student registration form', function () {
-    Livewire::test(StudentRegistrationForm::class)
+    Livewire::test(Registration::class)
         ->assertSee(__('Personal Identity'))
         ->assertSee(__('Address Information'))
         ->assertSee(__('Academic Information'))
@@ -95,7 +95,7 @@ it('submits the form with valid data student', function ($item) {
     $data['current_school'] = $item['current_school'];
 
     // Mengisi formulir dengan data yang valid
-    Livewire::test(StudentRegistrationForm::class)
+    Livewire::test(Registration::class)
         ->set('data', $data)
         ->call('create')
         ->assertHasNoFormErrors()
@@ -137,7 +137,7 @@ it('submits the form with valid data student whithout guardians', function () {
     $data["guardians"] = [];
 
     // Mengisi formulir dengan data yang valid
-    Livewire::test(StudentRegistrationForm::class)
+    Livewire::test(Registration::class)
         ->set('data', $data)
         ->call('create')
         ->assertHasNoFormErrors()
@@ -149,14 +149,14 @@ it('submits the form with invalid data', function () {
     $data = getValidFormData();
 
     // Mengisi formulir dengan data yang valid
-    Livewire::test(StudentRegistrationForm::class)
+    Livewire::test(Registration::class)
         ->set('data', $data)
         ->call('create')
         ->assertHasNoFormErrors()
         ->assertSeeText(__('Student Register Success'))
         ->assertSet('isSuccessful', true);
 
-    Livewire::test(StudentRegistrationForm::class)
+    Livewire::test(Registration::class)
         ->set('data', $data)
         ->call('create')
         ->assertHasErrors(['data.nik', 'data.nisn', 'data.kip', 'data.phone', 'data.email'])

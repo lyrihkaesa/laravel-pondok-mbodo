@@ -10,6 +10,7 @@ use App\Models\Product;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\StudentProduct;
+use App\Services\WalletService;
 use Filament\Resources\Resource;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
@@ -145,8 +146,8 @@ class StudentProductResource extends Resource
                     }),
                 Tables\Columns\ToggleColumn::make('is_validated')
                     ->label(__('Is Validated'))
-                    ->updateStateUsing(function ($state, $record) {
-                        // dd([$state, $record]);
+                    ->updateStateUsing(function ($state, StudentProduct $record, WalletService $walletService) {
+                        // dd([$state, $record, $walletService]);
                         $record->update([
                             'validated_at' => $state ? now() : null,
                             'validated_by' => $state ? auth()->id() : null,
@@ -155,21 +156,14 @@ class StudentProductResource extends Resource
                         $student = $record->student;
                         $studentProductId = $record->id;
                         if ($state) {
-                            $formWallet = Wallet::findOrFail('SYSTEM');
-                            $formWallet->balance -= $record->product_price;
-                            $formWallet->save();
+                            $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
-                            $toWallet = Wallet::findOrFail('YAYASAN');
-                            $toWallet->balance += $record->product_price;
-                            $toWallet->save();
-
-                            $toWallet->destinationTransactions()->create([
+                            $walletService->transferSystemToYayasan($record->product_price, [
                                 'student_product_id' => $studentProductId,
                                 'name' => $record->product_name,
                                 'type' => 'credit,validation,system',
                                 'amount' => $record->product_price,
-                                'from_wallet_id' => $formWallet->id,
-                                'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
+                                'description' => $description,
                             ]);
 
                             Notification::make()
@@ -180,21 +174,14 @@ class StudentProductResource extends Resource
 
                             return true;
                         } else {
-                            $formWallet = Wallet::findOrFail('YAYASAN');
-                            $formWallet->balance -= $record->product_price;
-                            $formWallet->save();
+                            $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' membatalkan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
-                            $toWallet = Wallet::findOrFail('SYSTEM');
-                            $toWallet->balance += $record->product_price;
-                            $toWallet->save();
-
-                            $formWallet->sourceTransactions()->create([
+                            $walletService->transferYayasanToSystem($record->product_price, [
                                 'student_product_id' => $studentProductId,
                                 'name' => $record->product_name,
                                 'type' => 'debit,unvalidation,system',
                                 'amount' => $record->product_price,
-                                'to_wallet_id' => $toWallet->id,
-                                'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' membatalkan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
+                                'description' => $description,
                             ]);
 
                             Notification::make()

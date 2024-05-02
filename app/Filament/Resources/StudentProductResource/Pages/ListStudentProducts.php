@@ -8,6 +8,7 @@ use App\Models\Wallet;
 use App\Models\Product;
 use App\Models\Student;
 use Livewire\Component;
+use App\Services\WalletService;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\StudentProductResource;
@@ -20,8 +21,7 @@ class ListStudentProducts extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->action(function (array $data) {
-
+                ->action(function (array $data, WalletService $walletService) {
                     if ($data['validated_at'] !== null) {
                         $data['validated_by'] = auth()->id();
                     }
@@ -29,22 +29,16 @@ class ListStudentProducts extends ListRecords
                     $record = self::getModel()::query()->create($data);
 
                     $student = $record->student;
+                    $studentProductId = $record->id;
                     if ($record->validated_at !== null) {
-                        $formWallet = Wallet::findOrFail('SYSTEM');
-                        $formWallet->balance -= $record->product_price;
-                        $formWallet->save();
+                        $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
-                        $toWallet = Wallet::findOrFail('YAYASAN');
-                        $toWallet->balance += $record->product_price;
-                        $toWallet->save();
-
-                        $toWallet->destinationTransactions()->create([
-                            'student_product_id' => $record->id,
+                        $walletService->transferSystemToYayasan($record->product_price, [
+                            'student_product_id' => $studentProductId,
                             'name' => $record->product_name,
                             'type' => 'credit,validation,system',
                             'amount' => $record->product_price,
-                            'from_wallet_id' => $formWallet->id,
-                            'description' => auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone,
+                            'description' => $description,
                         ]);
 
                         Notification::make()
