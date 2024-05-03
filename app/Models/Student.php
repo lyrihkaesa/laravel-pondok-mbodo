@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\Gender;
+use App\Enums\StudentStatus;
+use App\Enums\StudentCategory;
+use App\Enums\StudentCurrentSchool;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Student extends Model
 {
@@ -14,6 +18,16 @@ class Student extends Model
     protected $guarded = [];
 
     protected $with = ['user'];
+
+    protected function casts(): array
+    {
+        return [
+            'gender' => Gender::class,
+            'current_school' => StudentCurrentSchool::class,
+            'category' => StudentCategory::class,
+            'status' => StudentStatus::class,
+        ];
+    }
 
     public function user()
     {

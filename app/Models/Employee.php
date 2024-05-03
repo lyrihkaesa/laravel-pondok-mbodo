@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\Gender;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Employee extends Model
 {
@@ -13,6 +14,13 @@ class Employee extends Model
     protected $guarded = [];
 
     protected $with = ['user'];
+
+    protected function casts(): array
+    {
+        return [
+            'gender' => Gender::class,
+        ];
+    }
 
     public function user()
     {

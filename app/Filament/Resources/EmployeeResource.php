@@ -2,20 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EmployeeResource\Pages;
-use App\Filament\Resources\EmployeeResource\RelationManagers;
-use App\Models\Employee;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use App\Enums\Gender;
+use App\Models\Employee;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Spatie\Permission\Models\Role;
 use Livewire\Component as Livewire;
 use Illuminate\Validation\Rules\Unique;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\EmployeeResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Spatie\Permission\Models\Role;
+use App\Filament\Resources\EmployeeResource\RelationManagers;
 
 class EmployeeResource extends Resource
 {
@@ -75,15 +76,9 @@ class EmployeeResource extends Resource
                                 ]),
                             Forms\Components\ToggleButtons::make('gender')
                                 ->label(__('Gender'))
-                                ->options([
-                                    'Laki-Laki' => __('Male'),
-                                    'Perempuan' => __('Female'),
-                                ])->colors([
-                                    'Laki-Laki' => 'info',
-                                    'Perempuan' => 'pink',
-                                ])
+                                ->options(Gender::class)
                                 ->required()
-                                ->default('Laki-Laki')
+                                ->default(Gender::MALE)
                                 ->inline(),
                             Forms\Components\Grid::make([
                                 'default' => 1,

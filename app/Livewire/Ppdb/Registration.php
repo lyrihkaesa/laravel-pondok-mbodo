@@ -4,18 +4,19 @@ namespace App\Livewire\Ppdb;
 
 use Filament\Forms;
 use App\Models\User;
+use App\Enums\Gender;
 use App\Models\Student;
 use Livewire\Component;
 use App\Models\Guardian;
 use Filament\Forms\Form;
+use App\Enums\StudentCategory;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\HtmlString;
+use App\Enums\StudentCurrentSchool;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Validation\Rules\Unique;
-use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
 
 class Registration extends Component implements HasForms
@@ -75,15 +76,9 @@ class Registration extends Component implements HasForms
                             ]),
                         Forms\Components\ToggleButtons::make('gender')
                             ->label(__('Gender'))
-                            ->options([
-                                'Laki-Laki' => __('Male'),
-                                'Perempuan' => __('Female'),
-                            ])->colors([
-                                'Laki-Laki' => 'info',
-                                'Perempuan' => 'pink',
-                            ])
+                            ->options(Gender::class)
                             ->required()
-                            ->default('Laki-Laki')
+                            ->default(Gender::MALE)
                             ->inline(),
                         Forms\Components\Grid::make([
                             'default' => 1,
@@ -241,37 +236,15 @@ class Registration extends Component implements HasForms
                         Forms\Components\ToggleButtons::make('category')
                             ->label(__('Category'))
                             ->inline()
-                            ->options([
-                                'Santri Reguler' => __('Santri Reguler'),
-                                'Santri Ndalem' => __('Santri Ndalem'),
-                                'Santri Berprestasi' => __('Santri Berprestasi'),
-                            ])
-                            ->colors([
-                                'Santri Reguler' => 'info',
-                                'Santri Ndalem' => 'warning',
-                                'Santri Berprestasi' => 'success',
-                            ])
+                            ->options(StudentCategory::class)
                             ->required()
-                            ->default('Santri Reguler'),
+                            ->default(StudentCategory::REGULER),
                         Forms\Components\ToggleButtons::make('current_school')
                             ->label(__('Current School'))
                             ->inline()
-                            ->options([
-                                'PAUD/TK' => __('PAUD/TK'),
-                                'MI' => __('MI'),
-                                'SMP' => __('SMP'),
-                                'MA' => __('MA'),
-                                'Takhasus' => __('Takhasus'),
-                            ])
-                            ->colors([
-                                'PAUD/TK' => 'pink',
-                                'MI' => 'danger',
-                                'SMP' => 'warning',
-                                'MA' => 'success',
-                                'Takhasus' => 'info',
-                            ])
+                            ->options(StudentCurrentSchool::class)
                             ->required()
-                            ->default('PAUD/TK'),
+                            ->default(StudentCurrentSchool::PAUDTK),
                     ]),
 
                 Forms\Components\Section::make(__('Contact and Security Information'))

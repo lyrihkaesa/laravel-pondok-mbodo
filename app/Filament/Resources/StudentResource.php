@@ -4,11 +4,15 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Enums\Gender;
 use App\Models\Student;
 use App\Models\Guardian;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Enums\StudentStatus;
+use App\Enums\StudentCategory;
 use Filament\Resources\Resource;
+use App\Enums\StudentCurrentSchool;
 use Livewire\Component as Livewire;
 use Illuminate\Validation\Rules\Unique;
 use Illuminate\Database\Eloquent\Builder;
@@ -73,15 +77,9 @@ class StudentResource extends Resource
                                 ]),
                             Forms\Components\ToggleButtons::make('gender')
                                 ->label(__('Gender'))
-                                ->options([
-                                    'Laki-Laki' => __('Male'),
-                                    'Perempuan' => __('Female'),
-                                ])->colors([
-                                    'Laki-Laki' => 'info',
-                                    'Perempuan' => 'pink',
-                                ])
+                                ->options(Gender::class)
                                 ->required()
-                                ->default('Laki-Laki')
+                                ->default(Gender::MALE)
                                 ->inline(),
                             Forms\Components\Grid::make([
                                 'default' => 1,
@@ -245,54 +243,21 @@ class StudentResource extends Resource
                         Forms\Components\ToggleButtons::make('category')
                             ->label(__('Category'))
                             ->inline()
-                            ->options([
-                                'Santri Reguler' => __('Santri Reguler'),
-                                'Santri Ndalem' => __('Santri Ndalem'),
-                                'Santri Berprestasi' => __('Santri Berprestasi'),
-                            ])
-                            ->colors([
-                                'Santri Reguler' => 'info',
-                                'Santri Ndalem' => 'warning',
-                                'Santri Berprestasi' => 'success',
-                            ])
+                            ->options(StudentCategory::class)
                             ->required()
-                            ->default('Santri Reguler'),
+                            ->default(StudentCategory::REGULER),
                         Forms\Components\ToggleButtons::make('current_school')
                             ->label(__('Current School'))
                             ->inline()
-                            ->options([
-                                'PAUD/TK' => __('PAUD/TK'),
-                                'MI' => __('MI'),
-                                'SMP' => __('SMP'),
-                                'MA' => __('MA'),
-                                'Takhasus' => __('Takhasus'),
-                            ])
-                            ->colors([
-                                'PAUD/TK' => 'pink',
-                                'MI' => 'danger',
-                                'SMP' => 'warning',
-                                'MA' => 'success',
-                                'Takhasus' => 'info',
-                            ])
+                            ->options(StudentCurrentSchool::class)
                             ->required()
-                            ->default('PAUD/TK'),
+                            ->default(StudentCurrentSchool::PAUDTK),
                         Forms\Components\ToggleButtons::make('status')
                             ->label(__('Status'))
                             ->inline()
-                            ->options([
-                                'Mendaftar' => __('Enrolled'),
-                                'Aktif' => __('Active'),
-                                'Lulus' => __('Graduated'),
-                                'Tidak Aktif' => __('Inactive'),
-                            ])
-                            ->colors([
-                                'Mendaftar' => 'pink',
-                                'Tidak Aktif' => 'danger',
-                                'Aktif' => 'success',
-                                'Lulus' => 'info',
-                            ])
+                            ->options(StudentStatus::class)
                             ->required()
-                            ->default('Aktif'),
+                            ->default(StudentStatus::ACTIVE),
                     ])
                     ->columns(2),
                 Forms\Components\Section::make(__('Contact and Security Information'))
@@ -553,31 +518,14 @@ class StudentResource extends Resource
                 Tables\Columns\TextColumn::make('gender')
                     ->label(__('Gender'))
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'Laki-Laki' => 'info',
-                        'Perempuan' => 'pink',
-                    })
                     ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('current_school')
                     ->label(__('Current School'))
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'PAUD/TK' => 'pink',
-                        'MI' => 'danger',
-                        'SMP' => 'warning',
-                        'MA' => 'success',
-                        'Takhasus' => 'info',
-                    })
                     ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('status')
                     ->label(__('Status'))
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'Mendaftar' => 'pink',
-                        'Aktif' => 'success',
-                        'Lulus' => 'warning',
-                        'Tidak Aktif' => 'danger',
-                    })
                     ->visibleFrom('md'),
                 Tables\Columns\TextColumn::make('user.phone')
                     ->label(__('Phone Column'))
@@ -599,27 +547,13 @@ class StudentResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'Mendaftar' => 'Mendaftar',
-                        'Aktif' => 'Aktif',
-                        'Lulus' => 'Lulus',
-                        'Tidak Aktif' => 'Tidak Aktif',
-                    ]),
+                    ->options(StudentStatus::class),
                 Tables\Filters\SelectFilter::make('gender')
                     ->label('Jenis Kelamin')
-                    ->options([
-                        'Laki-Laki' => 'Laki-Laki',
-                        'Perempuan' => 'Perempuan',
-                    ]),
+                    ->options(Gender::class),
                 Tables\Filters\SelectFilter::make('current_school')
                     ->label('Sekolah')
-                    ->options([
-                        'PAUD/TK' => 'PAUD/TK',
-                        'MI' => 'MI',
-                        'SMP' => 'SMP',
-                        'MA' => 'MA',
-                        'Takhasus' => 'Takhasus',
-                    ]),
+                    ->options(StudentCurrentSchool::class),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
