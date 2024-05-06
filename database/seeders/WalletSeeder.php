@@ -18,10 +18,26 @@ class WalletSeeder extends Seeder
                 'id' => 'SYSTEM',
                 'name' => 'Dompet System',
                 'balance' => 0,
+                'canMinus' => false,
             ],
             [
                 'id' => 'YAYASAN',
                 'name' => 'Dompet Yayasan',
+                'balance' => 0,
+            ],
+            [
+                'id' => 'DONATUR',
+                'name' => 'Dompet Donatur',
+                'balance' => 0,
+            ],
+            [
+                'id' => 'DANA_BOS',
+                'name' => 'Dompet Dana BOS',
+                'balance' => 0,
+            ],
+            [
+                'id' => 'DANA_BOS',
+                'name' => 'Dompet Dana BOS',
                 'balance' => 0,
             ],
             [

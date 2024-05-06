@@ -98,7 +98,7 @@ class StudentResource extends Resource
                         Forms\Components\Grid::make(1)->schema([
                             Forms\Components\FileUpload::make('profile_picture_1x1')
                                 ->label(__('Profile Picture 1x1'))
-                                ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                                ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: __('Image Helper Suffix')))
                                 ->getUploadedFileNameForStorageUsing(
                                     function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
                                         return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-1x1');
@@ -305,7 +305,7 @@ class StudentResource extends Resource
                             ->columnSpanFull(),
                         Forms\Components\FileUpload::make('profile_picture_3x4')
                             ->label(__('Profile Picture 3x4'))
-                            ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                            ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: __('Image Helper Suffix')))
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
                                     return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-3x4');
@@ -317,7 +317,7 @@ class StudentResource extends Resource
                             ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('profile_picture_4x6')
                             ->label(__('Profile Picture 4x6'))
-                            ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                            ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: __('Image Helper Suffix')))
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
                                     return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-4x6');

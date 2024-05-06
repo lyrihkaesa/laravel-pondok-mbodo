@@ -20,7 +20,7 @@
     "Profile Picture 1x1": "Foto Profil 1x1",
     "Image Helper Text": ":prefix File harus berformat **.jpg**, **.jpeg**, **.png** dan berukuran maksimal **:file_size**. :suffix",
     "Image Helper Suffix": "Untuk backgorund warna merah gunakan **#DB1514** dan biru gunakan **#0090FF**.",
-    "PDF Helper Text": "File harus berformat **.pdf** dan berukuran maksimal **:file_size**.",
+    "PDF Helper Text": ":prefix File harus berformat **.pdf** dan berukuran maksimal **:file_size**. :suffix",
     "Address Information": "Informasi alamat",
     "Address": "Alamat",
     "Province": "Provinsi",
@@ -136,7 +136,7 @@
     "Wallet Id": "ID Dompet",
     "Name": "Nama",
     "Student Product Name": "Jenis Biaya",
-    "Student Product Price": "Besaran",
+    "Student Product Price": "Nominal",
     "Student Product School": "Tingkatan",
     "Validated At": "Tanggal Validasi",
     "Validated By": "Divalidasi Oleh",
@@ -155,5 +155,10 @@
     "The balance is not enough": "Saldo tidak mencukupi",
     "From Wallet Id": "Dari ID",
     "To Wallet Id": "Ke ID",
-    "ID copied!": "ID telah disalin!"
+    "ID copied!": "ID telah disalin!",
+    "ALLOW_NEGATIVE_BALANCE": "Mengijinkan Saldo Negatif",
+    "Transaction At": "Tanggal Transaksi",
+    "Amount Placeholder": "100000",
+    "Image Attachments": "Lampiran Gambar",
+    "File Attachments": "Lampiran File"
 }

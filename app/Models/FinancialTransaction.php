@@ -21,11 +21,22 @@ class FinancialTransaction extends Model
         'type',
         'amount',
         'description',
-        'transaction_date',
         'from_wallet_id',
         'to_wallet_id',
         'student_product_id',
+        'validated_by',
+        'transaction_at',
+        'image_attachments',
+        'file_attachments',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'image_attachments' => 'array',
+            'file_attachments' => 'array',
+        ];
+    }
 
     /**
      * Get the wallet where the transaction is from.

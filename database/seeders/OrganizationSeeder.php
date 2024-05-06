@@ -30,7 +30,22 @@ class OrganizationSeeder extends Seeder
                         "SYSTEM" => [
                             'name' => 'Dompet Sistem',
                             'balance' => 0,
-                        ]
+                            'policy' => ['ALLOW_NEGATIVE_BALANCE'],
+                        ],
+                        "DONATUR" => [
+                            'name' => 'Dompet Donatur',
+                            'balance' => 0,
+                            'policy' => ['ALLOW_NEGATIVE_BALANCE'],
+                        ],
+                        "DANA_BOS" => [
+                            'name' => 'Dompet Dana BOS',
+                            'balance' => 0,
+                            'policy' => ['ALLOW_NEGATIVE_BALANCE'],
+                        ],
+                        "EXPENSE" => [
+                            'name' => 'Dompet Pengeluaran',
+                            'balance' => 0,
+                        ],
                     ],
                 ],
                 "Pesantren Putra" => [
@@ -210,6 +225,7 @@ class OrganizationSeeder extends Seeder
                             'id' => $key,
                             'name' => $value['name'],
                             'balance' => $value['balance'],
+                            'policy' => $value['policy'] ?? null,
                         ]);
                     };
                 } else {

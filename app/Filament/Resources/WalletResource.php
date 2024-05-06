@@ -38,6 +38,12 @@ class WalletResource extends Resource
                     ->disabled()
                     ->numeric()
                     ->default(0),
+                Forms\Components\Select::make('policy')
+                    ->label(__('Wallet Policy'))
+                    ->options([
+                        'ALLOW_NEGATIVE_BALANCE' => __('ALLOW NEGATIVE BALANCE'),
+                    ])
+                    ->multiple(),
                 Forms\Components\Select::make('user_id')
                     ->label(__('User'))
                     ->relationship('user', 'name'),

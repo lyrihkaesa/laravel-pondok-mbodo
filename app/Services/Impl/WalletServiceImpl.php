@@ -5,6 +5,7 @@ namespace App\Services\Impl;
 use App\Models\Wallet;
 use App\Services\WalletService;
 use Illuminate\Support\Facades\DB;
+use App\Models\FinancialTransaction;
 
 class WalletServiceImpl implements WalletService
 {
@@ -16,7 +17,7 @@ class WalletServiceImpl implements WalletService
         //
     }
 
-    public function transfer(string $fromWalletId, string $toWalletId, float $amount, array $data = []): bool
+    public function transfer(string $fromWalletId, string $toWalletId, float $amount, FinancialTransaction $financialTransaction): array
     {
         // Mulai transaksi database
         DB::beginTransaction();
@@ -24,7 +25,9 @@ class WalletServiceImpl implements WalletService
         try {
             // Kurangi saldo dari dompet sumber
             $fromWallet = Wallet::findOrFail($fromWalletId);
-            if ($fromWallet->balance < $amount && $fromWallet->id !== "SYSTEM") {
+            $policy = $fromWallet->policy ?? [];
+            // dd([$fromWallet->balance < $amount, in_array("ALLOW_NEGATIVE_BALANCE", $policy)]);
+            if ($fromWallet->balance < $amount && !in_array("ALLOW_NEGATIVE_BALANCE", $policy)) {
                 throw new \Exception(__('The balance is not enough'));
             }
             $fromWallet->balance -= $amount;
@@ -35,32 +38,40 @@ class WalletServiceImpl implements WalletService
             $toWallet->balance += $amount;
             $toWallet->save();
 
-            $toWallet->destinationTransactions()->create([
-                'student_product_id' => $data['student_product_id'] ?? null,
-                'name' => $data['name'] ?? 'Transfer Saldo',
-                'type' => $data['type'] ?? 'transfer',
-                'amount' => $amount,
-                'from_wallet_id' => $fromWallet->id,
-                'description' => $data['description'] ?? "Transfer saldo " . $amount . " dari " . $fromWallet->id . " ke " . $toWallet->id,
-            ]);
+            $financialTransaction->from_wallet_id = $fromWallet->id;
+            $financialTransaction->to_wallet_id = $toWallet->id;
+            $financialTransaction->amount = $amount;
+
+            $financialTransaction->name = $financialTransaction->name ?? "Transfer Saldo";
+            $financialTransaction->type = $financialTransaction->type ?? "transfer";
+            $financialTransaction->description = $financialTransaction->description ?? "Transfer saldo $amount dari $fromWallet->id ke $toWallet->id";
+            $financialTransaction->validated_by = auth()->user()->id;
+
+            $financialTransaction->save();
 
             // Commit transaksi database
             DB::commit();
-            return true; // Transfer berhasil
+            return [
+                'is_success' => true,
+                'message' => 'Transfer saldo ' . $amount . ' dari ' . $fromWallet->id . ' ke ' . $toWallet->id . ' berhasil',
+            ]; // Transfer berhasil
         } catch (\Exception $e) {
             // Rollback transaksi database jika terjadi kesalahan
             DB::rollback();
-            return false; // Transfer gagal
+            return [
+                'is_success' => false,
+                'message' => $e->getMessage(),
+            ]; // Transfer gagal
         }
     }
 
-    public function transferSystemToYayasan(float $amount, array $data): bool
+    public function transferSystemToYayasan(float $amount, FinancialTransaction $financialTransaction): array
     {
-        return $this->transfer('SYSTEM', 'YAYASAN', $amount, $data);
+        return $this->transfer('SYSTEM', 'YAYASAN', $amount, $financialTransaction);
     }
 
-    public function transferYayasanToSystem(float $amount, array $data): bool
+    public function transferYayasanToSystem(float $amount, FinancialTransaction $financialTransaction): array
     {
-        return $this->transfer('YAYASAN', 'SYSTEM', $amount, $data);
+        return $this->transfer('YAYASAN', 'SYSTEM', $amount, $financialTransaction);
     }
 }

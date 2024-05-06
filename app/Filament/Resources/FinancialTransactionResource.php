@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\FinancialTransactionResource\Pages;
-use App\Filament\Resources\FinancialTransactionResource\RelationManagers;
-use App\Models\FinancialTransaction;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Services\WalletService;
+use Filament\Resources\Resource;
+use App\Models\FinancialTransaction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\FinancialTransactionResource\Pages;
+use App\Filament\Resources\FinancialTransactionResource\RelationManagers;
 
 class FinancialTransactionResource extends Resource
 {
@@ -23,7 +24,75 @@ class FinancialTransactionResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Section::make(__('Wallet'))
+                    ->schema([
+                        Forms\Components\Select::make('from_wallet_id')
+                            ->label(__('From Wallet Id'))
+                            ->relationship('fromWallet')
+                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->id} - {$record->name}")
+                            ->required()
+                            ->searchable(['id', 'name'])
+                            ->preload()
+                            ->disabled(fn ($operation) => $operation === 'edit'),
+                        Forms\Components\Select::make('to_wallet_id')
+                            ->label(__('To Wallet Id'))
+                            ->relationship('toWallet')
+                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->id} - {$record->name}")
+                            ->required()
+                            ->searchable(['id', 'name'])
+                            ->preload()
+                            ->disabled(fn ($operation) => $operation === 'edit'),
+                    ])
+                    ->compact()
+                    ->columns(2),
+
+                Forms\Components\Section::make(__('Detail'))
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label(__('Name'))
+                            ->placeholder(__('Listrik Yayasan / Konsumsi / Lainnya'))
+                            ->maxLength(255)
+                            ->required()
+                            ->columnSpanFull(),
+                        Forms\Components\TextInput::make('amount')
+                            ->label(__('Amount'))
+                            ->placeholder(__('Amount Placeholder'))
+                            ->numeric()
+                            ->minValue(1)
+                            ->disabled(fn ($operation) => $operation === 'edit')
+                            ->required(),
+                        Forms\Components\DateTimePicker::make('transaction_at')
+                            ->label(__('Transaction At'))
+                            ->required()
+                            ->default(now(tz: 'Asia/Jakarta')),
+                        // Forms\Components\TextInput::make('type')
+                        //     ->label(__('Type'))
+                        //     ->required(),
+                    ])
+                    ->compact()
+                    ->columns(2),
+
+                Forms\Components\Section::make(__('Other Information'))
+                    ->schema([
+                        Forms\Components\TextArea::make('description')
+                            ->label(__('Description'))
+                            ->autoSize(),
+                        Forms\Components\FileUpload::make('image_attachments')
+                            ->label(__('Image Attachments'))
+                            ->helperText(\App\Utilities\FileUtility::getImageHelperText(prefix: 'Masukan bukti transaksi/invoice dalam bentuk gambar.'))
+                            ->multiple()
+                            ->image()
+                            ->directory('financial_transaction_images'),
+                        Forms\Components\FileUpload::make('file_attachments')
+                            ->label(__('File Attachments'))
+                            ->helperText(\App\Utilities\FileUtility::getPdfHelperText(prefix: 'Masukan bukti transaksi/invoice dalam bentuk pdf.'))
+                            ->multiple()
+                            ->directory('financial_transaction_files'),
+                    ])
+                    ->compact()
+                    ->collapsible()
+                    ->collapsed()
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -62,20 +131,20 @@ class FinancialTransactionResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->label(__('Amount'))
-                    ->prefix(function ($record) {
-                        if (str($record->type)->contains('credit')) {
-                            return '+';
-                        } else {
-                            return '-';
-                        }
-                    })
-                    ->color(function ($record) {
-                        if (str($record->type)->contains('credit')) {
-                            return 'success';
-                        } else {
-                            return 'danger';
-                        }
-                    })
+                    // ->prefix(function ($record) {
+                    //     if (str($record->type)->contains('credit')) {
+                    //         return '+';
+                    //     } else {
+                    //         return '-';
+                    //     }
+                    // })
+                    // ->color(function ($record) {
+                    //     if (str($record->type)->contains('credit')) {
+                    //         return 'success';
+                    //     } else {
+                    //         return 'danger';
+                    //     }
+                    // })
                     ->money('IDR'),
                 Tables\Columns\TextColumn::make('description')
                     ->label(__('Description'))
@@ -94,7 +163,10 @@ class FinancialTransactionResource extends Resource
                     ->searchable(),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->action(function (array $data, $record, WalletService $walletService) {
+                        dd([$data, $record, $walletService]);
+                    }),
                 // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

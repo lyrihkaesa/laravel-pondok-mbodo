@@ -11,7 +11,9 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Carbon;
 use App\Services\WalletService;
+use App\Models\FinancialTransaction;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\AttachAction;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,9 +32,44 @@ class ProductsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\Select::make('product_id')
+                    ->label(__('Product Name'))
+                    ->helperText(__('Product Name Helper Text', [
+                        'product_name' => __('Student Product Name'),
+                        'product_price' => __('Student Product Price'),
+                    ]))
                     ->required()
-                    ->maxLength(255),
+                    ->options(Product::all()->pluck('name', 'id'))
+                    ->searchable()
+                    ->preload()
+                    ->live()
+                    ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $old, ?string $state) {
+                        if ($state === null) {
+                            return;
+                        };
+                        $product = Product::find($state);
+
+                        $set('product_name', $product->name . ' ' . now()->translatedFormat('F Y'));
+                        $set('product_price', $product->price);
+                        return $state;
+                    }),
+                Forms\Components\TextInput::make('product_name')
+                    ->label(__('Student Product Name'))
+                    ->required(),
+                Forms\Components\TextInput::make('product_price')
+                    ->label(__('Student Product Price'))
+                    ->required(),
+                Forms\Components\FileUpload::make('image_attachments')
+                    ->label(__('Image Attachments'))
+                    ->helperText(\App\Utilities\FileUtility::getImageHelperText(prefix: 'Masukan bukti transaksi/invoice dalam bentuk gambar.'))
+                    ->multiple()
+                    ->image()
+                    ->directory('financial_transaction_images'),
+                Forms\Components\FileUpload::make('file_attachments')
+                    ->label(__('File Attachments'))
+                    ->helperText(\App\Utilities\FileUtility::getPdfHelperText(prefix: 'Masukan bukti transaksi/invoice dalam bentuk pdf.'))
+                    ->multiple()
+                    ->directory('financial_transaction_files'),
             ]);
     }
 
@@ -50,23 +87,23 @@ class ProductsRelationManager extends RelationManager
                     ->updateStateUsing(function ($state, $record, WalletService $walletService) {
                         // dd([$state, $record, $record->pivot->pivotParent, $record->pivot->id]);
                         $studentProductModel = $record->pivot;
-                        $studentProductModel->update([
-                            'validated_at' => $state ? now() : null,
-                            'validated_by' => $state ? auth()->id() : null,
-                        ]);
 
                         $student = $studentProductModel->student;
                         $studentProductId = $studentProductModel->id;
                         if ($state) {
+                            $studentProductModel->update([
+                                'validated_at' => now(),
+                                'validated_by' => auth()->id(),
+                            ]);
+
                             $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
-                            $walletService->transferSystemToYayasan($record->product_price, [
-                                'student_product_id' => $studentProductId,
-                                'name' => $record->product_name,
-                                'type' => 'credit,validation,system',
-                                'amount' => $record->product_price,
-                                'description' => $description,
-                            ]);
+                            $financialTransaction = new FinancialTransaction();
+                            $financialTransaction->student_product_id = $studentProductId;
+                            $financialTransaction->name = $record->product_name;
+                            $financialTransaction->type = 'credit-yayasan,validation,system';
+                            $financialTransaction->description = $description;
+                            $walletService->transferSystemToYayasan($record->product_price, $financialTransaction);
 
                             Notification::make()
                                 ->title('Melakukan Validasi')
@@ -76,15 +113,19 @@ class ProductsRelationManager extends RelationManager
 
                             return true;
                         } else {
+                            $studentProductModel->update([
+                                'validated_at' => null,
+                                'validated_by' => null,
+                            ]);
+
                             $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' membatalkan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
-                            $walletService->transferYayasanToSystem($record->product_price, [
-                                'student_product_id' => $studentProductId,
-                                'name' => $record->product_name,
-                                'type' => 'debit,unvalidation,system',
-                                'amount' => $record->product_price,
-                                'description' => $description,
-                            ]);
+                            $financialTransaction = new FinancialTransaction();
+                            $financialTransaction->student_product_id = $studentProductId;
+                            $financialTransaction->name = $record->product_name;
+                            $financialTransaction->type = 'debit-yayasan,unvalidation,system';
+                            $financialTransaction->description = $description;
+                            $walletService->transferYayasanToSystem($record->product_price, $financialTransaction);
 
                             Notification::make()
                                 ->title('Membatalkan Validasi')
@@ -115,27 +156,43 @@ class ProductsRelationManager extends RelationManager
                     ->label('Belum Validasi'),
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make()->form(fn (AttachAction $action): array => [
-                    $action->getRecordSelect()
-                        // ->options(Product::all()->pluck('name', 'id')) // dont need that because ->allowDuplicates()
-                        ->live()
-                        ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                            if ($state === null) {
-                                return;
-                            };
-                            $product = Product::find($state);
+                Tables\Actions\AttachAction::make()
+                    ->form(fn (AttachAction $action): array => [
+                        $action->getRecordSelect()
+                            // ->options(Product::all()->pluck('name', 'id')) // dont need that because ->allowDuplicates()
+                            ->live()
+                            ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
+                                if ($state === null) {
+                                    return;
+                                };
+                                $product = Product::find($state);
 
-                            $set('product_name', $product->name . ' ' . now()->format('F Y'));
-                            $set('product_price', $product->price);
-                        }),
-                    Forms\Components\TextInput::make('product_name')
-                        ->required(),
-                    Forms\Components\TextInput::make('product_price')
-                        ->required(),
-                ])
+                                $set('product_name', $product->name . ' ' . now()->translatedFormat('F Y'));
+                                $set('product_price', $product->price);
+                            }),
+                        Forms\Components\TextInput::make('product_name')
+                            ->label(__('Student Product Name'))
+                            ->required(),
+                        Forms\Components\TextInput::make('product_price')
+                            ->label(__('Student Product Price'))
+                            ->required(),
+                        Forms\Components\FileUpload::make('image_attachments')
+                            ->label(__('Image Attachments'))
+                            ->helperText(\App\Utilities\FileUtility::getImageHelperText(prefix: 'Masukan bukti transaksi/invoice dalam bentuk gambar.'))
+                            ->multiple()
+                            ->image()
+                            ->directory('financial_transaction_images'),
+                        Forms\Components\FileUpload::make('file_attachments')
+                            ->label(__('File Attachments'))
+                            ->helperText(\App\Utilities\FileUtility::getPdfHelperText(prefix: 'Masukan bukti transaksi/invoice dalam bentuk pdf.'))
+                            ->multiple()
+                            ->directory('financial_transaction_files'),
+                    ])
                     ->preloadRecordSelect(),
             ])
             ->actions([
+                Tables\Actions\EditAction::make()
+                    ->visible(fn ($record): bool => $record->validated_at === null),
                 Tables\Actions\DetachAction::make()
                     ->visible(fn ($record): bool => $record->validated_at === null),
             ])

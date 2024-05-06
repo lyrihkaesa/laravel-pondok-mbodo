@@ -18,7 +18,7 @@ class FileUtility
     {
         $result = __('Image Helper Text', [
             'prefix' => $prefix === '' ? '' : $prefix,
-            'suffix' => $suffix === '' ?  __('Image Helper Suffix') : $suffix,
+            'suffix' => $suffix === '' ?  '' : $suffix,
             'file_size' => '500KB',
         ]);
         return str($result)->trim()->inlineMarkdown()->toHtmlString();
@@ -26,6 +26,7 @@ class FileUtility
 
     public static function getPdfHelperText(string $prefix = '', string $suffix = ''): HtmlString
     {
+        // dd([$prefix === '' ? '' : $prefix, $suffix === '' ?  '' : $suffix]);
         $result = __('PDF Helper Text', [
             'prefix' => $prefix === '' ? '' : $prefix,
             'suffix' => $suffix === '' ?  '' : $suffix,

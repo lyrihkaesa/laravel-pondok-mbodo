@@ -19,6 +19,8 @@ return new class extends Migration
             $table->integer('product_price')->nullable();
             $table->datetime('validated_at')->nullable();
             $table->unsignedBigInteger('validated_by')->nullable();
+            $table->json('image_attachments')->nullable();
+            $table->json('file_attachments')->nullable();
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products')->nullOnDelete();

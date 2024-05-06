@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('balance', 20, 2)->default(0);
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('organization_id')->nullable();
+            $table->json('policy')->nullable();
             $table->softDeletes(); // Mengaktifkan soft delete
             $table->timestamps();
 

@@ -8,7 +8,10 @@ use App\Models\Wallet;
 use App\Models\Product;
 use App\Models\Student;
 use Livewire\Component;
+use App\Enums\StudentCategory;
 use App\Services\WalletService;
+use App\Enums\StudentCurrentSchool;
+use App\Models\FinancialTransaction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\StudentProductResource;
@@ -33,13 +36,13 @@ class ListStudentProducts extends ListRecords
                     if ($record->validated_at !== null) {
                         $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
-                        $walletService->transferSystemToYayasan($record->product_price, [
-                            'student_product_id' => $studentProductId,
-                            'name' => $record->product_name,
-                            'type' => 'credit,validation,system',
-                            'amount' => $record->product_price,
-                            'description' => $description,
-                        ]);
+                        $financialTransaction = new FinancialTransaction();
+
+                        $financialTransaction->student_product_id = $studentProductId;
+                        $financialTransaction->name = $record->product_name;
+                        $financialTransaction->type = 'credit-yayasan,validation,system';
+                        $financialTransaction->description = $description;
+                        $walletService->transferSystemToYayasan($record->product_price, $financialTransaction);
 
                         Notification::make()
                             ->title('Melakukan Validasi')
@@ -51,7 +54,7 @@ class ListStudentProducts extends ListRecords
             Actions\Action::make('generateStudentsProducts')
                 ->label("Administrasi Umum")
                 ->fillForm(fn ($record): array => [
-                    'suffix' => now()->format('F Y'),
+                    'suffix' => now()->translatedFormat('F Y'),
                 ])
                 ->form([
                     Forms\Components\TextInput::make('suffix')
@@ -60,30 +63,20 @@ class ListStudentProducts extends ListRecords
                         ->live(onBlur: true)
                         ->required(),
                     Forms\Components\Select::make('product')
-                        ->label('Jenis Biaya')
+                        ->label(__('Student Product Name'))
                         ->relationship('product', 'name')
                         ->multiple()
                         ->preload()
                         ->searchable()
                         ->required(),
                     Forms\Components\Select::make('current_school')
-                        ->label('Sekolah')
-                        ->options([
-                            'PAUD/TK' => 'PAUD/TK',
-                            'MI' => 'MI',
-                            'SMP' => 'SMP',
-                            'MA' => 'MA',
-                            'Takhasus' => 'Takhasus',
-                        ])
+                        ->label(__('Student Product School'))
+                        ->options(StudentCurrentSchool::class)
                         ->multiple()
                         ->required(),
                     Forms\Components\Select::make('category')
-                        ->label('Kategori')
-                        ->options([
-                            'Santri Reguler' => 'Santri Reguler',
-                            'Santri Ndalem' => 'Santri Ndalem',
-                            'Santri Berprestasi' => 'Santri Berprestasi',
-                        ])
+                        ->label(__('Category'))
+                        ->options(StudentCategory::class)
                         ->multiple()
                         ->required(),
                 ])
