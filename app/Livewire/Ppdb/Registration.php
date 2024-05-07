@@ -238,6 +238,7 @@ class Registration extends Component implements HasForms
                             ->inline()
                             ->options(StudentCategory::class)
                             ->required()
+                            ->live(onBlur: true)
                             ->default(StudentCategory::REGULER),
                         Forms\Components\ToggleButtons::make('current_school')
                             ->label(__('Current School'))
@@ -270,7 +271,8 @@ class Registration extends Component implements HasForms
                                 if ($operation === 'edit') {
                                     return $rule->ignore($livewire->data['user_id'], "id");
                                 }
-                            }),
+                            })
+                            ->required(),
                         Forms\Components\TextInput::make('password')
                             ->label(__('Password'))
                             ->password()
@@ -285,9 +287,8 @@ class Registration extends Component implements HasForms
                         Forms\Components\TextInput::make('family_card_number')
                             ->label(__('Family Card Number'))
                             ->placeholder(__('Family Card Number Placeholder'))
-                            ->required()
                             ->length(16)
-                            ->columnSpanFull(),
+                            ->required(),
                         Forms\Components\Section::make(__('Father'))
                             ->schema([
                                 Forms\Components\TextInput::make('father_name')
@@ -356,11 +357,6 @@ class Registration extends Component implements HasForms
                                 Forms\Components\Repeater::make('guardians')
                                     ->label(false)
                                     ->schema([
-                                        Forms\Components\TextInput::make('name')
-                                            ->label(__('Full Name'))
-                                            ->placeholder(__('Guardian Name Placeholder'))
-                                            ->required()
-                                            ->maxLength(255),
                                         Forms\Components\Select::make('relationship')
                                             ->label(__('Relationship'))
                                             ->options([
@@ -384,7 +380,13 @@ class Registration extends Component implements HasForms
                                                 }
                                                 return ucwords($data['relationship']);
                                             })
-                                            ->required(),
+                                            ->required()
+                                            ->columnSpanFull(),
+                                        Forms\Components\TextInput::make('name')
+                                            ->label(__('Full Name'))
+                                            ->placeholder(__('Guardian Name Placeholder'))
+                                            ->required()
+                                            ->maxLength(255),
                                         Forms\Components\TextInput::make('nik')
                                             ->label(__('Nik'))
                                             ->placeholder(__('Nik Placeholder'))
@@ -405,7 +407,8 @@ class Registration extends Component implements HasForms
                                             ->label(__('Full Address'))
                                             ->placeholder(__('Guardian Full Address Placeholder'))
                                             ->autosize()
-                                            ->maxLength(255),
+                                            ->maxLength(255)
+                                            ->columnSpanFull(),
                                     ])
                                     ->defaultItems(0)
                                     // ->collapsed()
@@ -422,14 +425,14 @@ class Registration extends Component implements HasForms
                         Forms\Components\Checkbox::make('term_01')
                             ->label('Saya bersedia melunasi biaya pendidikan diawal karena putra/putri kami tidak mendaftar sebagai Santri Ndalem.')
                             ->live(onBlur: true)
-                            ->visible(fn (Forms\Get $get) => $get('category') === 'Santri Reguler')
-                            ->accepted(fn (Forms\Get $get) => $get('category') === 'Santri Reguler'),
+                            ->visible(fn (Forms\Get $get) => $get('category') === StudentCategory::REGULER || $get('category') === StudentCategory::BERPRESTASI)
+                            ->accepted(fn (Forms\Get $get) => $get('category') === StudentCategory::REGULER || $get('category') === StudentCategory::BERPRESTASI),
 
                         Forms\Components\Checkbox::make('term_02')
                             ->label('Saya meridhoi putra/putri kami sebagai Santri Ndalem dengan ketentuan - ketentuan yang telah ditetapkan.')
                             ->live()
-                            ->visible(fn (Forms\Get $get) => $get('category') === 'Santri Ndalem')
-                            ->accepted(fn (Forms\Get $get) => $get('category') === 'Santri Ndalem'),
+                            ->visible(fn (Forms\Get $get) => $get('category') === StudentCategory::NDALEM)
+                            ->accepted(fn (Forms\Get $get) => $get('category') === StudentCategory::NDALEM),
 
                         Forms\Components\Checkbox::make('term_03')
                             ->label('Apabila dikemudian hari putra/putri kami mengundurkan diri dengan alasan apapun, biaya pendidikan yang sudah dibayarkan tidak bisa ditarik kembali.')
@@ -480,6 +483,13 @@ class Registration extends Component implements HasForms
 
             $userModel = User::create($user);
 
+            // Membuat walet
+            $userModel->walets()->create([
+                'id' => $userModel->phone,
+                'name' => 'Dompet Utama',
+                'balance' => 0,
+            ]);
+
             // Assign 'Student' Role
             $roleModel = \Spatie\Permission\Models\Role::where('name', 'Santri')->first();
             $userModel->assignRole($roleModel);
@@ -487,6 +497,7 @@ class Registration extends Component implements HasForms
             // Membuat santri
             $student = [
                 "user_id" => $userModel->id,
+                "status" => "Mendaftar",
                 "name" => $state["name"],
                 "nik" => $state["nik"],
                 "gender" => $state["gender"],
@@ -506,7 +517,6 @@ class Registration extends Component implements HasForms
                 'family_card_number' => $state["family_card_number"],
                 "category" => $state["category"],
                 "current_school" => $state["current_school"],
-                "status" => "Mendaftar",
             ];
 
             $studentModel = $this->form->getModel()::create($student);
