@@ -21,14 +21,16 @@ class ManageFinancialTransactions extends ManageRecords
 
                     $result = $walletService->transfer($data['from_wallet_id'], $data['to_wallet_id'], $data['amount'], new FinancialTransaction($data));
 
-                    if ($result) {
+                    if ($result['is_success'] === true) {
                         Notification::make()
                             ->title('Berhasil')
+                            ->body($result['message'])
                             ->success()
                             ->send();
                     } else {
                         Notification::make()
                             ->title('Gagal')
+                            ->body($result['message'])
                             ->danger()
                             ->send();
                     }

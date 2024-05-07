@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('to_wallet_id')->nullable();
             $table->unsignedBigInteger('student_product_id')->nullable();
             $table->unsignedBigInteger('validated_by')->nullable();
-            $table->datetime('transaction_at')->nullable()->default(now());
+            $table->datetime('transaction_at')->nullable();
             $table->json('image_attachments')->nullable();
             $table->json('file_attachments')->nullable();
             $table->timestamps();

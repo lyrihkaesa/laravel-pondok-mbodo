@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FinancialTransaction extends Model
@@ -38,24 +39,23 @@ class FinancialTransaction extends Model
         ];
     }
 
-    /**
-     * Get the wallet where the transaction is from.
-     */
-    public function fromWallet()
+    public function fromWallet(): BelongsTo
     {
         return $this->belongsTo(Wallet::class, 'from_wallet_id');
     }
 
-    /**
-     * Get the wallet where the transaction is to.
-     */
-    public function toWallet()
+    public function toWallet(): BelongsTo
     {
         return $this->belongsTo(Wallet::class, 'to_wallet_id');
     }
 
-    public function studentProduct()
+    public function studentProduct(): BelongsTo
     {
         return $this->belongsTo(StudentProduct::class, 'student_product_id');
+    }
+
+    public function validator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'validated_by');
     }
 }

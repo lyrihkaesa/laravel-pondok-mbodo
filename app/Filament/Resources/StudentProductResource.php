@@ -77,7 +77,7 @@ class StudentProductResource extends Resource
                             ->offColor('danger')
                             ->live(onBlur: true)
                             ->afterStateUpdated(function (?string $state, Forms\Set $set, $record) {
-                                $set('validated_at', $state ? now(tz: 'Asia/Jakarta')->toDateTimeString() : null);
+                                $set('validated_at', $state ? now()->toDateTimeString() : null);
                                 $set('validated_by', $state ? auth()->id() : null);
                                 return $state;
                             })
@@ -132,7 +132,7 @@ class StudentProductResource extends Resource
                     ->label(__('Student Product Name')),
                 Tables\Columns\TextColumn::make('product_price')
                     ->label(__('Student Product Price'))
-                    ->money('IDR'),
+                    ->money(currency: 'IDR', locale: 'id'),
                 Tables\Columns\TextColumn::make('student.name')
                     ->label(__('Student'))
                     ->searchable(),

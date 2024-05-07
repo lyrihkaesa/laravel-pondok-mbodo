@@ -6,6 +6,7 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Number;
 use App\Services\WalletService;
 use Filament\Resources\Resource;
 use App\Models\FinancialTransaction;
@@ -29,7 +30,7 @@ class FinancialTransactionResource extends Resource
                         Forms\Components\Select::make('from_wallet_id')
                             ->label(__('From Wallet Id'))
                             ->relationship('fromWallet')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->id} - {$record->name}")
+                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->id} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
                             ->required()
                             ->searchable(['id', 'name'])
                             ->preload()
@@ -37,7 +38,7 @@ class FinancialTransactionResource extends Resource
                         Forms\Components\Select::make('to_wallet_id')
                             ->label(__('To Wallet Id'))
                             ->relationship('toWallet')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->id} - {$record->name}")
+                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->id} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
                             ->required()
                             ->searchable(['id', 'name'])
                             ->preload()
@@ -61,19 +62,25 @@ class FinancialTransactionResource extends Resource
                             ->minValue(1)
                             ->disabled(fn ($operation) => $operation === 'edit')
                             ->required(),
-                        Forms\Components\DateTimePicker::make('transaction_at')
-                            ->label(__('Transaction At'))
-                            ->required()
-                            ->default(now(tz: 'Asia/Jakarta')),
                         // Forms\Components\TextInput::make('type')
                         //     ->label(__('Type'))
                         //     ->required(),
+                        Forms\Components\DateTimePicker::make('transaction_at')
+                            ->label(__('Transaction At'))
+                            ->timezone('Asia/Jakarta')
+                            ->required()
+                            ->default(now()),
                     ])
                     ->compact()
                     ->columns(2),
 
                 Forms\Components\Section::make(__('Other Information'))
                     ->schema([
+                        Forms\Components\Select::make('validated_by')
+                            ->label(__('Validated By'))
+                            ->relationship('validator', 'name')
+                            ->disabled()
+                            ->default(auth()->id()),
                         Forms\Components\TextArea::make('description')
                             ->label(__('Description'))
                             ->autoSize(),
@@ -145,11 +152,14 @@ class FinancialTransactionResource extends Resource
                     //         return 'danger';
                     //     }
                     // })
-                    ->money('IDR'),
+                    ->money(currency: 'IDR', locale: 'id'),
                 Tables\Columns\TextColumn::make('description')
                     ->label(__('Description'))
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->searchable(),
+                Tables\Columns\TextColumn::make('transaction_at')
+                    ->label(__('Transaction At'))
+                    ->date(format: 'd/m/Y H:i:s', timezone: 'Asia/Jakarta'),
 
             ])
             ->filters([
@@ -163,10 +173,10 @@ class FinancialTransactionResource extends Resource
                     ->searchable(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->action(function (array $data, $record, WalletService $walletService) {
-                        dd([$data, $record, $walletService]);
-                    }),
+                Tables\Actions\EditAction::make(),
+                // ->action(function (array $data, $record, WalletService $walletService) {
+                //     // dd([$data, $record, $walletService]);
+                // }),
                 // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

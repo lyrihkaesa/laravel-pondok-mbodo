@@ -152,7 +152,7 @@
     "Student Financial": "Administrasi Santri",
     "Financial": "Administrasi",
     "Financial Transaction": "Transaksi Keuangan",
-    "The balance is not enough": "Saldo tidak mencukupi",
+    "The balance is not enough": "Saldo :wallet_name :wallet_balance tidak mencukupi untuk transaksi dengan nominal :amount",
     "From Wallet Id": "Dari ID",
     "To Wallet Id": "Ke ID",
     "ID copied!": "ID telah disalin!",

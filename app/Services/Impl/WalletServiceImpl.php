@@ -3,6 +3,7 @@
 namespace App\Services\Impl;
 
 use App\Models\Wallet;
+use Illuminate\Support\Number;
 use App\Services\WalletService;
 use Illuminate\Support\Facades\DB;
 use App\Models\FinancialTransaction;
@@ -28,7 +29,11 @@ class WalletServiceImpl implements WalletService
             $policy = $fromWallet->policy ?? [];
             // dd([$fromWallet->balance < $amount, in_array("ALLOW_NEGATIVE_BALANCE", $policy)]);
             if ($fromWallet->balance < $amount && !in_array("ALLOW_NEGATIVE_BALANCE", $policy)) {
-                throw new \Exception(__('The balance is not enough'));
+                throw new \Exception(__('The balance is not enough', [
+                    'wallet_name' => $fromWallet->name,
+                    'wallet_balance' => Number::currency($fromWallet->balance, 'IDR', 'id'),
+                    'amount' => Number::currency($amount, 'IDR', 'id')
+                ]));
             }
             $fromWallet->balance -= $amount;
             $fromWallet->save();
@@ -44,7 +49,7 @@ class WalletServiceImpl implements WalletService
 
             $financialTransaction->name = $financialTransaction->name ?? "Transfer Saldo";
             $financialTransaction->type = $financialTransaction->type ?? "transfer";
-            $financialTransaction->description = $financialTransaction->description ?? "Transfer saldo $amount dari $fromWallet->id ke $toWallet->id";
+            $financialTransaction->description = $financialTransaction->description ?? "Transfer saldo " . Number::currency($amount, 'IDR', 'id') . " dari #$fromWallet->id ke #$toWallet->id";
             $financialTransaction->validated_by = auth()->user()->id;
 
             $financialTransaction->save();
@@ -67,11 +72,13 @@ class WalletServiceImpl implements WalletService
 
     public function transferSystemToYayasan(float $amount, FinancialTransaction $financialTransaction): array
     {
+        $financialTransaction->transaction_at = now();
         return $this->transfer('SYSTEM', 'YAYASAN', $amount, $financialTransaction);
     }
 
     public function transferYayasanToSystem(float $amount, FinancialTransaction $financialTransaction): array
     {
+        $financialTransaction->transaction_at = now();
         return $this->transfer('YAYASAN', 'SYSTEM', $amount, $financialTransaction);
     }
 }
