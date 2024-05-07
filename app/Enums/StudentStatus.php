@@ -36,10 +36,10 @@ enum StudentStatus: string implements HasLabel, HasColor, HasIcon
     public function getIcon(): ?string
     {
         return match ($this) {
-            self::ENROLLED => 'heroicon-o-user',
-            self::ACTIVE => 'heroicon-o-user',
-            self::GRADUATED => 'heroicon-o-user',
-            self::INACTIVE => 'heroicon-o-user',
+            self::ENROLLED => 'heroicon-o-stop-circle',
+            self::ACTIVE => 'heroicon-o-check-circle',
+            self::GRADUATED => 'heroicon-o-academic-cap',
+            self::INACTIVE => 'heroicon-o-x-circle',
         };
     }
 }

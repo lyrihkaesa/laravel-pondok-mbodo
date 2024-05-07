@@ -33,9 +33,9 @@ enum StudentCategory: string implements HasLabel, HasColor, HasIcon
     public function getIcon(): ?string
     {
         return match ($this) {
-            self::REGULER => 'heroicon-o-user',
-            self::NDALEM => 'heroicon-o-user',
-            self::BERPRESTASI => 'heroicon-o-user',
+            self::REGULER => 'heroicon-o-user-circle',
+            self::NDALEM => 'heroicon-o-check-badge',
+            self::BERPRESTASI => 'heroicon-o-star',
         };
     }
 }
