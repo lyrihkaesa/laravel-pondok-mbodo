@@ -161,5 +161,7 @@
     "Amount Placeholder": "100000",
     "Image Attachments": "Lampiran Gambar",
     "File Attachments": "Lampiran File",
-    "Wallet Policy": "Ketentuan"
+    "Wallet Policy": "Ketentuan",
+    "Expense": "Pengeluaran",
+    "Income": "Pemasukan"
 }

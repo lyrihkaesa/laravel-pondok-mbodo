@@ -30,7 +30,7 @@ class FinancialTransactionResource extends Resource
                         Forms\Components\Select::make('from_wallet_id')
                             ->label(__('From Wallet Id'))
                             ->relationship('fromWallet')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->id} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
+                            ->getOptionLabelFromRecordUsing(fn ($record) => (in_array("ALLOW_NEGATIVE_BALANCE", $record->policy ?? []) ? "🔻" : "")  . "{$record->id} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
                             ->required()
                             ->searchable(['id', 'name'])
                             ->preload()
@@ -64,7 +64,8 @@ class FinancialTransactionResource extends Resource
                             ->required(),
                         // Forms\Components\TextInput::make('type')
                         //     ->label(__('Type'))
-                        //     ->required(),
+                        //     ->required()
+                        //     ->visible(fn ($operation) => dd($operation)),
                         Forms\Components\DateTimePicker::make('transaction_at')
                             ->label(__('Transaction At'))
                             ->timezone('Asia/Jakarta')

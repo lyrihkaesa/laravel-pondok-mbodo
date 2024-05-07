@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Number;
 use Filament\Support\Colors\Color;
 use Illuminate\Support\ServiceProvider;
 use Filament\Support\Facades\FilamentColor;
@@ -32,5 +33,7 @@ class AppServiceProvider extends ServiceProvider
             'pink' => Color::Pink,
             'neutral' => Color::Neutral,
         ]);
+
+        Number::useLocale('id');
     }
 }

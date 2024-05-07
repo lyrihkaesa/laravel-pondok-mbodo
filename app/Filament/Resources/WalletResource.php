@@ -65,7 +65,7 @@ class WalletResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('balance')
                     ->label(__('Balance'))
-                    ->numeric()
+                    ->money('IDR')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label(__('User'))

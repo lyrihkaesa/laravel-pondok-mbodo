@@ -24,7 +24,7 @@ class OrganizationSeeder extends Seeder
                     'classrooms' => [],
                     'wallets' => [
                         "YAYASAN" => [
-                            'name' => 'Dompet Utama',
+                            'name' => 'Dompet Yayasan',
                             'balance' => 0,
                         ],
                         "SYSTEM" => [
@@ -39,6 +39,11 @@ class OrganizationSeeder extends Seeder
                         ],
                         "DANA_BOS" => [
                             'name' => 'Dompet Dana BOS',
+                            'balance' => 0,
+                            'policy' => ['ALLOW_NEGATIVE_BALANCE'],
+                        ],
+                        "INCOME" => [
+                            'name' => 'Dompet Pemasukan',
                             'balance' => 0,
                             'policy' => ['ALLOW_NEGATIVE_BALANCE'],
                         ],
@@ -65,6 +70,12 @@ class OrganizationSeeder extends Seeder
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
                     'classrooms' => [],
+                    'wallets' => [
+                        "TAHFIDZUL" => [
+                            'name' => 'Dompet Utama',
+                            'balance' => 0,
+                        ],
+                    ],
                 ],
             ],
             'Sekolah Formal' => [
@@ -78,6 +89,12 @@ class OrganizationSeeder extends Seeder
                         'TK Kecil' => 1,
                         'TK Besar' => 1,
                     ],
+                    'wallets' => [
+                        "PAUD_TK" => [
+                            'name' => 'Dompet Utama',
+                            'balance' => 0,
+                        ],
+                    ],
                 ],
                 'MI/SD' => [
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
@@ -85,6 +102,12 @@ class OrganizationSeeder extends Seeder
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
                     'classrooms' => [
                         'MI Kelas' => 6
+                    ],
+                    'wallets' => [
+                        "MI_SD" => [
+                            'name' => 'Dompet Utama',
+                            'balance' => 0,
+                        ],
                     ],
                 ],
                 'SMP Islam Al Hawi' => [
@@ -94,6 +117,12 @@ class OrganizationSeeder extends Seeder
                     'classrooms' => [
                         'SMP Kelas' => 3,
                     ],
+                    'wallets' => [
+                        "SMP" => [
+                            'name' => 'Dompet Utama',
+                            'balance' => 0,
+                        ],
+                    ],
                 ],
                 'Madrasah Aliyah Plus Islam Al Hawi' => [
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
@@ -101,6 +130,12 @@ class OrganizationSeeder extends Seeder
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
                     'classrooms' => [
                         'MA Kelas' => 3,
+                    ],
+                    'wallets' => [
+                        "MA" => [
+                            'name' => 'Dompet Utama',
+                            'balance' => 0,
+                        ],
                     ],
                 ],
             ],
@@ -178,12 +213,24 @@ class OrganizationSeeder extends Seeder
                     'vision' => null,
                     'mission' => null,
                     'classrooms' => [],
+                    'wallets' => [
+                        "MLAKJS" => [
+                            'name' => 'Dompet Utama',
+                            'balance' => 0,
+                        ],
+                    ],
                 ],
                 'Jamiyah Thoriqoh Qodiriyah Al Jaelaniyah' => [
                     'description' => null,
                     'vision' => null,
                     'mission' => null,
                     'classrooms' => [],
+                    'wallets' => [
+                        "JTQAJ" => [
+                            'name' => 'Dompet Utama',
+                            'balance' => 0,
+                        ],
+                    ],
                 ],
                 'Langit Tour' => [
                     'description' => null,
@@ -196,12 +243,24 @@ class OrganizationSeeder extends Seeder
                     'vision' => null,
                     'mission' => null,
                     'classrooms' => [],
+                    'wallets' => [
+                        "TSN" => [
+                            'name' => 'Dompet Utama',
+                            'balance' => 0,
+                        ],
+                    ],
                 ],
                 'Padepokan Satrio Mbodo' => [
                     'description' => null,
                     'vision' => null,
                     'mission' => null,
                     'classrooms' => [],
+                    'wallets' => [
+                        "PSM" => [
+                            'name' => 'Dompet Utama',
+                            'balance' => 0,
+                        ],
+                    ],
                 ],
 
             ],
