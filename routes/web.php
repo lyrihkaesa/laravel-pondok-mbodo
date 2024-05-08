@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Models\Organization;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FinancialTransactionController;
 
 Route::get('/', \App\Livewire\Home::class)->name('home');
 Route::get('/tentang', \App\Livewire\About::class)->name('about');
@@ -22,6 +24,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/admin/financial-transactions/pdf', [FinancialTransactionController::class, 'generatePdfReport'])->name('admin.financial-transactions.pdf');
 });
+
+Route::get('/pdf', function () {
+    return view('reports.pdf_financial_transactions_v2', [
+        'transactions' => [],
+        'yayasan' => Organization::query()
+            ->where('slug', 'yayasan-pondok-pesantren-ki-ageng-mbodo')
+            ->first(),
+    ]);
+})->name('pdf');
 
 require __DIR__ . '/auth.php';

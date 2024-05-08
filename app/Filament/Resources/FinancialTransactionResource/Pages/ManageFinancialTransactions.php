@@ -4,7 +4,7 @@ namespace App\Filament\Resources\FinancialTransactionResource\Pages;
 
 use Filament\Forms;
 use Filament\Actions;
-use Filament\Forms\Form;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Number;
 use App\Services\WalletService;
 use App\Models\FinancialTransaction;
@@ -117,7 +117,70 @@ class ManageFinancialTransactions extends ManageRecords
                             ->danger()
                             ->send();
                     }
-                })
+                }),
+            Actions\Action::make('generate_report_pdf')
+                ->label(__('Generate Report PDF'))
+                ->color('danger')
+                ->icon('heroicon-m-document-text')
+                // ->iconButton()
+                // ->labeledFrom('md')
+                ->model(FinancialTransaction::class)
+                ->form([
+                    Forms\Components\Select::make('wallet_id')
+                        ->label(__('Wallet Id'))
+                        ->relationship('fromWallet')
+                        ->getOptionLabelFromRecordUsing(fn ($record) => (in_array("ALLOW_NEGATIVE_BALANCE", $record->policy ?? []) ? "🔻" : "")  . "{$record->id} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
+                        ->searchable(['id', 'name'])
+                        ->preload()
+                        ->default('YAYASAN')
+                        ->required(),
+                    Forms\Components\Grid::make()
+                        ->schema([
+                            Forms\Components\DatePicker::make('start_transaction_at')
+                                ->label(__('Start Transaction At'))
+                                ->default(now()->firstOfMonth())
+                                ->required(),
+                            Forms\Components\DatePicker::make('end_transaction_at')
+                                ->label(__('End Transaction At'))
+                                ->default(now()->endOfMonth())
+                                ->required(),
+                        ])
+                        ->columns([
+                            'default' => 2
+                        ]),
+                    Forms\Components\ToggleButtons::make('month')
+                        ->label(__('Month'))
+                        ->options(array_combine(range(1, 12), array_map(fn ($month) => Carbon::create(null, $month)->translatedFormat('F'), range(1, 12))))
+                        ->inline()
+                        ->live()
+                        ->afterStateUpdated(function ($state, Forms\Set $set, Forms\Get $get) {
+                            $stateInt = intval($state);
+
+                            $newStart = Carbon::parse($get('start_transaction_at'))->month($stateInt);
+                            $newEnd = Carbon::parse($get('end_transaction_at'))->month($stateInt);
+
+                            $set('start_transaction_at', $newStart->toDateString());
+                            $set('end_transaction_at', $newEnd->toDateString());
+                        })
+                        ->default(now()->month),
+                ])
+                ->action(function (array $data) {
+                    $this->replaceMountedAction('viewPdf', arguments: $data);
+                }),
         ];
+    }
+
+    public function viewPdfAction(): Actions\Action
+    {
+        return  Actions\Action::make('viewPdf')
+            ->label(__('View Financial Report'))
+            ->modal()
+            ->modalContent(fn ($arguments) => view('components.object-pdf', [
+                'src' => route('admin.financial-transactions.pdf', $arguments),
+            ]))
+            ->slideOver()
+            ->closeModalByClickingAway(false)
+            ->modalSubmitAction(false)
+            ->modalCancelAction(false);
     }
 }

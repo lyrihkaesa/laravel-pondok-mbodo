@@ -163,5 +163,13 @@
     "File Attachments": "Lampiran File",
     "Wallet Policy": "Ketentuan",
     "Expense": "Pengeluaran",
-    "Income": "Pemasukan"
+    "Income": "Pemasukan",
+    "This browser does not support PDFs. Please download the PDF to view it:": "Browser ini tidak mendukung PDF. Silahkan unduh PDF untuk melihatnya:",
+    "Download": "Unduh",
+    "Start Transaction At": "Tanggal Transaksi Dimulai",
+    "End Transaction At": "Tanggal Transaksi Berakhir",
+    "Month": "Bulan",
+    "Financial Report": "Laporan Keuangan",
+    "View Financial Report": "Lihat Laporan Keuangan",
+    "Generate Report PDF": "PDF"
 }
