@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Number;
 use App\Services\WalletService;
 use App\Models\FinancialTransaction;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ManageRecords;
 use App\Filament\Resources\FinancialTransactionResource;
@@ -179,6 +180,7 @@ class ManageFinancialTransactions extends ManageRecords
                 'src' => route('admin.financial-transactions.pdf', $arguments),
             ]))
             ->slideOver()
+            ->modalWidth(MaxWidth::FiveExtraLarge)
             ->closeModalByClickingAway(false)
             ->modalSubmitAction(false)
             ->modalCancelAction(false);

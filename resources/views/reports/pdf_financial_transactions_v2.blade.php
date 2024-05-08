@@ -94,6 +94,10 @@
             padding-left: 2px;
             padding-right: 2px;
         }
+
+        .nowarp {
+            white-space: nowrap;
+        }
     </style>
 </head>
 
@@ -103,8 +107,10 @@
             <td><img class="px-2" src="{{ asset('favicon-150x150.png') }}" width="90" height="90"></td>
             <td class="text-center">
                 <h1>{{ $yayasan->name }}</h1>
-                <p class="pb-2">Alamat Sekolah</p>
-                <p class="pb-2"><i>email | website | telepon</i></p>
+                <p class="pb-2">{{ $yayasan->address }}</p>
+                <p class="pb-2">
+                    <i>{{ $yayasan->email . ' | ' . env('APP_URL', 'https://pondokmbodo.com') . ' | ' . $yayasan->phone }}</i>
+                </p>
             </td>
         </tr>
         <tr>
@@ -121,7 +127,7 @@
     <table class="tg">
         <thead>
             <tr>
-                <th>Tanggal</th>
+                <th class="nowarp">Tanggal</th>
                 <th>Keterangan</th>
                 <th>Jumlah</th>
                 <th>Debit</th>
@@ -137,7 +143,7 @@
             @endif
             @foreach ($transactions as $transaction)
                 <tr>
-                    <td>{{ $transaction['transaction_at'] }}</td>
+                    <td class="nowarp">{{ $transaction['transaction_at'] }}</td>
                     <td>{{ $transaction['name'] }}</td>
                     <td class="text-center">{{ $transaction['count'] }}</td>
                     <td>{{ isset($transaction['debit']) ? $transaction['debit'] : '' }}</td>

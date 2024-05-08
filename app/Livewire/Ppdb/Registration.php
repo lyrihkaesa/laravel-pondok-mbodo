@@ -483,8 +483,7 @@ class Registration extends Component implements HasForms
 
             $userModel = User::create($user);
 
-            // Membuat walet
-            $userModel->walets()->create([
+            $userModel->wallets()->create([
                 'id' => $userModel->phone,
                 'name' => 'Dompet Utama',
                 'balance' => 0,
@@ -583,7 +582,7 @@ class Registration extends Component implements HasForms
 
             if ($package) {
                 foreach ($package->products as $product) {
-                    $studentModel->products()->attach($product, ['product_name' => $product->name . ' Awal ' . now()->format('F Y'), 'product_price' => $product->price]);
+                    $studentModel->products()->attach($product, ['product_name' => $product->name . ' Awal ' . now()->translatedFormat('F Y'), 'product_price' => $product->price]);
                 }
             }
 

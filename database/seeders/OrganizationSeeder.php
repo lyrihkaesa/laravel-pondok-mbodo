@@ -16,9 +16,12 @@ class OrganizationSeeder extends Seeder
     {
         $academicYear = AcademicYear::where('name', '2023/2024')->first();
         $categories = [
-            'Pondok Pesantren' => [
+            'Yayasan' => [
                 "Yayasan Pondok Pesantren Ki Ageng Mbodo" => [
                     'description' => null,
+                    'email' => 'pondokmbodo@gmail.com',
+                    'phone' => '6281234567890',
+                    'address' => 'Dusun Sendangsari RT05 RW07, Desa Tambirejo, Kec. Toroh, Kab. Grobogan, Prov. Jawa Tengah 58171',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
                     'classrooms' => [],
@@ -53,6 +56,8 @@ class OrganizationSeeder extends Seeder
                         ],
                     ],
                 ],
+            ],
+            'Pondok Pesantren' => [
                 "Pesantren Putra" => [
                     'description' => null,
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
@@ -139,7 +144,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
             ],
-            'Sekolah Madarasah' => [
+            'Sekolah Madrasah' => [
                 'Takhasus Athfal' => [
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
@@ -148,7 +153,7 @@ class OrganizationSeeder extends Seeder
                         'Takhasus Athfal Kelas' => 6,
                     ],
                 ],
-                'Madarasah Wustho' => [
+                'Madrasah Wustho' => [
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -156,7 +161,7 @@ class OrganizationSeeder extends Seeder
                         'Wusthu Kelas' => 3,
                     ],
                 ],
-                'Madarasah Ulya' => [
+                'Madrasah Ulya' => [
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -276,6 +281,9 @@ class OrganizationSeeder extends Seeder
                     'description' => $organization['description'],
                     'vision' => $organization['vision'],
                     'mission' => $organization['mission'],
+                    'email' => $organization['email'] ?? null,
+                    'phone' => $organization['phone'] ?? null,
+                    'address' => $organization['address'] ?? null,
                 ]);
 
                 if (isset($organization['wallets'])) {

@@ -25,8 +25,9 @@ class ListStudentProducts extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->action(function (array $data, WalletService $walletService) {
+                    $userLogin = auth()->user();
                     if ($data['validated_at'] !== null) {
-                        $data['validated_by'] = auth()->id();
+                        $data['validated_by'] = $userLogin->id;
                     }
 
                     $record = self::getModel()::query()->create($data);
@@ -34,7 +35,7 @@ class ListStudentProducts extends ListRecords
                     $student = $record->student;
                     $studentProductId = $record->id;
                     if ($record->validated_at !== null) {
-                        $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
+                        $description = $userLogin->name . ' - ' . $userLogin->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
                         $financialTransaction = new FinancialTransaction();
 
@@ -69,16 +70,19 @@ class ListStudentProducts extends ListRecords
                         ->preload()
                         ->searchable()
                         ->required(),
-                    Forms\Components\Select::make('current_school')
-                        ->label(__('Student Product School'))
-                        ->options(StudentCurrentSchool::class)
-                        ->multiple()
-                        ->required(),
-                    Forms\Components\Select::make('category')
-                        ->label(__('Category'))
-                        ->options(StudentCategory::class)
-                        ->multiple()
-                        ->required(),
+                    Forms\Components\Grid::make()
+                        ->schema([
+                            Forms\Components\Select::make('current_school')
+                                ->label(__('Student Product School'))
+                                ->options(StudentCurrentSchool::class)
+                                ->multiple()
+                                ->required(),
+                            Forms\Components\Select::make('category')
+                                ->label(__('Category'))
+                                ->options(StudentCategory::class)
+                                ->multiple()
+                                ->required(),
+                        ]),
                 ])
                 ->action(function (Component $livewire): void {
                     $currentSchool = $livewire->mountedActionsData[0]["current_school"];

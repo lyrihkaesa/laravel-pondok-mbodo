@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\OrganizationResource\Pages;
-use App\Filament\Resources\OrganizationResource\RelationManagers;
-use App\Models\Organization;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Organization;
+use Filament\Resources\Resource;
+use App\Enums\OrganizationCategory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\OrganizationResource\Pages;
+use App\Filament\Resources\OrganizationResource\RelationManagers;
 
 class OrganizationResource extends Resource
 {
@@ -65,15 +66,16 @@ class OrganizationResource extends Resource
                         Forms\Components\Select::make('category')
                             ->label('Kategori')
                             ->required()
-                            ->options([
-                                'Sekolah Formal' => 'Sekolah Formal',
-                                'Sekolah Madarasah' => 'Sekolah Madarasah',
-                                'Program Jurusan' => 'Program Jurusan',
-                                'Badan Lembaga' => 'Badan Lembaga',
-                                'Pondok Pesantren' => 'Pondok Pesantren',
-                            ])
-                            ->default('Badan Lembaga')
+                            ->options(OrganizationCategory::class)
+                            ->default(OrganizationCategory::BADAN_LEMBAGA)
                             ->native(false),
+                        Forms\Components\TextInput::make('email')
+                            ->label('Email'),
+                        Forms\Components\TextInput::make('phone')
+                            ->label('Phone'),
+                        Forms\Components\Textarea::make('address')
+                            ->label('Full Address')
+                            ->autoSize(),
                         Forms\Components\MarkdownEditor::make('description')
                             ->label('Deskripsi')
                             ->disableToolbarButtons([

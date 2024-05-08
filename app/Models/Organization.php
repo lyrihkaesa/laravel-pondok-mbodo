@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\OrganizationCategory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Organization extends Model
 {
@@ -19,6 +20,13 @@ class Organization extends Model
         'mission',
         'description',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'category' => OrganizationCategory::class,
+        ];
+    }
 
     public function programs(): BelongsToMany
     {

@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('thumbnail')->nullable();
             $table->text('vision')->nullable();
             $table->text('mission')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }

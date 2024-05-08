@@ -6,14 +6,12 @@ use App\Models\FinancialTransaction;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
-use App\Models\Wallet;
 use App\Models\Product;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\StudentProduct;
 use App\Services\WalletService;
 use Filament\Resources\Resource;
-use App\Enums\StudentCurrentSchool;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -129,7 +127,8 @@ class StudentProductResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('product_name')
-                    ->label(__('Student Product Name')),
+                    ->label(__('Student Product Name'))
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('product_price')
                     ->label(__('Student Product Price'))
                     ->money(currency: 'IDR', locale: 'id'),
@@ -143,17 +142,19 @@ class StudentProductResource extends Resource
                     ->label(__('Is Validated'))
                     ->updateStateUsing(function ($state, StudentProduct $record, WalletService $walletService) {
                         // dd([$state, $record, $walletService]);
-                        $student = $record->student;
-                        $studentProductId = $record->id;
+                        $studentProductModel = $record;
+                        $student = $studentProductModel->student;
+                        $studentProductId = $studentProductModel->id;
+                        $userLogin = auth()->user();
                         if ($state) {
-                            $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
+                            $description = $userLogin->name . ' - ' . $userLogin->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
                             $financialTransaction = new FinancialTransaction();
                             $financialTransaction->student_product_id = $studentProductId;
-                            $financialTransaction->name = $record->product_name;
+                            $financialTransaction->name = $studentProductModel->product_name;
                             $financialTransaction->type = 'credit-yayasan,validation,system';
                             $financialTransaction->description = $description;
-                            $result = $walletService->transferSystemToYayasan($record->product_price, $financialTransaction);
+                            $result = $walletService->transferSystemToYayasan($studentProductModel->product_price, $financialTransaction);
 
                             // dd($result);
                             if ($result['is_success'] === false) {
@@ -165,28 +166,28 @@ class StudentProductResource extends Resource
 
                                 return false;
                             } else {
-                                $record->update([
+                                $studentProductModel->update([
                                     'validated_at' => now(),
-                                    'validated_by' => auth()->id(),
+                                    'validated_by' => $userLogin->id,
                                 ]);
 
                                 Notification::make()
                                     ->title('Melakukan Validasi')
-                                    ->body('Berhasil melakukan validasi ' . $record->product_name . ' - ' . $student->name)
+                                    ->body('Berhasil melakukan validasi ' . $studentProductModel->product_name . ' - ' . $student->name)
                                     ->success()
                                     ->send();
 
                                 return true;
                             }
                         } else {
-                            $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' membatalkan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
+                            $description = $userLogin->name . ' - ' . $userLogin->phone . ' membatalkan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
                             $financialTransaction = new FinancialTransaction();
                             $financialTransaction->student_product_id = $studentProductId;
-                            $financialTransaction->name = $record->product_name;
+                            $financialTransaction->name = 'Membatalkan ' . $studentProductModel->product_name;
                             $financialTransaction->type = 'debit-yayasan,unvalidation,system';
                             $financialTransaction->description = $description;
-                            $result = $walletService->transferYayasanToSystem($record->product_price, $financialTransaction);
+                            $result = $walletService->transferYayasanToSystem($studentProductModel->product_price, $financialTransaction);
 
                             if ($result['is_success'] === false) {
                                 Notification::make()
@@ -197,14 +198,14 @@ class StudentProductResource extends Resource
 
                                 return true;
                             } else {
-                                $record->update([
+                                $studentProductModel->update([
                                     'validated_at' => null,
                                     'validated_by' => null,
                                 ]);
 
                                 Notification::make()
                                     ->title('Membatalkan Validasi')
-                                    ->body('Berhasil membatalkan validasi ' . $record->product_name . ' - ' . $student->name)
+                                    ->body('Berhasil membatalkan validasi ' . $studentProductModel->product_name . ' - ' . $student->name)
                                     ->success()
                                     ->iconColor('danger')
                                     ->send();
