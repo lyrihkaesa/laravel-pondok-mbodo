@@ -28,6 +28,7 @@ class EditStudent extends EditRecord
         $data['name'] = $user->name;
         $data['email'] = $user->email;
         $data['phone'] = $user->phone;
+        $data['phone_visibility'] = $user->phone_visibility;
 
         return $data;
     }

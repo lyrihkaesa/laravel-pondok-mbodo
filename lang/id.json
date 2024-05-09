@@ -171,5 +171,12 @@
     "Month": "Bulan",
     "Financial Report": "Laporan Keuangan",
     "View Financial Report": "Lihat Laporan Keuangan",
-    "Generate Report PDF": "PDF"
+    "Generate Report PDF": "PDF",
+    "Phone Visibility": "Pemirsa Nomor Telepon",
+    "Public": "Publik",
+    "Private": "Hanya Saya",
+    "Member": "Anggota",
+    "Public Description": "Dapat dilihat oleh **Semua Orang**.",
+    "Private Description": "Hanya dapat dilihat oleh **Anda** dan **Pengurus**.",
+    "Member Description": "Dapat dilihat oleh **Pengurus**, **Santri**, dan semua **Warga Pondok Mbodo**."
 }

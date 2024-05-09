@@ -14,6 +14,7 @@ use App\Enums\StudentCategory;
 use Filament\Resources\Resource;
 use App\Enums\StudentCurrentSchool;
 use Livewire\Component as Livewire;
+use App\Enums\SocialMediaVisibility;
 use Illuminate\Validation\Rules\Unique;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\StudentResource\Pages;
@@ -273,6 +274,14 @@ class StudentResource extends Resource
                                     return $rule->ignore($livewire->data['user_id'], "id");
                                 }
                             }),
+                        Forms\Components\ToggleButtons::make('phone_visibility')
+                            ->label(__('Phone Visibility'))
+                            ->debounce(delay: 200)
+                            ->inline()
+                            ->options(SocialMediaVisibility::class)
+                            ->default(SocialMediaVisibility::PUBLIC)
+                            ->helperText(fn ($state) => str($state->getDescription())->markdown()->toHtmlString())
+                            ->required(),
                         Forms\Components\TextInput::make('email')
                             ->label(__('Email'))
                             ->placeholder(__('Email Placeholder'))

@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
             'name' => 'Kaesa Lyrih',
             'email' => 'admin@gmail.com',
             'phone' => '628111222333', // Ganti dengan nomor telepon yang diinginkan
+            'phone_visibility' => 'private',
             'password' => Hash::make('password'), // password
         ]);
 

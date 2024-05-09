@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\SocialMediaVisibility;
 use Filament\Panel;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -31,6 +33,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'phone',
+        'phone_visibility',
         'password',
     ];
 
@@ -52,6 +55,7 @@ class User extends Authenticatable implements FilamentUser
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'phone_visibility' => SocialMediaVisibility::class,
     ];
 
     protected $with = [

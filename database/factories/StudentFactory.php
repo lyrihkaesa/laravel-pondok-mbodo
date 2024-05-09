@@ -28,6 +28,7 @@ class StudentFactory extends Factory
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'phone' => '628' . $this->faker->unique()->numberBetween(100000000, 999999999),
+            'phone_visibility' => 'public',
             'email_verified_at' => now(),
             'password' => Hash::make('password'), // password
             'remember_token' => str::random(10),

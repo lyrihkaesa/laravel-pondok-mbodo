@@ -260,7 +260,7 @@ class Registration extends Component implements HasForms
                             ->helperText(__('Phone Helper Text'))
                             ->unique(table: 'users', column: 'phone', modifyRuleUsing: function (Unique $rule,  Component $livewire, string $operation) {
                                 if ($operation === 'edit') {
-                                    return $rule->ignore($livewire->data['user_id'], "id");
+                                    return $rule->ignore($livewire->data['user_id'], 'id');
                                 }
                             }),
                         Forms\Components\TextInput::make('email')
@@ -269,7 +269,7 @@ class Registration extends Component implements HasForms
                             ->email()
                             ->unique(table: 'users', column: 'email', modifyRuleUsing: function (Unique $rule,  Component $livewire, string $operation) {
                                 if ($operation === 'edit') {
-                                    return $rule->ignore($livewire->data['user_id'], "id");
+                                    return $rule->ignore($livewire->data['user_id'], 'id');
                                 }
                             })
                             ->required(),
@@ -475,10 +475,11 @@ class Registration extends Component implements HasForms
 
             // Create User
             $user = [
-                "name" => $state["name"],
-                "email" => $state["email"],
-                "phone" => $state["phone"],
-                "password" => Hash::make($password),
+                'name' => $state['name'],
+                'email' => $state['email'],
+                'phone' => $state['phone'],
+                'phone_visibility' => 'public',
+                'password' => Hash::make($password),
             ];
 
             $userModel = User::create($user);
@@ -495,27 +496,27 @@ class Registration extends Component implements HasForms
 
             // Membuat santri
             $student = [
-                "user_id" => $userModel->id,
-                "status" => "Mendaftar",
-                "name" => $state["name"],
-                "nik" => $state["nik"],
-                "gender" => $state["gender"],
-                "birth_place" => $state["birth_place"],
-                "birth_date" => $state["birth_date"],
-                "province" => $state["province"],
-                "regency" => $state["regency"],
-                "district" => $state["district"],
-                "village" => $state["village"],
-                "address" => $state["address"],
-                "rt" => $state["rt"],
-                "rw" => $state["rw"],
-                "postal_code" => $state["postal_code"],
-                "nisn" => $state["nisn"],
-                "kip" => $state["kip"],
-                "current_name_school" => $state["current_name_school"],
-                'family_card_number' => $state["family_card_number"],
-                "category" => $state["category"],
-                "current_school" => $state["current_school"],
+                'user_id' => $userModel->id,
+                'status' => 'Mendaftar',
+                'name' => $state['name'],
+                'nik' => $state['nik'],
+                'gender' => $state['gender'],
+                'birth_place' => $state['birth_place'],
+                'birth_date' => $state['birth_date'],
+                'province' => $state['province'],
+                'regency' => $state['regency'],
+                'district' => $state['district'],
+                'village' => $state['village'],
+                'address' => $state['address'],
+                'rt' => $state['rt'],
+                'rw' => $state['rw'],
+                'postal_code' => $state['postal_code'],
+                'nisn' => $state['nisn'],
+                'kip' => $state['kip'],
+                'current_name_school' => $state['current_name_school'],
+                'family_card_number' => $state['family_card_number'],
+                'category' => $state['category'],
+                'current_school' => $state['current_school'],
             ];
 
             $studentModel = $this->form->getModel()::create($student);
@@ -525,7 +526,7 @@ class Registration extends Component implements HasForms
 
             $father = [
                 'name' => $state['father_name'],
-                "relationship" => "Ayah",
+                'relationship' => 'Ayah',
                 'nik' => $state['father_nik'],
                 'job' => $state['father_job'],
                 'phone' => $state['father_phone'],
@@ -534,12 +535,12 @@ class Registration extends Component implements HasForms
             $guardians[] = $father;
 
             $mother = [
-                "name" => $state['mother_name'],
-                "relationship" => "Ibu",
-                "nik" => $state['mother_nik'],
-                "job" => $state['mother_job'],
-                "phone" => $state['mother_phone'],
-                "address" => $state['mother_address'],
+                'name' => $state['mother_name'],
+                'relationship' => 'Ibu',
+                'nik' => $state['mother_nik'],
+                'job' => $state['mother_job'],
+                'phone' => $state['mother_phone'],
+                'address' => $state['mother_address'],
             ];
             $guardians[] = $mother;
 
@@ -577,7 +578,7 @@ class Registration extends Component implements HasForms
 
             // Melakukan attach products ke student
             $package = \App\Models\Package::with('products')->whereHas('categories', function ($query) use ($state) {
-                $query->whereIn('name', ['Biaya Pendaftaran', $state["gender"], $state["category"], $state["current_school"]]);
+                $query->whereIn('name', ['Biaya Pendaftaran', $state['gender'], $state['category'], $state['current_school']]);
             }, '=', 4)->first();
 
             if ($package) {
