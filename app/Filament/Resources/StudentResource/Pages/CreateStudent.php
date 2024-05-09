@@ -29,7 +29,7 @@ class CreateStudent extends CreateRecord
         ]);
 
         // Assign 'Student' Role
-        $role = Role::where('name', 'Santri')->first();
+        $role = Role::where('name', 'santri')->first();
         $user->assignRole($role);
 
         // Create Student

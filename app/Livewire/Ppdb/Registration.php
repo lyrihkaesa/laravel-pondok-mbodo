@@ -490,7 +490,7 @@ class Registration extends Component implements HasForms
             ]);
 
             // Assign 'Student' Role
-            $roleModel = \Spatie\Permission\Models\Role::where('name', 'Santri')->first();
+            $roleModel = \Spatie\Permission\Models\Role::where('name', 'santri')->first();
             $userModel->assignRole($roleModel);
 
             // Membuat santri

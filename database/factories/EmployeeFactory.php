@@ -32,8 +32,8 @@ class EmployeeFactory extends Factory
             'remember_token' => Str::random(10),
         ]);
 
-        $roles = Role::whereIn('name', ['Guru', 'Admin Keuangan', 'Admin Tata Usaha'])->get()->random(2); // Pilih dua peran secara acak
-        $rolePengurus = Role::where('name', 'Pengurus')->first();
+        $roles = Role::whereIn('name', ['guru', 'admin_keuangan', 'admin_tata_usaha'])->get()->random(2); // Pilih dua peran secara acak
+        $rolePengurus = Role::where('name', 'pengurus')->first();
 
         $user->syncRoles($roles);
         $user->assignRole($rolePengurus);

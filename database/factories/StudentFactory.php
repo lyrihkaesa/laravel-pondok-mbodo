@@ -33,7 +33,7 @@ class StudentFactory extends Factory
             'remember_token' => str::random(10),
         ]);
 
-        $studentRole = Role::where('name', 'Santri')->first();
+        $studentRole = Role::where('name', 'santri')->first();
         $user->assignRole($studentRole);
 
         $user->wallets()->create([
