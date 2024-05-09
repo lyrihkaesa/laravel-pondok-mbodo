@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Membuat user untuk peran "Super Admin"
-        $adminSuperRole = Role::where('name', 'Super Admin')->first();
+        $adminSuperRole = Role::where('name', 'super_admin')->first();
         $user = User::create([
             'name' => 'Kaesa Lyrih',
             'email' => 'admin@gmail.com',

@@ -25,10 +25,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::before(function (User $user, string $ability) {
-            return $user->isSuperAdmin() ? true : null;
-        });
-
         // Melakukan logging perintah query ke database
         // storage\logs\laravel.log
         DB::listen(function ($query) {

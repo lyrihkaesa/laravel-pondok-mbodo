@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Student;
+use App\Models\FinancialTransaction;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class StudentPolicy
+class FinancialTransactionPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class StudentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_student');
+        return $user->can('view_any_financial::transaction');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Student $student): bool
+    public function view(User $user, FinancialTransaction $financialTransaction): bool
     {
-        return $user->can('view_student');
+        return $user->can('view_financial::transaction');
     }
 
     /**
@@ -31,23 +31,23 @@ class StudentPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_student');
+        return $user->can('create_financial::transaction');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Student $student): bool
+    public function update(User $user, FinancialTransaction $financialTransaction): bool
     {
-        return $user->can('update_student');
+        return $user->can('update_financial::transaction');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Student $student): bool
+    public function delete(User $user, FinancialTransaction $financialTransaction): bool
     {
-        return $user->can('delete_student');
+        return $user->can('delete_financial::transaction');
     }
 
     /**
@@ -55,15 +55,15 @@ class StudentPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_student');
+        return $user->can('delete_any_financial::transaction');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, Student $student): bool
+    public function forceDelete(User $user, FinancialTransaction $financialTransaction): bool
     {
-        return $user->can('force_delete_student');
+        return $user->can('force_delete_financial::transaction');
     }
 
     /**
@@ -71,15 +71,15 @@ class StudentPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_student');
+        return $user->can('force_delete_any_financial::transaction');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, Student $student): bool
+    public function restore(User $user, FinancialTransaction $financialTransaction): bool
     {
-        return $user->can('restore_student');
+        return $user->can('restore_financial::transaction');
     }
 
     /**
@@ -87,15 +87,15 @@ class StudentPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_student');
+        return $user->can('restore_any_financial::transaction');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, Student $student): bool
+    public function replicate(User $user, FinancialTransaction $financialTransaction): bool
     {
-        return $user->can('replicate_student');
+        return $user->can('replicate_financial::transaction');
     }
 
     /**
@@ -103,6 +103,6 @@ class StudentPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_student');
+        return $user->can('reorder_financial::transaction');
     }
 }
