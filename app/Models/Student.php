@@ -8,8 +8,10 @@ use App\Enums\StudentCategory;
 use App\Enums\StudentCurrentSchool;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Student extends Model
 {
@@ -29,9 +31,14 @@ class Student extends Model
         ];
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function socialMediaLinks(): HasManyThrough
+    {
+        return $this->hasManyThrough(SocialMediaLink::class, User::class);
     }
 
     public function classrooms(): BelongsToMany

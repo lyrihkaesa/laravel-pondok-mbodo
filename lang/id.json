@@ -178,5 +178,12 @@
     "Member": "Anggota",
     "Public Description": "Dapat dilihat oleh **Semua Orang**.",
     "Private Description": "Hanya dapat dilihat oleh **Anda** dan **Pengurus**.",
-    "Member Description": "Dapat dilihat oleh **Pengurus**, **Santri**, dan semua **Warga Pondok Mbodo**."
+    "Member Description": "Dapat dilihat oleh **Pengurus**, **Santri**, dan semua **Warga Pondok Mbodo**.",
+    "Website and Social Media": "Situs Web dan Tautan Sosial",
+    "Username Placeholder": "pondokmbodo",
+    "URL Placeholder": "https://pondokmbodo.com",
+    "Visibility": "Pemirsa",
+    "Save Social Media Links": "Simpan Social Media",
+    "Success": "Berhasil",
+    "Failed": "Gagal"
 }

@@ -29,7 +29,9 @@ class EditEmployee extends EditRecord
         $data['name'] = $user->name;
         $data['email'] = $user->email;
         $data['phone'] = $user->phone;
+        $data['phone_visibility'] = $user->phone_visibility;
         $data['roles'] = $user->roles->pluck('id')->toArray();
+        $data['socialMediaLinks'] = $user->socialMediaLinks;
 
         return $data;
     }
@@ -40,6 +42,7 @@ class EditEmployee extends EditRecord
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
+            'phone_visibility' => $data['phone_visibility'],
             'password' => $data['password'] ? Hash::make($data['password']) : $record->user->password,
         ]);
 
@@ -49,8 +52,10 @@ class EditEmployee extends EditRecord
         // Menghilangkan data yang tidak diperlukan
         unset($data['email']);
         unset($data['phone']);
+        unset($data['phone_visibility']);
         unset($data['password']);
         unset($data['roles']);
+        unset($data['socialMediaLinks']);
 
         $record->update($data);
 

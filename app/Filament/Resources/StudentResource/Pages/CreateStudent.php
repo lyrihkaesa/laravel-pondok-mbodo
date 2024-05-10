@@ -38,6 +38,7 @@ class CreateStudent extends CreateRecord
         unset($data['email']);
         unset($data['phone']);
         unset($data['password']);
+        unset($data['phone_visibility']);
 
         $data['user_id'] = $user->id;
 

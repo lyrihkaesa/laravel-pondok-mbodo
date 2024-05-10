@@ -10,9 +10,13 @@ use App\Models\Employee;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use App\Enums\SocialMediaPlatform;
 use Spatie\Permission\Models\Role;
 use Livewire\Component as Livewire;
+use App\Enums\SocialMediaVisibility;
 use Illuminate\Validation\Rules\Unique;
+use App\Services\SocialMediaLinkService;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\EmployeeResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -110,6 +114,70 @@ class EmployeeResource extends Resource
                         ])->columnSpan(1),
                     ])
                     ->columns(2),
+                Forms\Components\Section::make(__('Website and Social Media'))
+                    ->id('website-and-social-media')
+                    ->schema([
+                        Forms\Components\Repeater::make('socialMediaLinks')
+                            ->label(false)
+                            ->schema([
+                                Forms\Components\Grid::make()
+                                    ->schema([
+                                        Forms\Components\Select::make('platform')
+                                            ->label(__('Platform'))
+                                            ->options(SocialMediaPlatform::class)
+                                            ->live(onBlur: true)
+                                            ->required(),
+                                        Forms\Components\TextInput::make('username')
+                                            ->label(__('Username'))
+                                            ->placeholder(__('Username Placeholder'))
+                                            ->maxLength(255)
+                                            ->visible(fn (Forms\Get $get) => $get('platform') !== 'web')
+                                            ->columnSpan(2),
+                                        Forms\Components\TextInput::make('url')
+                                            ->label(__('URL'))
+                                            ->placeholder(__('URL Placeholder'))
+                                            ->url()
+                                            ->visible(fn (Forms\Get $get) => $get('platform') === 'web')
+                                            ->columnSpan(2),
+                                    ])
+                                    ->columns(3),
+                                Forms\Components\ToggleButtons::make('visibility')
+                                    ->label(__('Visibility'))
+                                    ->debounce(delay: 200)
+                                    ->inline()
+                                    ->options(SocialMediaVisibility::class)
+                                    ->default(SocialMediaVisibility::PUBLIC)
+                                    ->helperText(fn ($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
+                                    ->required(),
+                            ]),
+                        // ->deleteAction(fn ($action) => $action->requiresConfirmation()),
+                    ])
+                    ->footerActions([
+                        Forms\Components\Actions\Action::make('saveSocialMediaLinks')
+                            ->label(__('Save Social Media Links'))
+                            ->action(function (Forms\Get $get, $record, SocialMediaLinkService $socialMediaLinkService) {
+                                $socialMediaLinks = $get('socialMediaLinks');
+                                $userModel = $record->user;
+                                $result = $socialMediaLinkService->insertUpdateDeleteMany($socialMediaLinks, $userModel);
+
+                                if ($result['is_success']) {
+                                    Notification::make()
+                                        ->success()
+                                        ->title(__('Success'))
+                                        ->body($result['message'])
+                                        ->send();
+                                } else {
+                                    Notification::make()
+                                        ->danger()
+                                        ->title(__('Failed'))
+                                        ->body($result['message'])
+                                        ->send();
+                                }
+                            }),
+                    ])
+                    ->collapsible()
+                    ->collapsed()
+                    ->visible(fn (string $operation): bool => $operation === 'edit'),
                 Forms\Components\Section::make(__('Address Information'))
                     ->schema([
                         Forms\Components\Select::make('province')
@@ -251,7 +319,8 @@ class EmployeeResource extends Resource
                             ])
                             ->disabled()
                             ->columns(2)
-                            ->columnSpanFull(),
+                            ->columnSpanFull()
+                            ->visible(fn (string $operation): bool => $operation === 'edit'),
                     ])
                     ->columns(2),
                 Forms\Components\Section::make(__('Contact and Security Information'))
@@ -267,6 +336,14 @@ class EmployeeResource extends Resource
                                     return $rule->ignore($livewire->data['user_id'], "id");
                                 }
                             }),
+                        Forms\Components\ToggleButtons::make('phone_visibility')
+                            ->label(__('Phone Visibility'))
+                            ->debounce(delay: 200)
+                            ->inline()
+                            ->options(SocialMediaVisibility::class)
+                            ->default(SocialMediaVisibility::PUBLIC)
+                            ->helperText(fn ($state) => str($state->getDescription())->markdown()->toHtmlString())
+                            ->required(),
                         Forms\Components\TextInput::make('email')
                             ->label(__('Email'))
                             ->placeholder(__('Email Placeholder'))
