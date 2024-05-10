@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\StudentResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\StudentResource\RelationManagers;
+use App\Filament\Resources\StudentResource\Pages\EditStudent;
 
 class StudentResource extends Resource
 {
@@ -167,6 +168,8 @@ class StudentResource extends Resource
                                         ->title(__('Success'))
                                         ->body($result['message'])
                                         ->send();
+
+                                    redirect(self::getUrl() . '/' . $record->id . '/edit');
                                 } else {
                                     Notification::make()
                                         ->danger()

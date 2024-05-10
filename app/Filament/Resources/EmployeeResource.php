@@ -166,6 +166,8 @@ class EmployeeResource extends Resource
                                         ->title(__('Success'))
                                         ->body($result['message'])
                                         ->send();
+
+                                    redirect(self::getUrl() . '/' . $record->id . '/edit');
                                 } else {
                                     Notification::make()
                                         ->danger()

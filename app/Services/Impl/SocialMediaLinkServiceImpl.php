@@ -3,6 +3,7 @@
 namespace App\Services\Impl;
 
 use App\Models\User;
+use App\Enums\SocialMediaPlatform;
 use Illuminate\Support\Facades\DB;
 use App\Services\SocialMediaLinkService;
 
@@ -23,6 +24,10 @@ class SocialMediaLinkServiceImpl implements SocialMediaLinkService
 
         foreach ($socialMediaLinks as $value) {
             $socialMediaLinkId = $value['id'] ?? null;
+
+            if ($value['platform'] !== 'web') {
+                $value['url'] = SocialMediaPlatform::from($value['platform'])->getRedirectUrl($value['username']);
+            }
 
             if ($socialMediaLinkId) {
                 // Jika ID tersedia, tambahkan data untuk diperbarui
