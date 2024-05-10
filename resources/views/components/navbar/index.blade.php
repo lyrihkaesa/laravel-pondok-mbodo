@@ -1,5 +1,5 @@
 {{-- Navbar --}}
-<nav @if (!request()->is('ppdb') && !request()->is('ppdb/*')) x-cloak x-data :class="{ 'backdrop-blur bg-white/75 dark:bg-gray-800/75 ': isScrolled }" @endif
+<nav @if (!(request()->is('ppdb*') || request()->is('blog/*'))) x-cloak x-data :class="{ 'backdrop-blur bg-white/75 dark:bg-gray-800/75 ': isScrolled }" @endif
     class="mx-auto w-full max-w-[85rem] border-b-2 border-gray-100 bg-white px-4 py-2 transition-colors duration-500 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
     aria-label="Global">
     <div class="flex items-center justify-between">

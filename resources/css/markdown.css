@@ -10,16 +10,28 @@
     @apply block text-base font-bold text-gray-800 dark:text-white sm:text-lg lg:text-xl lg:leading-tight;
 }
 
+.markdown.post>p {
+    @apply block mt-2 text-base text-gray-800 dark:text-neutral-200;
+}
+
 .markdown>p {
     @apply block mt-2 text-gray-600 dark:text-gray-400;
 }
 
 .markdown>ul {
-    @apply list-disc;
+    @apply ps-8 list-disc;
 }
 
 .markdown>ol {
-    @apply ps-4 list-decimal;
+    @apply ps-8 list-decimal;
+}
+
+.markdown.post>ul>li {
+    @apply mt-2 text-base text-gray-800 dark:text-neutral-200;
+}
+
+.markdown.post>ol>li {
+    @apply mt-2 text-base text-gray-800 dark:text-neutral-200;
 }
 
 .markdown>ol>li {
