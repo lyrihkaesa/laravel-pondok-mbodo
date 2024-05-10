@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ExtracurricularSeeder::class,
             OrganizationSeeder::class,
             LawSeeder::class,
+            PostSeeder::class
         ]);
     }
 }

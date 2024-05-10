@@ -185,5 +185,12 @@
     "Visibility": "Pemirsa",
     "Save Social Media Links": "Simpan Social Media",
     "Success": "Berhasil",
-    "Failed": "Gagal"
+    "Failed": "Gagal",
+    "Title": "Judul",
+    "Slug": "Slug",
+    "Content": "Konten",
+    "Author": "Penulis",
+    "Editor": "Editor",
+    "Published At": "Dipublikasi",
+    "Updated At": "Diperbarui"
 }
