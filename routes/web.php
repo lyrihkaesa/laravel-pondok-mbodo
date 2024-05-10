@@ -14,6 +14,8 @@ Route::get('/ppdb/formulir', \App\Livewire\Ppdb\Registration::class)->name('stud
 Route::get('/ppdb/biaya', \App\Livewire\Ppdb\Price::class)->name('ppdb.price');
 
 Route::get('/lembaga/{slug}', \App\Livewire\Organization\Show::class)->name('organizations.show');
+
+Route::get('/blog', \App\Livewire\Post\Index::class)->name('posts.index');
 Route::get('/blog/{slug}', \App\Livewire\Post\Show::class)->name('posts.show');
 
 

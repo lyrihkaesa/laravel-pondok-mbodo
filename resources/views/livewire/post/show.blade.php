@@ -17,7 +17,7 @@
                         style="background-image: url({{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('images\thumbnails\images-dark.webp') }});">
                         <div class="px-4 pt-8 sm:px-6 lg:px-8">
                             <a class="inline-flex items-center gap-x-1.5 rounded-full bg-gray-950 py-2 pe-6 ps-4 text-sm text-blue-500 decoration-2 hover:underline"
-                                href="#">
+                                href="{{ route('posts.index') }}">
                                 <svg class="size-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24"
                                     height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

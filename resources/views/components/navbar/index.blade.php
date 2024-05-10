@@ -43,7 +43,7 @@
                     <x-navbar-link href="{{ route('ppdb.price') }}">Biaya Pendidikan</x-navbar-link>
                 @endif
                 <x-navbar-dropdown label="Informasi">
-                    <x-navbar-dropdown-item href="#">Pawarto</x-navbar-dropdown-item>
+                    <x-navbar-dropdown-item href="{{ route('posts.index') }}">Pawarto</x-navbar-dropdown-item>
                     <x-navbar-dropdown-item href="{{ route('law.index') }}">Peraturan (Tata
                         Tertib)</x-navbar-dropdown-item>
                 </x-navbar-dropdown>
