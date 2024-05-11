@@ -12,9 +12,9 @@
  @endphp
 
  <!-- Team -->
- <div {!! $attributes->merge([
+ <section {!! $attributes->merge([
      'class' => 'mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14' . $bgColorClass,
  ]) !!}>
      {{ $slot }}
- </div>
+ </section>
  <!-- End Team -->

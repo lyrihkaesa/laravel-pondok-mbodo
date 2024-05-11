@@ -28,6 +28,8 @@
         {{ $css }}
     @endisset
     @vite('resources/css/app.css')
+
+    @stack('styles')
 </head>
 
 <body class="font-sans antialiased">

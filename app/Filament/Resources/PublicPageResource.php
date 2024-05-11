@@ -109,6 +109,22 @@ class PublicPageResource extends Resource
                                     ]),
                                 Forms\Components\Textarea::make('description'),
                             ]),
+                        Forms\Components\Builder\Block::make('article')
+                            ->schema([
+                                Forms\Components\TextInput::make('title'),
+                                Forms\Components\Textarea::make('sub_title'),
+                                Forms\Components\FileUpload::make('url')
+                                    ->label(__('Image'))
+                                    ->image()
+                                    ->downloadable()
+                                    ->openable()
+                                    ->required()
+                                    ->directory('pages'),
+                                Forms\Components\TextInput::make('alt')
+                                    ->label(__('Alt text'))
+                                    ->required(),
+                                Forms\Components\MarkdownEditor::make('body'),
+                            ]),
                         Forms\Components\Builder\Block::make('heading')
                             ->schema([
                                 Forms\Components\TextInput::make('content')
