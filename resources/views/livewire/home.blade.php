@@ -19,65 +19,22 @@
                     @endforeach
                 </x-block.slider.pagination>
             </x-block.slider.index>
+        @elseif ($block['type'] === 'team')
+            {{-- @dd($block) --}}
+            <x-block.team.index>
+                <x-block.team.header>
+                    <x-block.team.title>{{ $block['data']['title'] }}</x-block.team.title>
+                </x-block.team.header>
+                <x-block.team.grid>
+                    @foreach ($block['data']['teams'] as $member)
+                        <x-block.team.item imageUrl="{{ asset('storage/' . $member['url']) }}"
+                            imageAlt="{{ $member['alt'] }}"
+                            role="{{ $member['role'] }}">{{ $member['name'] }}</x-block.team.item>
+                    @endforeach
+                </x-block.team.grid>
+            </x-block.team.index>
         @endif
     @endforeach
-
-    <!-- Team -->
-    <div class="mx-auto max-w-[85rem] bg-gray-200 px-4 py-10 dark:bg-gray-700 sm:px-6 lg:px-8 lg:py-14">
-        <!-- Title -->
-        <div class="mx-auto mb-10 max-w-2xl text-center lg:mb-14">
-            <h2 class="text-2xl font-bold dark:text-white md:text-4xl md:leading-tight">Masyayikh Penasehat & Pengasuh
-            </h2>
-        </div>
-        <!-- End Title -->
-
-        <!-- Grid -->
-        <div class="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-12">
-            <div class="text-center">
-                <img class="sm:size-48 lg:size-60 mx-auto rounded-xl" src="/images/pengurus/pengurus-01.jpg"
-                    alt="K.H. Ahmad Basyir Kudus">
-                <div class="mt-2 sm:mt-4">
-                    <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 sm:text-base lg:text-lg">
-                        K.H. Ahmad Basyir Kudus
-                    </h3>
-                    <p class="text-xs text-gray-600 dark:text-gray-400 sm:text-sm lg:text-base">
-                        Penasehat
-                    </p>
-                </div>
-            </div>
-            <!-- End Col -->
-
-            <div class="text-center">
-                <img class="sm:size-48 lg:size-60 mx-auto rounded-xl" src="/images/pengurus/pengurus-02.jpg"
-                    alt="Simbah Mulyadi Bin Kardi Ronodikromo">
-                <div class="mt-2 sm:mt-4">
-                    <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 sm:text-base lg:text-lg">
-                        Simbah Mulyadi Bin Kardi Ronodikromo
-                    </h3>
-                    <p class="text-xs text-gray-600 dark:text-gray-400 sm:text-sm lg:text-base">
-                        Pembina
-                    </p>
-                </div>
-            </div>
-            <!-- End Col -->
-
-            <div class="text-center">
-                <img class="sm:size-48 lg:size-60 mx-auto rounded-xl" src="/images/pengurus/pengurus-03.jpg"
-                    alt="Abah K.H. Muhammad Ghufron Mulyadi">
-                <div class="mt-2 sm:mt-4">
-                    <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 sm:text-base lg:text-lg">
-                        Abah K.H. Muhammad Ghufron Mulyadi
-                    </h3>
-                    <p class="text-xs text-gray-600 dark:text-gray-400 sm:text-sm lg:text-base">
-                        Pegasuh
-                    </p>
-                </div>
-            </div>
-            <!-- End Col -->
-        </div>
-        <!-- End Grid -->
-    </div>
-    <!-- End Team -->
 
     <!-- Card Blog -->
     <div class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
