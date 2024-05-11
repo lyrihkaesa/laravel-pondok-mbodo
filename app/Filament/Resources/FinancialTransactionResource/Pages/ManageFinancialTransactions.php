@@ -37,7 +37,8 @@ class ManageFinancialTransactions extends ManageRecords
                             ->danger()
                             ->send();
                     }
-                }),
+                })
+                ->createAnother(false),
             Actions\CreateAction::make('expense')
                 ->label(__('Expense'))
                 ->color('danger')
@@ -64,7 +65,8 @@ class ManageFinancialTransactions extends ManageRecords
                             ->danger()
                             ->send();
                     }
-                }),
+                })
+                ->createAnother(false),
             Actions\CreateAction::make('income')
                 ->label(__('Income'))
                 ->color('success')
@@ -91,7 +93,8 @@ class ManageFinancialTransactions extends ManageRecords
                             ->danger()
                             ->send();
                     }
-                }),
+                })
+                ->createAnother(false),
             Actions\CreateAction::make('dana_bos')
                 ->label(__('Dana BOS'))
                 ->color('success')
@@ -118,7 +121,8 @@ class ManageFinancialTransactions extends ManageRecords
                             ->danger()
                             ->send();
                     }
-                }),
+                })
+                ->createAnother(false),
             Actions\Action::make('generate_report_pdf')
                 ->label(__('Generate Report PDF'))
                 ->color('danger')
@@ -181,7 +185,7 @@ class ManageFinancialTransactions extends ManageRecords
             ]))
             ->slideOver()
             ->modalWidth(MaxWidth::FiveExtraLarge)
-            ->closeModalByClickingAway(false)
+            // ->closeModalByClickingAway(false)
             ->modalSubmitAction(false)
             ->modalCancelAction(false);
     }

@@ -94,29 +94,36 @@ class FinancialTransactionController extends Controller
         $totalBalance = 0;
         $totalCredit = 0;
 
-        $transactions = collect($newTransactionDebits)->merge($newTransactionCredits)->values()->map(function ($transaction) use (&$totalCount, &$totalDebit, &$totalCredit, &$totalBalance) {
-            $totalCount += $transaction['count'];
+        $shortedTransactionDebits = collect($newTransactionDebits)->sortBy('transaction_at');
+        $shortedTransactionCredits = collect($newTransactionCredits)->sortBy('transaction_at');
 
-            if (isset($transaction['debit'])) {
-                $totalBalance += $transaction['debit'];
-                $totalDebit += $transaction['debit'];
-                $transaction['debit'] = Number::currency($transaction['debit'], 'IDR');
-            } else {
-                $totalBalance -= $transaction['credit'];
-                $totalCredit += $transaction['credit'];
-                $transaction['credit'] = Number::currency($transaction['credit'], 'IDR');
-            }
+        $transactions = $shortedTransactionDebits
+            ->merge($shortedTransactionCredits)
+            // ->sortBy('transaction_at')
+            ->values()
+            ->map(function ($transaction) use (&$totalCount, &$totalDebit, &$totalCredit, &$totalBalance) {
+                $totalCount += $transaction['count'];
 
-            $transaction['balance'] = Number::currency($totalBalance, 'IDR');
-            $transaction['transaction_at'] = Carbon::parse($transaction['transaction_at'])->isoFormat('D MMMM Y');
-            return $transaction;
-        });
+                if (isset($transaction['debit'])) {
+                    $totalBalance += $transaction['debit'];
+                    $totalDebit += $transaction['debit'];
+                    $transaction['debit'] = Number::currency($transaction['debit'], 'IDR');
+                } else {
+                    $totalBalance -= $transaction['credit'];
+                    $totalCredit += $transaction['credit'];
+                    $transaction['credit'] = Number::currency($transaction['credit'], 'IDR');
+                }
+
+                $transaction['balance'] = Number::currency($totalBalance, 'IDR');
+                $transaction['transaction_at'] = Carbon::parse($transaction['transaction_at'])->isoFormat('DD MMMM Y');
+                return $transaction;
+            });
 
         $totalDebit = Number::currency($totalDebit, 'IDR');
         $totalCredit = Number::currency($totalCredit, 'IDR');
         $totalBalance = Number::currency($totalBalance, 'IDR');
-        $startDate = Carbon::parse($request->start_transaction_at ?? now()->startOfMonth())->isoFormat('D MMMM Y, HH:mm:ss');
-        $endDate = Carbon::parse($request->end_transaction_at ?? now()->endOfMonth())->isoFormat('D MMMM Y, HH:mm:ss');
+        $startDate = Carbon::parse($request->start_transaction_at ?? now()->startOfMonth())->isoFormat('DD MMMM Y, HH:mm:ss');
+        $endDate = Carbon::parse($request->end_transaction_at ?? now()->endOfMonth())->isoFormat('DD MMMM Y, HH:mm:ss');
 
         $yayasan = Organization::query()
             ->where('slug', 'yayasan-pondok-pesantren-ki-ageng-mbodo')
