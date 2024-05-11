@@ -10,6 +10,14 @@
     @apply block text-base font-bold text-gray-800 dark:text-white sm:text-lg lg:text-xl lg:leading-tight;
 }
 
+.markdown.article-a>blockquote {
+    @apply mt-3 border-l-4 border-teal-400 pl-4 text-sm lg:text-base text-gray-800 dark:text-gray-400;
+}
+
+.markdown.article-a>p {
+    @apply text-gray-800 dark:text-gray-200;
+}
+
 .markdown.article>p {
     @apply text-gray-800 dark:text-gray-200;
 }

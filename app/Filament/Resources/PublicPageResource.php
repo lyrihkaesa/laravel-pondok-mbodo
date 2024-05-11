@@ -28,18 +28,10 @@ class PublicPageResource extends Resource
                         Forms\Components\TextInput::make('title')
                             ->label(__('Title'))
                             ->required()
-                            ->live(onBlur: true)
                             ->minLength(1)
-                            ->maxLength(255)
-                            ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
-                                if ($operation === 'edit') {
-                                    return;
-                                }
-
-                                $set('slug', str()->slug($state));
-                            }),
-                        Forms\Components\TextInput::make('slug')
-                            ->label(__('Slug'))
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('path')
+                            ->label(__('Path'))
                             ->minLength(1)
                             ->maxLength(255)
                             ->unique(ignoreRecord: true)
@@ -51,6 +43,7 @@ class PublicPageResource extends Resource
                 Forms\Components\Builder::make('content')
                     ->label(__('Content'))
                     ->blocks([
+                        // SLIDER
                         Forms\Components\Builder\Block::make('slider')
                             ->schema([
                                 Forms\Components\Repeater::make('slides')
@@ -68,6 +61,8 @@ class PublicPageResource extends Resource
                                     ])
                                     ->grid(2),
                             ]),
+
+                        // TEAM
                         Forms\Components\Builder\Block::make('team')
                             ->schema([
                                 Forms\Components\Grid::make()
@@ -94,6 +89,8 @@ class PublicPageResource extends Resource
                                     ])
                                     ->grid(2),
                             ]),
+
+                        // POST
                         Forms\Components\Builder\Block::make('post')
                             ->schema([
                                 Forms\Components\Grid::make()
@@ -109,6 +106,8 @@ class PublicPageResource extends Resource
                                     ]),
                                 Forms\Components\Textarea::make('description'),
                             ]),
+
+                        // ARTICLE
                         Forms\Components\Builder\Block::make('article')
                             ->schema([
                                 Forms\Components\TextInput::make('title'),
@@ -125,39 +124,101 @@ class PublicPageResource extends Resource
                                     ->required(),
                                 Forms\Components\MarkdownEditor::make('body'),
                             ]),
-                        Forms\Components\Builder\Block::make('heading')
+
+                        // HERO
+                        Forms\Components\Builder\Block::make('hero')
                             ->schema([
-                                Forms\Components\TextInput::make('content')
-                                    ->label('Heading')
-                                    ->required(),
-                                Forms\Components\Select::make('level')
-                                    ->options([
-                                        'h1' => 'Heading 1',
-                                        'h2' => 'Heading 2',
-                                        'h3' => 'Heading 3',
-                                        'h4' => 'Heading 4',
-                                        'h5' => 'Heading 5',
-                                        'h6' => 'Heading 6',
+                                Forms\Components\Grid::make()
+                                    ->schema([
+                                        Forms\Components\Group::make()
+                                            ->schema([
+                                                Forms\Components\TextInput::make('title')
+                                                    ->label(__('Title')),
+                                                Forms\Components\TextInput::make('span_title')
+                                                    ->label(__('Blue Title')),
+                                                Forms\Components\Textarea::make('description')
+                                                    ->label(__('Description')),
+                                            ]),
+                                        Forms\Components\Group::make()
+                                            ->schema([
+                                                Forms\Components\FileUpload::make('image')
+                                                    ->label(__('Image'))
+                                                    ->image()
+                                                    ->downloadable()
+                                                    ->openable()
+                                                    ->directory('pages'),
+                                                Forms\Components\TextInput::make('image_alt')
+                                                    ->label(__('Alt text')),
+                                            ])
                                     ])
-                                    ->required(),
+                                    ->columns(2),
+                                Forms\Components\Group::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('primary_button')
+                                            ->label(__('Primary Button')),
+                                        Forms\Components\TextInput::make('primary_button_url')
+                                            ->label(__('Primary Button URL')),
+                                    ])
+                                    ->columns(2),
+                                Forms\Components\Group::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('secondary_button')
+                                            ->label(__('Secondary Button')),
+                                        Forms\Components\TextInput::make('secondary_button_url')
+                                            ->label(__('Secondary Button URL')),
+                                    ])
+                                    ->columns(2),
+                            ]),
+
+                        // ARTICLE_A
+                        Forms\Components\Builder\Block::make('article-a')
+                            ->schema([
+                                Forms\Components\Group::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('title_left'),
+                                        Forms\Components\MarkdownEditor::make('body_left'),
+                                    ]),
+                                Forms\Components\Group::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('title_right'),
+                                        Forms\Components\MarkdownEditor::make('body_right'),
+                                    ]),
                             ])
                             ->columns(2),
-                        Forms\Components\Builder\Block::make('paragraph')
-                            ->schema([
-                                Forms\Components\Textarea::make('content')
-                                    ->label('Paragraph')
-                                    ->required(),
-                            ]),
-                        Forms\Components\Builder\Block::make('image')
-                            ->schema([
-                                Forms\Components\FileUpload::make('url')
-                                    ->label('Image')
-                                    ->image()
-                                    ->required(),
-                                Forms\Components\TextInput::make('alt')
-                                    ->label('Alt text')
-                                    ->required(),
-                            ]),
+
+                        // Forms\Components\Builder\Block::make('heading')
+                        //     ->schema([
+                        //         Forms\Components\TextInput::make('content')
+                        //             ->label('Heading')
+                        //             ->required(),
+                        //         Forms\Components\Select::make('level')
+                        //             ->options([
+                        //                 'h1' => 'Heading 1',
+                        //                 'h2' => 'Heading 2',
+                        //                 'h3' => 'Heading 3',
+                        //                 'h4' => 'Heading 4',
+                        //                 'h5' => 'Heading 5',
+                        //                 'h6' => 'Heading 6',
+                        //             ])
+                        //             ->required(),
+                        //     ])
+                        //     ->columns(2),
+                        // Forms\Components\Builder\Block::make('paragraph')
+                        //     ->schema([
+                        //         Forms\Components\Textarea::make('content')
+                        //             ->label('Paragraph')
+                        //             ->required(),
+                        //     ]),
+                        // Forms\Components\Builder\Block::make('image')
+                        //     ->schema([
+                        //         Forms\Components\FileUpload::make('url')
+                        //             ->label('Image')
+                        //             ->image()
+                        //             ->required(),
+                        //         Forms\Components\TextInput::make('alt')
+                        //             ->label('Alt text')
+                        //             ->required(),
+                        //     ]),
                     ])
                     ->collapsible()
                     ->columnSpanFull(),

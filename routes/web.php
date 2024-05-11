@@ -5,14 +5,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FinancialTransactionController;
 
-Route::get('/', \App\Livewire\Home::class)->name('home');
-Route::get('/tentang', \App\Livewire\About::class)->name('about');
-Route::get('/peraturan', \App\Livewire\Law\Index::class)->name('law.index');
+Route::get('/', \App\Livewire\Page::class)->name('home');
+Route::get('/tentang', \App\Livewire\Page::class)->name('about');
 
-Route::get('/ppdb', \App\Livewire\Ppdb\Index::class)->name('ppdb.index');
+Route::get('/ppdb', \App\Livewire\Page::class)->name('ppdb.index');
 Route::get('/ppdb/formulir', \App\Livewire\Ppdb\Registration::class)->name('student-registration');
 Route::get('/ppdb/biaya', \App\Livewire\Ppdb\Price::class)->name('ppdb.price');
 
+Route::get('/peraturan', \App\Livewire\Law\Index::class)->name('law.index');
 Route::get('/lembaga/{slug}', \App\Livewire\Organization\Show::class)->name('organizations.show');
 
 Route::get('/blog', \App\Livewire\Post\Index::class)->name('posts.index');
@@ -41,3 +41,5 @@ Route::get('/pdf', function () {
 })->name('pdf');
 
 require __DIR__ . '/auth.php';
+
+Route::fallback(\App\Livewire\Page::class);

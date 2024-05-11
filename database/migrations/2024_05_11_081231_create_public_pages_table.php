@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('public_pages', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('path')->unique();
             $table->json('content');
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
