@@ -120,7 +120,7 @@
         </tr>
     </table>
     <section class="text-center">
-        <h2>LAPORAN KEUANGAN</h2>
+        <h2>LAPORAN KEUANGAN {{ $walletId }}</h2>
         <p>{{ $startDate }} - {{ $endDate }}</p>
     </section>
     <br>

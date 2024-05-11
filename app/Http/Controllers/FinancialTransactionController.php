@@ -14,12 +14,13 @@ class FinancialTransactionController extends Controller
 {
     public function generatePdfReport(Request $request)
     {
-        $transactionDebit = FinancialTransaction::query()
+        $defaultWalletId = 'YAYASAN';
+        $transactionDebits = FinancialTransaction::query()
             ->select('name', DB::raw('MAX(transaction_at) as transaction_at'), DB::raw('SUM(amount) as total_amount'), DB::raw('COUNT(*) as count'))
             ->when($request->wallet_id, function ($query) use ($request) {
                 $query->where('to_wallet_id', $request->wallet_id);
-            }, function ($query) {
-                $query->where('to_wallet_id', 'YAYASAN');
+            }, function ($query) use ($defaultWalletId) {
+                $query->where('to_wallet_id', $defaultWalletId);
             })
             ->whereBetween('transaction_at', [
                 $request->start_transaction_at ?? now()->startOfMonth(),
@@ -37,12 +38,12 @@ class FinancialTransactionController extends Controller
                 ];
             });
 
-        $transactionCredit = FinancialTransaction::query()
+        $transactionCredits = FinancialTransaction::query()
             ->select('name', DB::raw('MAX(transaction_at) as transaction_at'), DB::raw('SUM(amount) as total_amount'), DB::raw('COUNT(*) as count'))
             ->when($request->wallet_id, function ($query) use ($request) {
                 $query->where('from_wallet_id', $request->wallet_id);
-            }, function ($query) {
-                $query->where('from_wallet_id', 'YAYASAN');
+            }, function ($query) use ($defaultWalletId) {
+                $query->where('from_wallet_id', $defaultWalletId);
             })
             ->whereBetween('transaction_at', [
                 $request->start_transaction_at ?? now()->startOfMonth(),
@@ -60,13 +61,40 @@ class FinancialTransactionController extends Controller
                 ];
             });
 
+        $newTransactionDebits = [];
+        $debitNameSameCredit = [];
+        $newTransactionCredits = [];
+
+        foreach ($transactionDebits as $debit) {
+            $debitName = $debit['name'];
+            $updatedDebit = $debit; // Buat salinan dari transaksi debit
+
+            foreach ($transactionCredits as $credit) {
+                $creditName = $credit['name'];
+
+                if ($debitName === $creditName) {
+                    $updatedDebit['count'] -= $credit['count'];
+                    $updatedDebit['debit'] -= $credit['credit'];
+                    $debitNameSameCredit[] = $creditName;
+                }
+            }
+            if ($updatedDebit['debit'] > 0) {
+                $newTransactionDebits[] = $updatedDebit; // Tambahkan transaksi debit yang telah diperbarui ke dalam array baru
+            }
+        }
+
+        foreach ($transactionCredits as $credit) {
+            if (!in_array($credit['name'], $debitNameSameCredit)) {
+                $newTransactionCredits[] = $credit;
+            }
+        }
 
         $totalCount = 0;
         $totalDebit = 0;
         $totalBalance = 0;
         $totalCredit = 0;
 
-        $transactions = $transactionDebit->merge($transactionCredit)->values()->map(function ($transaction) use (&$totalCount, &$totalDebit, &$totalCredit, &$totalBalance) {
+        $transactions = collect($newTransactionDebits)->merge($newTransactionCredits)->values()->map(function ($transaction) use (&$totalCount, &$totalDebit, &$totalCredit, &$totalBalance) {
             $totalCount += $transaction['count'];
 
             if (isset($transaction['debit'])) {
@@ -87,8 +115,8 @@ class FinancialTransactionController extends Controller
         $totalDebit = Number::currency($totalDebit, 'IDR');
         $totalCredit = Number::currency($totalCredit, 'IDR');
         $totalBalance = Number::currency($totalBalance, 'IDR');
-        $startDate = Carbon::parse($request->start_transaction_at ?? now()->startOfMonth())->isoFormat('D MMMM Y');
-        $endDate = Carbon::parse($request->end_transaction_at ?? now()->endOfMonth())->isoFormat('D MMMM Y');
+        $startDate = Carbon::parse($request->start_transaction_at ?? now()->startOfMonth())->isoFormat('D MMMM Y, HH:mm:ss');
+        $endDate = Carbon::parse($request->end_transaction_at ?? now()->endOfMonth())->isoFormat('D MMMM Y, HH:mm:ss');
 
         $yayasan = Organization::query()
             ->where('slug', 'yayasan-pondok-pesantren-ki-ageng-mbodo')
@@ -101,11 +129,12 @@ class FinancialTransactionController extends Controller
             'totalDebit' => $totalDebit,
             'totalCredit' => $totalCredit,
             'totalBalance' => $totalBalance,
+            'walletId' => $request->wallet_id ?? $defaultWalletId,
             'startDate' => $startDate,
             'endDate' => $endDate,
         ]);
         $pdf->setPaper('a4',);
         $pdf->render();
-        return $pdf->stream(__('Financial Report') . ' ' . now()->isoFormat("D MMMM Y") . '.pdf');
+        return $pdf->stream(__('Financial Report') . ' ' . $request->wallet_id . ' ' . $request->start_transaction_at . ' - ' . $request->end_transaction_at . '.pdf');
     }
 }

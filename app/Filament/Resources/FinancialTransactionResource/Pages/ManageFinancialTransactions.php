@@ -137,11 +137,11 @@ class ManageFinancialTransactions extends ManageRecords
                         ->required(),
                     Forms\Components\Grid::make()
                         ->schema([
-                            Forms\Components\DatePicker::make('start_transaction_at')
+                            Forms\Components\DateTimePicker::make('start_transaction_at')
                                 ->label(__('Start Transaction At'))
                                 ->default(now()->firstOfMonth())
                                 ->required(),
-                            Forms\Components\DatePicker::make('end_transaction_at')
+                            Forms\Components\DateTimePicker::make('end_transaction_at')
                                 ->label(__('End Transaction At'))
                                 ->default(now()->endOfMonth())
                                 ->required(),
@@ -160,8 +160,8 @@ class ManageFinancialTransactions extends ManageRecords
                             $newStart = Carbon::parse($get('start_transaction_at'))->month($stateInt);
                             $newEnd = Carbon::parse($get('end_transaction_at'))->month($stateInt);
 
-                            $set('start_transaction_at', $newStart->toDateString());
-                            $set('end_transaction_at', $newEnd->toDateString());
+                            $set('start_transaction_at', $newStart->toDateTimeString());
+                            $set('end_transaction_at', $newEnd->toDateTimeString());
                         })
                         ->default(now()->month),
                 ])
