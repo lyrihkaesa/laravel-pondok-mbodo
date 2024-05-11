@@ -81,6 +81,7 @@ class EmployeeFactory extends Factory
             'rw' => $this->faker->randomElement($rtRwArray),
             'postal_code' => $this->faker->postcode(),
             'start_employment_date' => now(),
+            'family_card_number' => $nik,
             'salary' => $this->faker->numberBetween(300000, 1000000),
         ];
     }

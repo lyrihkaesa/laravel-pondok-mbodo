@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PublicPageResource extends Resource
 {
     protected static ?string $model = PublicPage::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationGroup = 'Manajemen Konten';
 
     public static function form(Form $form): Form
     {
@@ -243,7 +243,7 @@ class PublicPageResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
+                Tables\Columns\TextColumn::make('path')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime()

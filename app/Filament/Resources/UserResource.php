@@ -24,35 +24,62 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('phone_visibility')
-                    ->options(SocialMediaVisibility::class)
-                    ->default(SocialMediaVisibility::PUBLIC),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->revealable()
-                    ->maxLength(255),
-                Forms\Components\Actions::make([
-                    Forms\Components\Actions\Action::make('student')
-                        ->url(fn (User $record): string => route('filament.admin.resources.students.edit', ['record' => $record->student]))
-                        ->openUrlInNewTab()
-                        ->visible(fn (User $record): bool => $record->student !== null),
-                    Forms\Components\Actions\Action::make('employee')
-                        ->url(fn (User $record): string => route('filament.admin.resources.employees.edit', ['record' => $record->employee]))
-                        ->openUrlInNewTab()
-                        ->visible(fn (User $record): bool => $record->employee !== null),
-                ]),
-            ]);
+                Forms\Components\Group::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label(__('Name'))
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('email')
+                            ->label(__('Email'))
+                            ->email()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('phone')
+                            ->label(__('Phone'))
+                            ->tel()
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\ToggleButtons::make('phone_visibility')
+                            ->label(__('Phone Visibility'))
+                            ->debounce(delay: 200)
+                            ->inline()
+                            ->options(SocialMediaVisibility::class)
+                            ->default(SocialMediaVisibility::PUBLIC)
+                            ->helperText(fn ($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
+                            ->required(),
+                        Forms\Components\TextInput::make('password')
+                            ->label(__('Password'))
+                            ->password()
+                            ->revealable()
+                            ->maxLength(255),
+                    ]),
+                Forms\Components\Group::make()
+                    ->schema([
+                        Forms\Components\Actions::make([
+                            Forms\Components\Actions\Action::make('student')
+                                ->label(__('Student'))
+                                ->url(fn (User $record): string => route('filament.admin.resources.students.edit', ['record' => $record->student]))
+                                ->openUrlInNewTab()
+                                ->visible(fn (User $record): bool => $record->student !== null),
+                            Forms\Components\Actions\Action::make('employee')
+                                ->label(__('Employee'))
+                                ->url(fn (User $record): string => route('filament.admin.resources.employees.edit', ['record' => $record->employee]))
+                                ->openUrlInNewTab()
+                                ->visible(fn (User $record): bool => $record->employee !== null),
+                        ]),
+                        Forms\Components\FileUpload::make('profile_picture_1x1')
+                            ->label(__('Profile Picture 1x1'))
+                            ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                            ->image()
+                            ->downloadable()
+                            ->openable()
+                            ->directory('profile_pictures'),
+                        Forms\Components\DateTimePicker::make('email_verified_at')
+                            ->label(__('Email Verified At'))
+                            ->disabled(),
+                    ]),
+            ])
+            ->columns(2);
     }
 
     public static function table(Table $table): Table

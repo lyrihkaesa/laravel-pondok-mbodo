@@ -17,7 +17,7 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
     protected static ?string $navigationIcon = 'heroicon-o-tag';
-    protected static ?string $navigationGroup = 'Manajemen Yayasan';
+    protected static ?string $navigationGroup = 'Manajemen Konten';
     protected static ?string $label = 'Kategori Master';
 
     public static function form(Form $form): Form

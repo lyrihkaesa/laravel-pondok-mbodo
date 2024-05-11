@@ -20,7 +20,7 @@ class TeamB extends Component
         $this->iteration = $iteration;
         $this->members = \App\Models\User::query()
             ->whereIn('id', $this->membersIds)
-            ->select('name', 'phone', 'phone_visibility')
+            ->select('name', 'phone', 'phone_visibility', 'profile_picture_1x1',)
             ->get();
     }
     public function render()
