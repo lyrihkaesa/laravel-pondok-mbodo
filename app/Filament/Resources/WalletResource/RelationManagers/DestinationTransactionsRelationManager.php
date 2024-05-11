@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class DestinationTransactionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'destinationTransactions';
+    protected static ?string $title = 'Masuk';
 
     public function form(Form $form): Form
     {
@@ -45,20 +46,6 @@ class DestinationTransactionsRelationManager extends RelationManager
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->label(__('Amount'))
-                    ->prefix(function ($record) {
-                        if (str($record->type)->contains('credit')) {
-                            return '+';
-                        } else {
-                            return '-';
-                        }
-                    })
-                    ->color(function ($record) {
-                        if (str($record->type)->contains('credit')) {
-                            return 'success';
-                        } else {
-                            return 'danger';
-                        }
-                    })
                     ->money('IDR'),
                 Tables\Columns\TextColumn::make('description')
                     ->label(__('Description')),

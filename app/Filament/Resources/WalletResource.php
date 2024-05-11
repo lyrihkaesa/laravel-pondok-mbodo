@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\WalletResource\Pages;
-use App\Filament\Resources\WalletResource\RelationManagers;
-use App\Models\Wallet;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Wallet;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Support\RawJs;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\WalletResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\WalletResource\RelationManagers;
 
 class WalletResource extends Resource
 {
@@ -37,6 +38,8 @@ class WalletResource extends Resource
                     ->label(__('Balance'))
                     ->disabled()
                     ->numeric()
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
                     ->default(0),
                 Forms\Components\Select::make('policy')
                     ->label(__('Wallet Policy'))
@@ -66,6 +69,14 @@ class WalletResource extends Resource
                 Tables\Columns\TextColumn::make('balance')
                     ->label(__('Balance'))
                     ->money('IDR')
+                    ->color(function ($state) {
+                        $balance = floatval($state);
+                        if ($balance > 0) {
+                            return 'success';
+                        } else if ($balance < 0) {
+                            return 'danger';
+                        }
+                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label(__('User'))
