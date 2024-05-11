@@ -38,7 +38,7 @@
                 </x-block.team.grid>
             </x-block.team.index>
         @elseif ($block['type'] === 'post')
-            <livewire:block.post :take="$block['data']['take']" :title="$block['data']['title']" :description="$block['data']['description']" :iteration="$loop->iteration" />
+            <livewire:block.post :iteration="$loop->iteration" :title="$block['data']['title']" :description="$block['data']['description']" :take="$block['data']['take']" />
         @elseif ($block['type'] === 'article')
             <x-block.article.index :iteration="$loop->iteration">
                 <x-block.article.header>
@@ -107,7 +107,10 @@
                 </div>
                 <!-- End Col -->
             </x-block.article-a.index>
+        @elseif ($block['type'] === 'team-b')
+            {{-- @dd($block) --}}
+            <livewire:block.team-b :iteration="$loop->iteration" :title="$block['data']['title']" :description="$block['data']['description']" :memberIds="$block['data']['member_id']" />
         @endif
     @endforeach
-    <x-block.team-b></x-block.team-b>
+
 </section>

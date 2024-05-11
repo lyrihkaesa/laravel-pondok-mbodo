@@ -186,6 +186,18 @@ class PublicPageResource extends Resource
                             ])
                             ->columns(2),
 
+                        // TEAM_B
+                        Forms\Components\Builder\Block::make('team-b')
+                            ->schema([
+                                Forms\Components\TextInput::make('title'),
+                                Forms\Components\Textarea::make('description'),
+                                Forms\Components\Select::make('member_id')
+                                    ->label(__('Members'))
+                                    ->options(\App\Models\User::all()->pluck('name', 'id'))
+                                    ->searchable()
+                                    ->multiple(),
+                            ]),
+
                         // Forms\Components\Builder\Block::make('heading')
                         //     ->schema([
                         //         Forms\Components\TextInput::make('content')
