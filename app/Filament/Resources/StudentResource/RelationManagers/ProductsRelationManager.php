@@ -127,7 +127,7 @@ class ProductsRelationManager extends RelationManager
 
                             $financialTransaction = new FinancialTransaction();
                             $financialTransaction->student_product_id = $studentProductId;
-                            $financialTransaction->name = 'Membatalkan ' . $studentProductModel->product_name;
+                            $financialTransaction->name = $studentProductModel->product_name;
                             $financialTransaction->type = 'debit-yayasan,unvalidation,system';
                             $financialTransaction->description = $description;
                             $result = $walletService->transferYayasanToSystem($studentProductModel->product_price, $financialTransaction);

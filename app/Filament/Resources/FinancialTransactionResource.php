@@ -82,7 +82,7 @@ class FinancialTransactionResource extends Resource
                             ->relationship('validator', 'name')
                             ->disabled()
                             ->default(auth()->id()),
-                        Forms\Components\TextArea::make('description')
+                        Forms\Components\Textarea::make('description')
                             ->label(__('Description'))
                             ->autoSize(),
                         Forms\Components\FileUpload::make('image_attachments')
