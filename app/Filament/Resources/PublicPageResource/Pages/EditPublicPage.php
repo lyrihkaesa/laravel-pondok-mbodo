@@ -20,7 +20,7 @@ class EditPublicPage extends EditRecord
 
     protected function handleRecordUpdate(Model $record, $data): Model
     {
-        dd($data);
+        // dd($data);
         $record->update($data);
         return $record;
     }

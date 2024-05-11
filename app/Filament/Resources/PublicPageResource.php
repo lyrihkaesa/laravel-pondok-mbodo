@@ -99,8 +99,15 @@ class PublicPageResource extends Resource
                                 Forms\Components\Grid::make()
                                     ->schema([
                                         Forms\Components\TextInput::make('title'),
-                                        Forms\Components\Textarea::make('description'),
+                                        Forms\Components\TextInput::make('take')
+                                            ->label(__('Take'))
+                                            ->numeric()
+                                            ->minValue(1)
+                                            ->maxValue(10)
+                                            ->required()
+                                            ->default(3),
                                     ]),
+                                Forms\Components\Textarea::make('description'),
                             ]),
                         Forms\Components\Builder\Block::make('heading')
                             ->schema([
