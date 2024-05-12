@@ -9,7 +9,9 @@ use Filament\PanelProvider;
 use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
 use App\Filament\Pages\EditProfile;
+use App\Filament\Pages\EditProfileStudent;
 use Filament\Http\Middleware\Authenticate;
+use App\Filament\Pages\EditProfileEmployee;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -33,7 +35,23 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->profile()
             ->userMenuItems([
-                'profile' => MenuItem::make()->url(fn (): string => EditProfile::getUrl()),
+                'profile' => MenuItem::make()
+                    ->icon('heroicon-o-user-circle')
+                    ->url(fn (): string => EditProfile::getUrl()),
+                'home' => MenuItem::make()
+                    ->label(__('Home'))
+                    ->icon('heroicon-o-home')
+                    ->url(fn (): string => '/'),
+                'profile student' => MenuItem::make()
+                    ->label(__('Profile Student'))
+                    ->icon('icon-student-male')
+                    ->visible(fn (): bool => auth()->user()->hasRole('santri'))
+                    ->url(fn (): string => EditProfileStudent::getUrl()),
+                'profile employee' => MenuItem::make()
+                    ->label(__('Profile Employee'))
+                    ->icon('icon-school-director')
+                    ->visible(fn (): bool => auth()->user()->hasRole('pengurus'))
+                    ->url(fn (): string => EditProfileEmployee::getUrl()),
             ])
             ->colors([
                 // 'primary' => Color::Lime,

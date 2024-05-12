@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Blade;
 class GuardianResource extends Resource
 {
     protected static ?string $model = Guardian::class;
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'icon-working-parents';
     protected static ?string $navigationGroup = 'Manajemen Anggota';
     protected static ?int $navigationSort = -2;
 

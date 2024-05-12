@@ -25,7 +25,7 @@ use App\Filament\Resources\EmployeeResource\RelationManagers;
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'icon-business-group';
     protected static ?string $navigationGroup = 'Manajemen Anggota';
     protected static ?int $navigationSort = -1;
 

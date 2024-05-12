@@ -28,7 +28,7 @@ use App\Filament\Resources\StudentResource\Pages\EditStudent;
 class StudentResource extends Resource
 {
     protected static ?string $model = Student::class;
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'icon-students';
     protected static ?string $navigationGroup = 'Manajemen Anggota';
     protected static ?int $navigationSort = -3;
 
