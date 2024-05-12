@@ -10,6 +10,18 @@
     @apply block text-base font-bold text-gray-800 dark:text-white sm:text-lg lg:text-xl lg:leading-tight;
 }
 
+.markdown.filament-section-body>h1 {
+    @apply text-base font-medium leading-6 text-gray-950 dark:text-white;
+}
+
+.markdown.filament-section-body>ol {
+    @apply mt-1 list-decimal px-4 text-sm text-gray-500 dark:text-gray-400;
+}
+
+.markdown.filament-section-body>ol>li {
+    @apply text-sm text-gray-500 dark:text-gray-400 mt-1;
+}
+
 .markdown.article-a>blockquote {
     @apply mt-3 border-l-4 border-teal-400 pl-4 text-sm lg:text-base text-gray-800 dark:text-gray-400;
 }

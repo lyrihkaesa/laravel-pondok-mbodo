@@ -9,6 +9,7 @@ use App\Models\Student;
 use Livewire\Component;
 use App\Models\Guardian;
 use Filament\Forms\Form;
+use App\Models\PublicPage;
 use App\Enums\StudentCategory;
 use Illuminate\Support\Facades\DB;
 use App\Enums\StudentCurrentSchool;
@@ -25,10 +26,12 @@ class Registration extends Component implements HasForms
 
     public ?array $data = [];
     public bool $isSuccessful = false;
+    public $publicPage;
 
     public function mount(): void
     {
         $this->form->fill();
+        $this->publicPage = PublicPage::where('path', 'ppdb/formulir')->first();
     }
 
     public function form(Form $form): Form

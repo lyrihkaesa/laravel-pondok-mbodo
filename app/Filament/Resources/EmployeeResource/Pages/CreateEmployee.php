@@ -49,8 +49,8 @@ class CreateEmployee extends CreateRecord
         return $record;
     }
 
-    protected function getRedirectUrl(): string
-    {
-        return $this->previousUrl ?? $this->getResource()::getUrl('index');
-    }
+    // protected function getRedirectUrl(): string
+    // {
+    //     return $this->previousUrl ?? $this->getResource()::getUrl('index');
+    // }
 }

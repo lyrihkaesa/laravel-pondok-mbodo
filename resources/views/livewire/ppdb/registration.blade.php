@@ -5,6 +5,7 @@
 <x-slot name="css">
     @filamentStyles()
     @vite('resources/css/filament/admin/theme.css')
+    @vite('resources/css/markdown.css')
 </x-slot>
 
 <x-slot name="script">
@@ -15,40 +16,39 @@
     <h1 class="mb-4 text-lg font-semibold">Pendaftaran Santri</h1>
     <form wire:submit="create">
         {{ $this->form }}
+        @isset($publicPage)
+            @foreach ($publicPage->content as $block)
+                @if ($block['type'] === 'filament-section')
+                    <x-filament::section :aside="$block['data']['aside']" :collapsible="$block['data']['collapsible']" class="my-4 lg:my-6">
+                        @isset($block['data']['section_heading'])
+                            <x-slot name="heading">
+                                {{ $block['data']['section_heading'] }}
+                            </x-slot>
+                        @endisset
+                        @isset($block['data']['body'])
+                            @foreach ($block['data']['body'] as $blockBody)
+                                @if ($blockBody['type'] === 'markdown')
+                                    <div class="markdown filament-section-body">
+                                        {!! str($blockBody['data']['content'])->markdown() !!}
+                                    </div>
+                                @elseif ($blockBody['type'] === 'team-c')
+                                    <livewire:block.team-c :title="$blockBody['data']['title']" :description="$blockBody['data']['description']" :memberIds="$blockBody['data']['member_id']"
+                                        :whatsappMessage="$blockBody['data']['whatsapp_message']" />
+                                @endif
 
-        <x-filament::section aside collapsible class="my-4 lg:my-6">
-            <x-slot name="heading">
-                {{ __('Other') }}
-            </x-slot>
-            <h1 class="text-base font-medium leading-6 text-gray-950 dark:text-white">
-                {{ __('Registration Requirement') }}</h1>
-            <ul class="mt-1 list-decimal px-4 text-sm text-gray-500 dark:text-gray-400">
-                <li>Tiga lembar Fotocopy Kartu Keluarga</li>
-                <li>Tiga lembar Fotocopy Akta Kelahiran</li>
-                <li>Tiga lembar Fotocopy SKHUN Terlegalisir</li>
-                <li>Tiga lembar Fotocopy Ijazah Terlegalisir</li>
-                <li>Tiga lembar Fotocopy KTP Orang Tua/Wali</li>
-                <li>Tiga lembar Pass Foto Berwarna 3x4</li>
-                <li>Tiga lembar Pass Foto Berwarna 2x3</li>
-            </ul>
-            <hr class="my-4 border-gray-200 dark:border-gray-700">
-            <h1 class="text-base font-medium leading-6 text-gray-950 dark:text-white">
-                {{ __('Registration Contact') }}
-            </h1>
-            <div class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                <p>Syarat pendaftaran bisa dibawa saat mengantar santri ke pesantren. Setelah mengisi formulir
-                    pendaftaran online, harap konfirmasi ke salah satu nomor: </p>
-                <x-item-wa-copy-button name="Mbak Yani" phone="6282136687558"
-                    message="Assalamualaikum Wr. Wb. Mbak Yani. Saya ingin konsultasi pendaftaran santri baru." />
-                <x-item-wa-copy-button name="Mbak Ulfa" phone="6282134125855"
-                    message="Assalamualaikum Wr. Wb. Mbak Ulfa. Saya ingin konsultasi pendaftaran santri baru." />
-            </div>
-        </x-filament::section>
-
+                                @if (!$loop->last && $block['data']['divinder'])
+                                    <hr class="my-4 border-gray-200 dark:border-gray-700">
+                                @else
+                                    <div class="my-4"></div>
+                                @endif
+                            @endforeach
+                        @endisset
+                    </x-filament::section>
+                @endif
+            @endforeach
+        @endisset
         <x-filament::section aside class="my-4 lg:my-6">
-            <x-slot name="heading">
-
-            </x-slot>
+            <x-slot name="heading"></x-slot>
             <x-filament::button type="submit" class="w-full" size="lg" wire:loading.attr="disabled">
                 <span wire:loading.remove>{{ __('Register') }}</span>
                 <x-filament::loading-indicator wire:loading class="h-5 w-5" />

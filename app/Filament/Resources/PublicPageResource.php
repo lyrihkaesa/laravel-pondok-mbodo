@@ -198,6 +198,59 @@ class PublicPageResource extends Resource
                                     ->multiple(),
                             ]),
 
+                        // FILAMENT SECTION
+                        Forms\Components\Builder\Block::make('filament-section')
+                            ->schema([
+                                Forms\Components\Group::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('section_heading')
+                                            ->label(__('Section Heading')),
+                                        Forms\Components\Group::make()
+                                            ->schema([
+                                                Forms\Components\Toggle::make('aside')
+                                                    ->inline(false)
+                                                    ->onColor('success')
+                                                    ->offColor('danger')
+                                                    ->default(true),
+                                                Forms\Components\Toggle::make('collapsible')
+                                                    ->inline(false)
+                                                    ->onColor('success')
+                                                    ->offColor('danger')
+                                                    ->default(true),
+                                                Forms\Components\Toggle::make('divinder')
+                                                    ->inline(false)
+                                                    ->onColor('success')
+                                                    ->offColor('danger')
+                                                    ->default(true),
+                                            ])
+                                            ->columns(3),
+                                    ])
+                                    ->columns(2),
+                                Forms\Components\Builder::make('body')
+                                    ->schema([
+                                        Forms\Components\Builder\Block::make('markdown')
+                                            ->schema([
+                                                Forms\Components\MarkdownEditor::make('content')
+                                                    ->label(__('Markdown')),
+                                            ]),
+                                        Forms\Components\Builder\Block::make('team-c')
+                                            ->schema([
+                                                Forms\Components\TextInput::make('title')
+                                                    ->label(__('Title')),
+                                                Forms\Components\Textarea::make('description')
+                                                    ->label(__('Description')),
+                                                Forms\Components\Select::make('member_id')
+                                                    ->label(__('Members'))
+                                                    ->options(\App\Models\User::all()->pluck('name', 'id'))
+                                                    ->searchable()
+                                                    ->multiple(),
+                                                Forms\Components\TextInput::make('whatsapp_message')
+                                                    ->label(__('Whatsapp Message')),
+                                            ])
+                                    ]),
+                            ]),
+
+
                         // Forms\Components\Builder\Block::make('heading')
                         //     ->schema([
                         //         Forms\Components\TextInput::make('content')
