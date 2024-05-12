@@ -49,24 +49,28 @@
                 </x-navbar-dropdown>
                 <x-navbar-dropdown label="Program Pendidikan">
                     <x-navbar-dropdown-child label="Formal">
-                        @foreach ($organizations['formals'] as $organization)
+                        @foreach ($organizations['Sekolah Formal'] as $organization)
                             <x-navbar-dropdown-item
-                                href="{{ $organization['href'] }}">{{ $organization['slot'] }}</x-navbar-dropdown-item>
+                                href="{{ route('organizations.show', ['slug' => $organization->slug]) }}">{{ $organization->name }}</x-navbar-dropdown-item>
                         @endforeach
                     </x-navbar-dropdown-child>
                     <x-navbar-dropdown-child label="Non Formal">
-                        @foreach ($organizations['non_formals'] as $organization)
+                        @foreach ($organizations['Program Jurusan'] as $organization)
                             <x-navbar-dropdown-item
-                                href="{{ $organization['href'] }}">{{ $organization['slot'] }}</x-navbar-dropdown-item>
+                                href="{{ route('organizations.show', ['slug' => $organization->slug]) }}">{{ $organization->name }}</x-navbar-dropdown-item>
+                        @endforeach
+                        @foreach ($organizations['Sekolah Madrasah'] as $organization)
+                            <x-navbar-dropdown-item
+                                href="{{ route('organizations.show', ['slug' => $organization->slug]) }}">{{ $organization->name }}</x-navbar-dropdown-item>
                         @endforeach
                     </x-navbar-dropdown-child>
                     <x-navbar-dropdown-item href="#">Ekstrakurikuler</x-navbar-dropdown-item>
                 </x-navbar-dropdown>
                 @if (!request()->is('ppdb/*') && !request()->is('ppdb'))
                     <x-navbar-dropdown label='Badan Lembaga'>
-                        @foreach ($organizations['non_formals'] as $organization)
+                        @foreach ($organizations['Badan Lembaga'] as $organization)
                             <x-navbar-dropdown-item
-                                href="{{ $organization['href'] }}">{{ $organization['slot'] }}</x-navbar-dropdown-item>
+                                href="{{ route('organizations.show', ['slug' => $organization->slug]) }}">{{ $organization->name }}</x-navbar-dropdown-item>
                         @endforeach
                     </x-navbar-dropdown>
                 @endif

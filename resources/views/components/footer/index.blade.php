@@ -8,12 +8,14 @@
                 allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d989.7616956258024!2d110.91619417450636!3d-7.120577071179217!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e70afe358aa7ec3%3A0xe4c54aaa9c50e928!2sPondok%20Mbodo!5e0!3m2!1sen!2sus!4v1711145401101!5m2!1sen!2sus"></iframe>
         </div>
+
         <!-- End Col -->
         <div>
             <h4 class="text-xs font-semibold uppercase text-gray-900 dark:text-gray-100">Sekolah Formal</h4>
             <div class="mt-3 grid space-y-3 text-sm">
-                @foreach ($organizations['formals'] as $organization)
-                    <x-footer-link href="{{ $organization['href'] }}">{{ $organization['slot'] }}</x-footer-link>
+                @foreach ($organizations['Sekolah Formal'] as $organization)
+                    <x-footer-link
+                        href="{{ route('organizations.show', ['slug' => $organization->slug]) }}">{{ $organization->name }}</x-footer-link>
                 @endforeach
             </div>
         </div>
@@ -22,8 +24,13 @@
         <div>
             <h4 class="text-xs font-semibold uppercase text-gray-900 dark:text-gray-100">Sekolah Non Formal</h4>
             <div class="mt-3 grid space-y-3 text-sm">
-                @foreach ($organizations['non_formals'] as $organization)
-                    <x-footer-link href="{{ $organization['href'] }}">{{ $organization['slot'] }}</x-footer-link>
+                @foreach ($organizations['Program Jurusan'] as $organization)
+                    <x-footer-link
+                        href="{{ route('organizations.show', ['slug' => $organization->slug]) }}">{{ $organization->name }}</x-footer-link>
+                @endforeach
+                @foreach ($organizations['Sekolah Madrasah'] as $organization)
+                    <x-footer-link
+                        href="{{ route('organizations.show', ['slug' => $organization->slug]) }}">{{ $organization->name }}</x-footer-link>
                 @endforeach
             </div>
         </div>
