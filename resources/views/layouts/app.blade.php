@@ -33,20 +33,12 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        {{-- @include('layouts.navigation') --}}
+    <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
 
         <!-- Page Heading -->
         @isset($header)
             {{ $header }}
         @endisset
-        {{-- @if (isset($header))
-            <header class="bg-white shadow dark:bg-gray-800">
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endif --}}
 
         <!-- Page Content -->
         <main>
@@ -58,19 +50,15 @@
         @else
             <x-footer />
         @endisset
-
-        {{-- @if (isset($footer))
-            {{ $footer }}
-        @else
-            <x-footer />
-        @endif --}}
     </div>
 
     @isset($script)
         {{ $script }}
     @endisset
-    {{-- @filamentScripts() --}}
+
     @vite('resources/js/app.js')
+
+    @stack('scripts')
 </body>
 
 </html>
