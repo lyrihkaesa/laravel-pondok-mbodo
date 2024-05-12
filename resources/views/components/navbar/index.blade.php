@@ -1,3 +1,7 @@
+@php
+    $user = auth()->user();
+@endphp
+
 {{-- Navbar --}}
 <nav @if (!(request()->is('ppdb*') || request()->is('blog/*'))) x-cloak x-data :class="{ 'backdrop-blur bg-white/75 dark:bg-gray-800/75 ': isScrolled }" @endif
     class="mx-auto w-full max-w-[85rem] border-b-2 border-gray-100 bg-white px-4 py-2 transition-colors duration-500 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
@@ -28,7 +32,13 @@
             </button>
             <x-dark-mode-button />
             @if (!request()->is('ppdb'))
-                <x-ppdb-button class="inline-flex" />
+                @auth
+                    <a href="{{ route('filament.admin.pages.dashboard') }}">
+                        <x-filament::avatar src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}" />
+                    </a>
+                @else
+                    <x-ppdb-button class="inline-flex" />
+                @endauth
             @endif
         </div>
     </div>
@@ -81,7 +91,13 @@
         </div>
         <x-dark-mode-button class="hidden sm:block" />
         @if (!request()->is('ppdb'))
-            <x-ppdb-button class="hidden" />
+            @auth
+                <a class="hidden sm:block" href="{{ route('filament.admin.pages.dashboard') }}">
+                    <x-filament::avatar src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}" />
+                </a>
+            @else
+                <x-ppdb-button class="hidden" />
+            @endauth
         @else
             <x-ppdb.form-button class="hidden" />
         @endif

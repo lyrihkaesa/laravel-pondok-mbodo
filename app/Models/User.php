@@ -8,6 +8,7 @@ use Filament\Panel;
 use Laravel\Sanctum\HasApiTokens;
 use App\Enums\SocialMediaVisibility;
 use Spatie\Permission\Traits\HasRoles;
+use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     use HasApiTokens;
     use HasFactory;
@@ -93,5 +94,15 @@ class User extends Authenticatable implements FilamentUser
     public function socialMediaLinks(): HasMany
     {
         return $this->hasMany(SocialMediaLink::class);
+    }
+
+    public function getAvatarUrl(): string
+    {
+        return filament()->getUserAvatarUrl($this);
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->profile_picture_1x1 ? asset('storage/' . $this->profile_picture_1x1) : null;
     }
 }
