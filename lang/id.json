@@ -203,5 +203,12 @@
     "Convert to Employee": "Jadikan Pengurus",
     "Convertion data Student to Employee": "Membuat Santri :name menjadi Pengurus",
     "Convert to Student": "Jadikan Santri",
-    "Convertion data Employee to Student": "Membuat Pengurus :name menjadi Santri"
+    "Convertion data Employee to Student": "Membuat Pengurus :name menjadi Santri",
+    "Profile Information": "Informasi Profil",
+    "Update your accounts profile information and email address.": "Update informasi profil akun Anda dan alamat email.",
+    "Update Password": "Perbarui Kata Sandi",
+    "Ensure your account is using long, random password to stay secure.": "Pastikan akun anda menggunakan kata sandi panjang dan acak untuk tetap aman.",
+    "Current Password": "Kata Sandi Sekarang",
+    "New Password": "Kata Sandi Baru",
+    "Confirm Password": "Konfirmasi Kata Sandi"
 }

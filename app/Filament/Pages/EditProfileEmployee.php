@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EditProfileEmployee extends Page
 {
@@ -12,7 +13,12 @@ class EditProfileEmployee extends Page
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()->hasRole('pengurus');
+        return auth()->user()->employee !== null;
+    }
+
+    public function getTitle(): string | Htmlable
+    {
+        return __('Profile Student');
     }
 
     public static function getNavigationLabel(): string

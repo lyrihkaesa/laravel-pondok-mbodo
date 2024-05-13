@@ -8,11 +8,14 @@ use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\DB;
+use App\Enums\SocialMediaVisibility;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Filament\Forms\Concerns\InteractsWithForms;
 
@@ -25,6 +28,11 @@ class EditProfile extends Page implements HasForms
 
     public ?array $profileData = [];
     public ?array $passwordData = [];
+
+    public function getTitle(): string | Htmlable
+    {
+        return __('Profile');
+    }
 
     public static function getNavigationLabel(): string
     {
@@ -52,16 +60,43 @@ class EditProfile extends Page implements HasForms
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Profile Information')
-                    ->description('Update your account\'s profile information and email address.')
+                Forms\Components\Section::make(__('Profile Information'))
+                    ->description(__('Update your accounts profile information and email address.'))
                     ->aside()
                     ->schema([
+                        Forms\Components\FileUpload::make('profile_picture_1x1')
+                            ->label(__('Profile Picture 1x1'))
+                            ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                            ->image()
+                            ->downloadable()
+                            ->openable()
+                            ->directory('profile_pictures'),
                         Forms\Components\TextInput::make('name')
-                            ->required(),
+                            ->label(__('Name'))
+                            ->required()
+                            ->maxLength(255),
                         Forms\Components\TextInput::make('email')
+                            ->label(__('Email'))
+                            ->unique(ignoreRecord: true)
                             ->email()
                             ->required()
-                            ->unique(ignoreRecord: true),
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('phone')
+                            ->label(__('Phone'))
+                            ->placeholder(__('Phone Placeholder'))
+                            ->helperText(__('Phone Helper Text'))
+                            ->unique(ignoreRecord: true)
+                            ->tel()
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\ToggleButtons::make('phone_visibility')
+                            ->label(__('Phone Visibility'))
+                            ->debounce(delay: 200)
+                            ->inline()
+                            ->options(SocialMediaVisibility::class)
+                            ->default(SocialMediaVisibility::PUBLIC)
+                            ->helperText(fn ($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
+                            ->required(),
                     ]),
             ])
             ->model($this->getUser())
@@ -72,16 +107,20 @@ class EditProfile extends Page implements HasForms
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Update Password')
-                    ->description('Ensure your account is using long, random password to stay secure.')
+                Forms\Components\Section::make(__('Update Password'))
+                    ->description(__('Ensure your account is using long, random password to stay secure.'))
                     ->aside()
                     ->schema([
                         Forms\Components\TextInput::make('Current password')
+                            ->label(__('Current Password'))
                             ->password()
+                            ->revealable()
                             ->required()
                             ->currentPassword(),
                         Forms\Components\TextInput::make('password')
+                            ->label(__('New Password'))
                             ->password()
+                            ->revealable()
                             ->required()
                             ->rule(Password::default())
                             ->autocomplete('new-password')
@@ -89,7 +128,9 @@ class EditProfile extends Page implements HasForms
                             ->live(debounce: 500)
                             ->same('passwordConfirmation'),
                         Forms\Components\TextInput::make('passwordConfirmation')
+                            ->label(__('Confirm Password'))
                             ->password()
+                            ->revealable()
                             ->required()
                             ->dehydrated(false),
                     ]),
@@ -152,8 +193,30 @@ class EditProfile extends Page implements HasForms
 
     private function handleRecordUpdate(Model $record, array $data): Model
     {
-        $record->update($data);
-        return $record;
+        try {
+            DB::beginTransaction();
+
+            // $studentModel = $record->student;
+            // $employeeModel = $record->employee;
+
+            // if ($studentModel) {
+            //     $studentModel->name = $data['name'];
+            //     $studentModel->save();
+            // }
+
+            // if ($employeeModel) {
+            //     $employeeModel->name = $data['name'];
+            //     $studentModel->save();
+            // }
+
+            $record->update($data);
+
+            DB::commit();
+            return $record;
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return $record;
+        }
     }
 
     private function sendSuccessNotification(): void
