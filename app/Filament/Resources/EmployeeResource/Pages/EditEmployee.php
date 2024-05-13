@@ -2,12 +2,18 @@
 
 namespace App\Filament\Resources\EmployeeResource\Pages;
 
-use App\Filament\Resources\EmployeeResource;
+use Exception;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
+use App\Enums\StudentStatus;
+use App\Enums\StudentCategory;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use App\Enums\StudentCurrentSchool;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Notifications\Notification;
+use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\EmployeeResource;
 
 class EditEmployee extends EditRecord
 {
@@ -19,6 +25,73 @@ class EditEmployee extends EditRecord
             Actions\DeleteAction::make(),
             Actions\ForceDeleteAction::make(),
             Actions\RestoreAction::make(),
+            Actions\Action::make('convertToStudentAction')
+                ->label(__('Convert to Student'))
+                ->requiresConfirmation()
+                ->icon('icon-student-male')
+                ->color('warning')
+                ->visible(fn (Model $record) => $record->user->student === null)
+                ->action(function (Model $record) {
+
+                    $userModel = $record->user;
+
+                    try {
+                        DB::beginTransaction();
+
+                        $dataEmployeeModel = $record->toArray();
+
+                        // Umum menghilangkan data yang tidak ada di table students
+                        unset($dataEmployeeModel['id']);
+                        unset($dataEmployeeModel['user']);
+                        unset($dataEmployeeModel['created_at']);
+                        unset($dataEmployeeModel['updated_at']);
+                        unset($dataEmployeeModel['deleted_at']);
+
+                        // Spesifik menghilangkan data yang tidak ada di table students
+                        unset($dataEmployeeModel['niy']);
+                        unset($dataEmployeeModel['salary']);
+                        unset($dataEmployeeModel['start_employment_date']);
+
+                        // Menambahkan default nilai pada column di table students
+                        $dataEmployeeModel['status'] = StudentStatus::ACTIVE;
+                        $dataEmployeeModel['current_school'] = StudentCurrentSchool::MA;
+                        $dataEmployeeModel['category'] = StudentCategory::REGULER;
+
+                        $studentModel = $userModel->student()->create($dataEmployeeModel);
+
+                        $role = Role::where('name', 'santri')->first();
+                        $userModel->assignRole($role);
+
+                        DB::commit();
+
+                        redirect(route('filament.admin.resources.students.edit', $studentModel));
+
+                        Notification::make()
+                            ->title(__('Success'))
+                            ->body(__('Convertion data Employee to Student', [
+                                'name' => $userModel->name,
+                            ]))
+                            ->success()
+                            ->send();
+                    } catch (Exception $exception) {
+                        DB::rollBack();
+                        dd($exception);
+
+                        Notification::make()
+                            ->title(__('Failed'))
+                            ->body(__('Convertion data Employee to Student', [
+                                'name' => $userModel->name,
+                            ]))
+                            ->danger()
+                            ->send();
+                    }
+                }),
+            Actions\Action::make('goToStudentAction')
+                ->label(__('Student'))
+                ->icon('icon-student-male')
+                ->visible(fn (Model $record) => $record->user->student !== null)
+                ->url(fn (Model $record) => route('filament.admin.resources.students.edit', $record->user->student))
+                ->openUrlInNewTab(),
         ];
     }
 

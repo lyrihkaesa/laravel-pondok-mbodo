@@ -197,6 +197,11 @@
     "Back to Blog": "Kembali ke Blog",
     "Previous": "Sebelumnya",
     "Next": "Selanjutnya",
-    "Profile Student": "Profil Santri",
-    "Profile Employee": "Profil Pengurus"
+    "Profile": "Profile Saya",
+    "Profile Student": "Profil Santri Saya",
+    "Profile Employee": "Profil Pengurus Saya",
+    "Convert to Employee": "Jadikan Pengurus",
+    "Convertion data Student to Employee": "Membuat Santri :name menjadi Pengurus",
+    "Convert to Student": "Jadikan Santri",
+    "Convertion data Employee to Student": "Membuat Pengurus :name menjadi Santri"
 }
