@@ -19,13 +19,22 @@ use Filament\Forms\Concerns\InteractsWithForms;
 class EditProfile extends Page implements HasForms
 {
     use InteractsWithForms;
-    // protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static bool $shouldRegisterNavigation = false;
-
+    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
     protected static string $view = 'filament.pages.edit-profile';
+    protected static ?int $navigationSort = -99;
 
     public ?array $profileData = [];
     public ?array $passwordData = [];
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Profile');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Informai Pribadi');
+    }
 
     public function mount(): void
     {
