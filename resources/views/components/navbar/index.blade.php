@@ -93,7 +93,7 @@
         @if (!request()->is('ppdb'))
             @auth
                 <a class="hidden sm:block" href="{{ route('filament.admin.pages.dashboard') }}">
-                    <x-filament::avatar src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}" />
+                    <x-filament::avatar class="h-auto" src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}" />
                 </a>
             @else
                 <x-ppdb-button class="hidden" />
