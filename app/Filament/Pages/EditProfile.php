@@ -2,7 +2,6 @@
 
 namespace App\Filament\Pages;
 
-use Exception;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -25,7 +24,6 @@ class EditProfile extends Page implements HasForms
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
     protected static ?string $slug = 'my';
     protected static string $view = 'filament.pages.edit-profile';
-    protected static ?int $navigationSort = -99;
 
     public ?array $profileData = [];
     public ?array $passwordData = [];
@@ -38,6 +36,11 @@ class EditProfile extends Page implements HasForms
     public static function getNavigationLabel(): string
     {
         return __('Profile');
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return \App\Utilities\FilamentUtility::getNavigationSort(__('Profile'));
     }
 
     public static function getNavigationGroup(): ?string
@@ -144,7 +147,7 @@ class EditProfile extends Page implements HasForms
     {
         $user = Filament::auth()->user();
         if (!$user instanceof Model) {
-            throw new Exception('The authenticated user object must be an Eloquent model to allow the profile page to update it.');
+            throw new \Exception('The authenticated user object must be an Eloquent model to allow the profile page to update it.');
         }
         return $user;
     }
@@ -214,7 +217,7 @@ class EditProfile extends Page implements HasForms
 
             DB::commit();
             return $record;
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             DB::rollBack();
             return $record;
         }

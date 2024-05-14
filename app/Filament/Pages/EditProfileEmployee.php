@@ -2,8 +2,6 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Employee;
-use Exception;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -25,7 +23,6 @@ class EditProfileEmployee extends Page implements HasForms
     protected static ?string $navigationIcon = 'icon-school-director';
     protected static string $view = 'filament.pages.edit-profile-employee';
     protected static ?string $slug = 'my/pengurus';
-    protected static ?int $navigationSort = -97;
 
     // Custom property
     public ?array $profileData = [];
@@ -48,6 +45,12 @@ class EditProfileEmployee extends Page implements HasForms
     public static function getNavigationLabel(): string
     {
         return __('Profile Employee');
+    }
+
+
+    public static function getNavigationSort(): ?int
+    {
+        return \App\Utilities\FilamentUtility::getNavigationSort(__('Profile Employee'));
     }
 
     public static function getNavigationGroup(): ?string
@@ -455,14 +458,14 @@ class EditProfileEmployee extends Page implements HasForms
     {
         $user = Filament::auth()->user();
         if (!$user instanceof Model) {
-            throw new Exception('The authenticated user object must be an Eloquent model to allow the profile page to update it.');
+            throw new \Exception('The authenticated user object must be an Eloquent model to allow the profile page to update it.');
         }
         return $user;
     }
 
     protected function getEmployee(): Model
     {
-        return $this->getUser()->employee ?? new Employee();
+        return $this->getUser()->employee ?? abort(404);
     }
 
     protected function fillForms(): void
@@ -510,7 +513,7 @@ class EditProfileEmployee extends Page implements HasForms
                 ->send();
 
             return $record;
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             DB::rollBack();
 
             Notification::make()
