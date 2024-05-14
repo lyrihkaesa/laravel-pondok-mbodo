@@ -12,10 +12,16 @@ use Illuminate\Contracts\Auth\Authenticatable;
 class EditProfileStudent extends Page
 {
     protected static ?string $navigationIcon = 'icon-student-male';
+    protected static ?string $slug = 'my/santri';
     protected static string $view = 'filament.pages.edit-profile-student';
     protected static ?int $navigationSort = -98;
 
-    public static function shouldRegisterNavigation(): bool
+    // public static function shouldRegisterNavigation(): bool
+    // {
+    //     return auth()->user()->student !== null;
+    // }
+
+    public static function canAccess(): bool
     {
         return auth()->user()->student !== null;
     }

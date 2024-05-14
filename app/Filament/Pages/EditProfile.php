@@ -23,6 +23,7 @@ class EditProfile extends Page implements HasForms
 {
     use InteractsWithForms;
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
+    protected static ?string $slug = 'my';
     protected static string $view = 'filament.pages.edit-profile';
     protected static ?int $navigationSort = -99;
 

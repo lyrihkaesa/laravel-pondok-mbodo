@@ -46,12 +46,12 @@ class AdminPanelProvider extends PanelProvider
                 'profile student' => MenuItem::make()
                     ->label(__('Profile Student'))
                     ->icon('icon-student-male')
-                    ->visible(fn (): bool => auth()->user()->hasRole('santri'))
+                    ->visible(fn (): bool => auth()->user()->student !== null)
                     ->url(fn (): string => EditProfileStudent::getUrl()),
                 'profile employee' => MenuItem::make()
                     ->label(__('Profile Employee'))
                     ->icon('icon-school-director')
-                    ->visible(fn (): bool => auth()->user()->hasRole('pengurus'))
+                    ->visible(fn (): bool => auth()->user()->employee !== null)
                     ->url(fn (): string => EditProfileEmployee::getUrl()),
             ])
             ->colors([

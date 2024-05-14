@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Employee;
 use Exception;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -23,12 +24,18 @@ class EditProfileEmployee extends Page implements HasForms
     use InteractsWithForms;
     protected static ?string $navigationIcon = 'icon-school-director';
     protected static string $view = 'filament.pages.edit-profile-employee';
+    protected static ?string $slug = 'my/pengurus';
     protected static ?int $navigationSort = -97;
 
     // Custom property
     public ?array $profileData = [];
 
-    public static function shouldRegisterNavigation(): bool
+    // public static function shouldRegisterNavigation(): bool
+    // {
+    //     return auth()->user()->employee !== null;
+    // }
+
+    public static function canAccess(): bool
     {
         return auth()->user()->employee !== null;
     }
@@ -455,7 +462,7 @@ class EditProfileEmployee extends Page implements HasForms
 
     protected function getEmployee(): Model
     {
-        return $this->getUser()->employee;
+        return $this->getUser()->employee ?? new Employee();
     }
 
     protected function fillForms(): void
