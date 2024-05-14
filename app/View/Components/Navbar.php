@@ -14,11 +14,13 @@ class Navbar extends Component
      */
     public function __construct()
     {
-        $this->organizations = \App\Models\Organization::query()
-            ->select(['name', 'slug', 'category'])
-            ->whereIn('category', ['Sekolah Formal', 'Program Jurusan', 'Sekolah Madrasah', 'Badan Lembaga'])
-            ->get()
-            ->groupBy('category');
+        $this->organizations = cache()->remember('navbar_footer_organizations', 3600, function () {
+            return \App\Models\Organization::query()
+                ->select(['name', 'slug', 'category'])
+                ->whereIn('category', ['Sekolah Formal', 'Program Jurusan', 'Sekolah Madrasah', 'Badan Lembaga'])
+                ->get()
+                ->groupBy('category');
+        });
     }
 
     /**
