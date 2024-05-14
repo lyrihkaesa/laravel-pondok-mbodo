@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('profile_picture_4x6')->nullable();
             $table->string('niy')->unique()->nullable(); // Nomor Induk Siswa atau Nomor Induk Yayasan
             $table->enum('gender', ['Laki-Laki', 'Perempuan'])->nullable();
-            $table->enum('religion', ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Budha', 'Konghucu'])->default('Islam');
+            $table->string('religion')->default('Islam');
             $table->string('birth_place')->nullable();
             $table->date('birth_date')->nullable();
             $table->string('province')->nullable();
