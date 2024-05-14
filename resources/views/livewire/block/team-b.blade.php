@@ -17,7 +17,7 @@
 
     <!-- Grid -->
     <div class="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-12">
-        @foreach ($members as $member)
+        @foreach ($this->members as $member)
             <div class="text-center">
                 <img class="sm:size-48 lg:size-60 mx-auto rounded-xl"
                     src="{{ $member->profile_picture_1x1 ? asset('storage/' . $member->profile_picture_1x1) : asset('images\thumbnails\images-dark.webp') }}"

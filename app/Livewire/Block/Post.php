@@ -3,10 +3,10 @@
 namespace App\Livewire\Block;
 
 use Livewire\Component;
+use Livewire\Attributes\Computed;
 
 class Post extends Component
 {
-    public $posts = [];
     public $take;
     public $title;
     public $description;
@@ -18,9 +18,16 @@ class Post extends Component
         $this->title = $title;
         $this->description = $description;
         $this->bgColorClass = \App\Utilities\TailwindUtility::getBackgroundClass($iteration);
-        $this->posts = \App\Models\Post::isPublished()->inRandomOrder()
+    }
+
+    #[Computed()]
+    public function posts()
+    {
+        return \App\Models\Post::isPublished()->inRandomOrder()
             ->take($this->take)->get();
     }
+
+
     public function render()
     {
         return view('livewire.block.post');

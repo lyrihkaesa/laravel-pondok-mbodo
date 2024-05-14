@@ -14,7 +14,7 @@
             <div class="pb-8">
                 <div class="">
                     <div class="space-y-8 bg-cover bg-center lg:space-y-16"
-                        style="background-image: url({{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('images\thumbnails\images-dark.webp') }});">
+                        style="background-image: url({{ $this->post->thumbnail ? asset('storage/' . $this->post->thumbnail) : asset('images\thumbnails\images-dark.webp') }});">
                         <div class="px-4 pt-8 sm:px-6 lg:px-8">
                             <a class="inline-flex items-center gap-x-1.5 rounded-full bg-gray-950 py-2 pe-6 ps-4 text-sm text-blue-500 decoration-2 hover:underline"
                                 href="{{ route('posts.index') }}">
@@ -27,7 +27,7 @@
                             </a>
                         </div>
                         <div class="bg-gradient-to-b from-transparent via-black/80 to-black px-4 pb-6 sm:px-6 lg:px-8">
-                            <h2 class="py-12 pb-4 text-3xl font-bold text-white lg:text-5xl">{{ $post->title }}
+                            <h2 class="py-12 pb-4 text-3xl font-bold text-white lg:text-5xl">{{ $this->post->title }}
                             </h2>
                             <div class="flex items-center gap-x-5">
                                 <a class="inline-flex items-center gap-1.5 rounded-full bg-gray-300 px-3 py-1 text-xs text-gray-800 hover:bg-gray-500 sm:px-4 sm:py-2 sm:text-sm"
@@ -35,13 +35,13 @@
                                     Berita
                                 </a>
                                 <p class="text-xs text-neutral-200 sm:text-sm">
-                                    {{ $post->published_at->translatedFormat('l, d F Y H:i') }}</p>
+                                    {{ $this->post->published_at->translatedFormat('l, d F Y H:i') }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="space-y-5 px-4 pt-6 sm:px-6 lg:space-y-8 lg:px-8">
                         <section class="markdown post">
-                            {!! str($post->content)->markdown() !!}
+                            {!! str($this->post->content)->markdown() !!}
                         </section>
 
                         <div class="grid gap-y-5 lg:flex lg:items-center lg:justify-between lg:gap-y-0">
@@ -198,7 +198,7 @@
                         <div class="group block grow">
                             <h5
                                 class="text-sm font-semibold text-gray-800 group-hover:text-gray-600 dark:text-neutral-200 dark:group-hover:text-neutral-400">
-                                {{ $post->author->name }}
+                                {{ $this->post->author->name }}
                             </h5>
                             <p class="text-sm text-gray-500 dark:text-neutral-500">
                                 Penulis
@@ -215,7 +215,7 @@
                         <div class="group block grow">
                             <h5
                                 class="text-sm font-semibold text-gray-800 group-hover:text-gray-600 dark:text-neutral-200 dark:group-hover:text-neutral-400">
-                                {{ $post->editor->name }}
+                                {{ $this->post->editor->name }}
                             </h5>
                             <p class="text-sm text-gray-500 dark:text-neutral-500">
                                 Editor

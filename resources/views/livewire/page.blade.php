@@ -7,7 +7,7 @@
 @endpush
 
 <section>
-    @foreach ($publicPage->content as $block)
+    @foreach ($this->publicPage->content as $block)
         @if ($block['type'] === 'slider')
             <x-block.slider.index>
                 <x-block.slider.main>
