@@ -194,15 +194,9 @@
             <div class="grid grid-cols-2 gap-8 md:gap-12 lg:grid-cols-3">
                 @foreach ($organization->users as $user)
                     <div class="grid gap-x-4 gap-y-3 sm:flex sm:items-center">
-                        @if (!$user->hasRole('Santri'))
-                            <img class="size-20 rounded-lg"
-                                src="{{ isset($user->employee->profile_picture_1x1) ? asset('storage/' . $user->employee->profile_picture_1x1) : ($user->employee->gender === 'Perempuan' ? asset('images/profile-picture/female.jpg') : asset('images/profile-picture/male.jpg')) }}"
-                                alt="{{ $user->name }}">
-                        @else
-                            <img class="size-20 rounded-lg"
-                                src="{{ isset($user->student->profile_picture_1x1) ? asset('storage/' . $user->student->profile_picture_1x1) : ($user->student->gender === 'Perempuan' ? asset('images/profile-picture/female.jpg') : asset('images/profile-picture/male.jpg')) }}"
-                                alt="{{ $user->name }}">
-                        @endif
+                        <img class="size-20 rounded-lg"
+                            src="{{ $user->profile_picture_1x1 ? asset('storage/' . $user->profile_picture_1x1) : asset('images\thumbnails\images-dark.webp') }}"
+                            alt="{{ $user->name }}">
 
 
                         <div class="sm:flex sm:h-full sm:flex-col">
