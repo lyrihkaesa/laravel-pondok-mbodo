@@ -116,6 +116,8 @@ class StudentResource extends Resource
                         ])->columnSpan(1),
                     ])
                     ->columns(2),
+
+
                 Forms\Components\Section::make(__('Website and Social Media'))
                     ->id('website-and-social-media')
                     ->schema([
@@ -182,6 +184,8 @@ class StudentResource extends Resource
                     ->collapsible()
                     ->collapsed()
                     ->visible(fn (string $operation): bool => $operation === 'edit'),
+
+
                 Forms\Components\Section::make(__('Address Information'))
                     ->schema([
                         Forms\Components\Select::make('province')
@@ -331,6 +335,8 @@ class StudentResource extends Resource
                             ->default(StudentStatus::ACTIVE),
                     ])
                     ->columns(2),
+
+
                 Forms\Components\Section::make(__('Contact and Security Information'))
                     ->schema([
                         Forms\Components\TextInput::make('phone')
@@ -374,6 +380,8 @@ class StudentResource extends Resource
                                 }
                             }),
                     ])->columns(2),
+
+
                 Forms\Components\Section::make(__('Files'))
                     ->schema([
                         Forms\Components\TextInput::make('family_card_number')
@@ -486,6 +494,8 @@ class StudentResource extends Resource
                     ])
                     ->columns(2)
                     ->collapsible(),
+
+
                 Forms\Components\Section::make(__('Parent/Guardian Information'))
                     ->schema([
                         Forms\Components\Repeater::make('guardians')
