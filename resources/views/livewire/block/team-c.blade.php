@@ -8,7 +8,7 @@
             $user = auth()->user();
         @endphp
 
-        @foreach ($members as $member)
+        @foreach ($this->members as $member)
             @php
                 $phone =
                     $member->phone_visibility->value === 'public' ||

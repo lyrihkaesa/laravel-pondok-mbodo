@@ -29,8 +29,26 @@ class StudentResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Student::class;
     protected static ?string $navigationIcon = 'icon-students';
-    protected static ?string $navigationGroup = 'Manajemen Anggota';
-    protected static ?int $navigationSort = -3;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Manage Members');
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return \App\Utilities\FilamentUtility::getNavigationSort(__('Student'));
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Student');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Student');
+    }
 
     public static function form(Form $form): Form
     {
@@ -679,16 +697,6 @@ class StudentResource extends Resource implements HasShieldPermissions
             'view' => Pages\ViewStudent::route('/{record}'),
             'edit' => Pages\EditStudent::route('/{record}/edit'),
         ];
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return 'Santri';
-    }
-
-    public static function getModelLabel(): string
-    {
-        return 'Santri';
     }
 
     public static function getEloquentQuery(): Builder

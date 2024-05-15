@@ -18,8 +18,26 @@ class GuardianResource extends Resource
 {
     protected static ?string $model = Guardian::class;
     protected static ?string $navigationIcon = 'icon-working-parents';
-    protected static ?string $navigationGroup = 'Manajemen Anggota';
-    protected static ?int $navigationSort = -2;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Manage Members');
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return \App\Utilities\FilamentUtility::getNavigationSort(__('Guardian'));
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Guardian');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Guardian');
+    }
 
     public static function form(Form $form): Form
     {
@@ -121,15 +139,5 @@ class GuardianResource extends Resource
             // 'view' => Pages\ViewGuardian::route('/{record}'),
             'edit' => Pages\EditGuardian::route('/{record}/edit'),
         ];
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return 'Orang Tua/Wali';
-    }
-
-    public static function getModelLabel(): string
-    {
-        return 'Orang Tua/Wali';
     }
 }

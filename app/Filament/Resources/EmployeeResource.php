@@ -26,9 +26,26 @@ class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
     protected static ?string $navigationIcon = 'icon-business-group';
-    protected static ?string $navigationGroup = 'Manajemen Anggota';
-    protected static ?int $navigationSort = -1;
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Manage Members');
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return \App\Utilities\FilamentUtility::getNavigationSort(__('Employee'));
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Employee');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Employee');
+    }
 
     public static function form(Form $form): Form
     {
@@ -571,16 +588,6 @@ class EmployeeResource extends Resource
             'view' => Pages\ViewEmployee::route('/{record}'),
             'edit' => Pages\EditEmployee::route('/{record}/edit'),
         ];
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return 'Pengurus';
-    }
-
-    public static function getModelLabel(): string
-    {
-        return 'Pengurus';
     }
 
     public static function getEloquentQuery(): Builder

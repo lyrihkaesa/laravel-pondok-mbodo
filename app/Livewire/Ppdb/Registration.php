@@ -354,7 +354,7 @@ class Registration extends Component implements HasForms
                                     ->columnSpanFull(),
                             ])
                             ->columns(2),
-                        Forms\Components\Section::make(__('Guardian'))
+                        Forms\Components\Section::make(__('Guardian Optional'))
                             ->description(__('Guardian Description'))
                             ->schema([
                                 Forms\Components\Repeater::make('guardians')

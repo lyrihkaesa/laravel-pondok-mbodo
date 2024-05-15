@@ -104,7 +104,7 @@
     "Contact and Security Information Description": "Digunakan untuk konfirmasi pendafaran dan login sebagai santri.",
     "Parent Information": "Informasi Orang Tua",
     "Parent Information Description": "Informasi tentang data orang tua calon santri.",
-    "Guardian": "Wali Lainnya (Opsional)",
+    "Guardian": "Orang Tua/Wali",
     "Guardian Description": "Isi ini jika walinya bukan Orang Tua (Ayah dan Ibu).",
     "Terms and Conditions": "Pernyataan Persetujuan",
     "Terms and Conditions Description": "PBaca dan setujui semua syarat dan ketentuan.",
@@ -212,5 +212,7 @@
     "New Password": "Kata Sandi Baru",
     "Confirm Password": "Konfirmasi Kata Sandi",
     "Update Roles": "Perbarui Peran",
-    "Add your website and links to your social media accounts to provide additional information to visitors of your profile.": "Tambahkan situs web Anda dan tautan ke akun media sosial Anda untuk memberikan informasi tambahan kepada pengunjung profil Anda."
+    "Add your website and links to your social media accounts to provide additional information to visitors of your profile.": "Tambahkan situs web Anda dan tautan ke akun media sosial Anda untuk memberikan informasi tambahan kepada pengunjung profil Anda.",
+    "Manage Members": "Manajemen Anggota",
+    "Guardian Optional": "Wali Lainnya (Opsional)"
 }
