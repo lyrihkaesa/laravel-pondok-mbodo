@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use App\Models\FinancialTransaction;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -12,13 +11,15 @@ use Filament\Tables\Table;
 use App\Models\StudentProduct;
 use App\Services\WalletService;
 use Filament\Resources\Resource;
+use App\Models\FinancialTransaction;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\StudentProductResource\Pages;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use App\Filament\Resources\StudentProductResource\RelationManagers;
 
-class StudentProductResource extends Resource
+class StudentProductResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = StudentProduct::class;
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
@@ -84,7 +85,7 @@ class StudentProductResource extends Resource
                                     $component->state($record->validated_at ? true : false);
                                 }
                             })
-                            ->disabled(fn (string $operation): bool => $operation === 'edit')
+                            ->disabled(fn (string $operation): bool => $operation === 'edit' || !auth()->user()->can('validate_student::product'))
                             ->columnSpan([
                                 'default' => 1,
                             ]),
@@ -103,7 +104,7 @@ class StudentProductResource extends Resource
                                 return $state;
                             })
                             // ->visible(fn (string $operation): bool => $operation === 'edit')
-                            ->disabled(fn ($state): bool => $state === null)
+                            ->disabled(fn ($state): bool => $state === null || !auth()->user()->can('validate_student::product'))
                             ->columnSpan([
                                 'default' => 3,
                             ]),
@@ -216,7 +217,8 @@ class StudentProductResource extends Resource
                     })
                     ->default(function ($record) {
                         return $record->validated_at === null ? false : true;
-                    }),
+                    })
+                    ->visible(fn (): bool => auth()->user()->can('validate_student::product')),
                 Tables\Columns\TextColumn::make('validated_at')
                     ->label(__('Validated At'))
                     ->dateTime(format: 'd/m/Y H:i', timezone: 'Asia/Jakarta'),
@@ -288,5 +290,24 @@ class StudentProductResource extends Resource
     public static function getModelLabel(): string
     {
         return __('Student Financial');
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            // 'force_delete',
+            // 'force_delete_any',
+            // 'restore',
+            // 'restore_any',
+            // 'replicate',
+            // 'reorder',
+            'validate',
+        ];
     }
 }

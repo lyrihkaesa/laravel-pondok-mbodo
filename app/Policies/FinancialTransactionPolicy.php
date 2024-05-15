@@ -105,4 +105,9 @@ class FinancialTransactionPolicy
     {
         return $user->can('reorder_financial::transaction');
     }
+
+    public function export(User $user): bool
+    {
+        return $user->can('export_financial::transaction');
+    }
 }

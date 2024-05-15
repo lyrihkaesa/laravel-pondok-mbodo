@@ -13,8 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class UserResource extends Resource
+class UserResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = User::class;
     protected static ?string $navigationIcon = 'heroicon-o-users';
@@ -53,6 +54,8 @@ class UserResource extends Resource
                             ->revealable()
                             ->maxLength(255),
                     ]),
+
+
                 Forms\Components\Group::make()
                     ->schema([
                         Forms\Components\Actions::make([
@@ -60,12 +63,14 @@ class UserResource extends Resource
                                 ->label(__('Student'))
                                 ->url(fn (User $record): string => route('filament.admin.resources.students.edit', ['record' => $record->student]))
                                 ->openUrlInNewTab()
-                                ->visible(fn (User $record): bool => $record->student !== null),
+                                ->visible(fn (User $record): bool => $record->student !== null)
+                                ->disabled(fn () => !auth()->user()->can('edit_student')),
                             Forms\Components\Actions\Action::make('employee')
                                 ->label(__('Employee'))
                                 ->url(fn (User $record): string => route('filament.admin.resources.employees.edit', ['record' => $record->employee]))
                                 ->openUrlInNewTab()
-                                ->visible(fn (User $record): bool => $record->employee !== null),
+                                ->visible(fn (User $record): bool => $record->employee !== null)
+                                ->disabled(fn () => !auth()->user()->can('edit_employee')),
                         ]),
                         Forms\Components\FileUpload::make('profile_picture_1x1')
                             ->label(__('Profile Picture 1x1'))
@@ -114,6 +119,7 @@ class UserResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -137,6 +143,7 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
+            // 'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
@@ -147,5 +154,23 @@ class UserResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+            'restore',
+            'restore_any',
+            // 'replicate',
+            // 'reorder',
+        ];
     }
 }

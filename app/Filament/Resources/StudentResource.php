@@ -23,9 +23,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\StudentResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\StudentResource\RelationManagers;
-use App\Filament\Resources\StudentResource\Pages\EditStudent;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class StudentResource extends Resource
+class StudentResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Student::class;
     protected static ?string $navigationIcon = 'icon-students';
@@ -356,7 +356,7 @@ class StudentResource extends Resource
                             ->inline()
                             ->options(SocialMediaVisibility::class)
                             ->default(SocialMediaVisibility::PUBLIC)
-                            ->helperText(fn ($state) => str($state->getDescription())->markdown()->toHtmlString())
+                            ->helperText(fn ($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
                             ->required(),
                         Forms\Components\TextInput::make('email')
                             ->label(__('Email'))
@@ -646,6 +646,7 @@ class StudentResource extends Resource
                     ->options(StudentCurrentSchool::class),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),
@@ -657,7 +658,8 @@ class StudentResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('updated_at', 'desc');
     }
 
     public static function getRelations(): array
@@ -673,6 +675,7 @@ class StudentResource extends Resource
         return [
             'index' => Pages\ListStudents::route('/'),
             'create' => Pages\CreateStudent::route('/create'),
+            'view' => Pages\ViewStudent::route('/{record}'),
             'edit' => Pages\EditStudent::route('/{record}/edit'),
         ];
     }
@@ -693,5 +696,23 @@ class StudentResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            'force_delete',
+            'force_delete_any',
+            'restore',
+            'restore_any',
+            // 'replicate',
+            // 'reorder',
+        ];
     }
 }

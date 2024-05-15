@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -15,11 +16,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\FinancialTransactionResource\Pages;
 use App\Filament\Resources\FinancialTransactionResource\RelationManagers;
 
-class FinancialTransactionResource extends Resource
+class FinancialTransactionResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = FinancialTransaction::class;
     protected static ?string $navigationGroup = 'Manajemen Keuangan';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     public static function form(Form $form): Form
     {
@@ -203,5 +204,24 @@ class FinancialTransactionResource extends Resource
     public static function getModelLabel(): string
     {
         return __('Financial Transaction');
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+            // 'force_delete',
+            // 'force_delete_any',
+            // 'restore',
+            // 'restore_any',
+            // 'replicate',
+            // 'reorder',
+            'export',
+        ];
     }
 }

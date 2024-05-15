@@ -119,7 +119,8 @@ class ListStudentProducts extends ListRecords
                         ->title('Generate Berhasil')
                         ->body('Santri ' . $students->count() . ' telah dilengkapi dengan SPP ' . $product_names . ' ' . $suffix)
                         ->send();
-                }),
+                })
+                ->visible(fn (): bool => auth()->user()->can('create_student::product')),
         ];
     }
 }

@@ -63,18 +63,18 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    // 'resource_permission_prefixes_labels' => [
-    //     'view' => 'View',
-    //     'view_any' => 'View Any',
-    //     'create' => 'Create',
-    //     'update' => 'Update',
-    //     'delete' => 'Delete',
-    //     'delete_any' => 'Delete Any',
-    //     'force_delete' => 'Force Delete',
-    //     'force_delete_any' => 'Force Delete Any',
-    //     'restore' => 'Restore',
-    //     'replicate' => 'Replicate',
-    //     'reorder' => 'Reorder',
-    //     'restore_any' => 'Restore Any',
-    // ],
+    'resource_permission_prefixes_labels' => [
+        'view' => 'Lihat',
+        'view_any' => 'Lihat Lainnya',
+        'create' => 'Buat',
+        'update' => 'Edit',
+        'delete' => 'Hapus',
+        'delete_any' => 'Hapus Lainnya',
+        'force_delete' => 'Hapus Permanen',
+        'force_delete_any' => 'Hapus Permanen Lainnya',
+        'restore' => 'Pulihkan',
+        'replicate' => 'Duplikasi',
+        'reorder' => 'Urutkan Ulang',
+        'restore_any' => 'Pulihkan Lainnya',
+    ],
 ];

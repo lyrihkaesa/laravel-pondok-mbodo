@@ -159,7 +159,8 @@ class ProductsRelationManager extends RelationManager
                     })
                     ->default(function ($record) {
                         return $record->validated_at === null ? false : true;
-                    }),
+                    })
+                    ->visible(fn (): bool => auth()->user()->can('validate_student::product')),
                 Tables\Columns\TextColumn::make('validated_at')
                     ->label(__('Validated At'))
                     ->dateTime(format: 'd/m/Y H:i', timezone: 'Asia/Jakarta'),

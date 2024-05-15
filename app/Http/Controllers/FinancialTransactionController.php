@@ -14,6 +14,7 @@ class FinancialTransactionController extends Controller
 {
     public function generatePdfReport(Request $request)
     {
+        $this->authorize('export_financial::transaction');
         $defaultWalletId = 'YAYASAN';
         $transactionDebits = FinancialTransaction::query()
             ->select('name', DB::raw('MAX(transaction_at) as transaction_at'), DB::raw('SUM(amount) as total_amount'), DB::raw('COUNT(*) as count'))

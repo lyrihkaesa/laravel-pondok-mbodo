@@ -171,7 +171,8 @@ class ManageFinancialTransactions extends ManageRecords
                 ])
                 ->action(function (array $data) {
                     $this->replaceMountedAction('viewPdf', arguments: $data);
-                }),
+                })
+                ->visible(fn (): bool => auth()->user()->can('export_financial::transaction')),
         ];
     }
 
