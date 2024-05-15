@@ -344,7 +344,7 @@ class EmployeeResource extends Resource
                             ->inline()
                             ->options(SocialMediaVisibility::class)
                             ->default(SocialMediaVisibility::PUBLIC)
-                            ->helperText(fn ($state) => str($state->getDescription())->markdown()->toHtmlString())
+                            ->helperText(fn ($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
                             ->required(),
                         Forms\Components\TextInput::make('email')
                             ->label(__('Email'))
@@ -369,7 +369,9 @@ class EmployeeResource extends Resource
                             }),
                         Forms\Components\Select::make('roles')
                             ->label(__('Role'))
-                            ->options(Role::whereNotIn('name', ['super_admin'])->pluck('name', 'id'))
+                            ->options(Role::whereNotIn('name', ['super_admin'])->pluck('name', 'id')->map(function ($name) {
+                                return str($name)->replace('_', ' ')->title();
+                            }))
                             ->preload()
                             ->multiple()
                             ->searchable(),
@@ -513,6 +515,7 @@ class EmployeeResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('user.roles.name')
                     ->label(__('Role'))
+                    ->formatStateUsing(fn (string $state): string => str($state)->replace('_', ' ')->title())
                     ->badge()
                     ->color('warning')
                     ->toggleable(isToggledHiddenByDefault: false),
@@ -521,6 +524,7 @@ class EmployeeResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),
@@ -537,7 +541,8 @@ class EmployeeResource extends Resource
                 $query->whereDoesntHave('user.roles', function (Builder $query) {
                     $query->where('name', 'super_admin');
                 });
-            });
+            })
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array
@@ -552,6 +557,7 @@ class EmployeeResource extends Resource
         return [
             'index' => Pages\ListEmployees::route('/'),
             'create' => Pages\CreateEmployee::route('/create'),
+            'view' => Pages\ViewEmployee::route('/{record}'),
             'edit' => Pages\EditEmployee::route('/{record}/edit'),
         ];
     }
