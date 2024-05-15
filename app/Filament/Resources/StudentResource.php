@@ -179,11 +179,12 @@ class StudentResource extends Resource implements HasShieldPermissions
                                         ->body($result['message'])
                                         ->send();
                                 }
-                            }),
+                            })
+                            ->visible(fn (string $operation): bool => $operation === 'edit'),
                     ])
                     ->collapsible()
                     ->collapsed()
-                    ->visible(fn (string $operation): bool => $operation === 'edit'),
+                    ->visible(fn (string $operation): bool => $operation === 'edit' || $operation === 'view'),
 
 
                 Forms\Components\Section::make(__('Address Information'))

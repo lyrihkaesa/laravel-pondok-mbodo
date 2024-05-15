@@ -114,6 +114,8 @@ class EmployeeResource extends Resource
                         ])->columnSpan(1),
                     ])
                     ->columns(2),
+
+
                 Forms\Components\Section::make(__('Website and Social Media'))
                     ->id('website-and-social-media')
                     ->schema([
@@ -175,11 +177,14 @@ class EmployeeResource extends Resource
                                         ->body($result['message'])
                                         ->send();
                                 }
-                            }),
+                            })
+                            ->visible(fn (string $operation): bool => $operation === 'edit'),
                     ])
                     ->collapsible()
                     ->collapsed()
-                    ->visible(fn (string $operation): bool => $operation === 'edit'),
+                    ->visible(fn (string $operation): bool => $operation === 'edit' || $operation === 'view'),
+
+
                 Forms\Components\Section::make(__('Address Information'))
                     ->schema([
                         Forms\Components\Select::make('province')
@@ -292,6 +297,8 @@ class EmployeeResource extends Resource
                             ])->columnSpan(1),
 
                     ])->columns(2),
+
+
                 Forms\Components\Section::make(__('Academic Information'))
                     ->schema([
                         Forms\Components\TextInput::make('niy')
@@ -325,6 +332,8 @@ class EmployeeResource extends Resource
                             ->visible(fn (string $operation): bool => $operation === 'edit'),
                     ])
                     ->columns(2),
+
+
                 Forms\Components\Section::make(__('Contact and Security Information'))
                     ->schema([
                         Forms\Components\TextInput::make('phone')
@@ -376,6 +385,8 @@ class EmployeeResource extends Resource
                             ->multiple()
                             ->searchable(),
                     ])->columns(2),
+
+
                 Forms\Components\Section::make(__('Files'))
                     ->schema([
                         Forms\Components\TextInput::make('family_card_number')
