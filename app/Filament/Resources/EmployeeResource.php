@@ -124,7 +124,9 @@ class EmployeeResource extends Resource
                                         return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-1x1');
                                     }
                                 )
+                                ->avatar()
                                 ->image()
+                                ->imageEditor()
                                 ->downloadable()
                                 ->openable()
                                 ->directory('profile_pictures'),

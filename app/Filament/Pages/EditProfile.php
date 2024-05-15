@@ -74,7 +74,9 @@ class EditProfile extends Page implements HasForms
                         Forms\Components\FileUpload::make('profile_picture_1x1')
                             ->label(__('Profile Picture 1x1'))
                             ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                            ->avatar()
                             ->image()
+                            ->imageEditor()
                             ->downloadable()
                             ->openable()
                             ->directory('profile_pictures'),
