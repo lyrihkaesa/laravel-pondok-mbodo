@@ -150,9 +150,7 @@ class ManageFinancialTransactions extends ManageRecords
                                 ->default(now()->endOfMonth())
                                 ->required(),
                         ])
-                        ->columns([
-                            'default' => 2
-                        ]),
+                        ->columns(2),
                     Forms\Components\ToggleButtons::make('month')
                         ->label(__('Month'))
                         ->options(array_combine(range(1, 12), array_map(fn ($month) => Carbon::create(null, $month)->translatedFormat('F'), range(1, 12))))
