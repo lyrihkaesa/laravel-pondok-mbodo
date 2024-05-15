@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Filament\Panel;
+use App\Observers\UserObserver;
 use Laravel\Sanctum\HasApiTokens;
 use App\Enums\SocialMediaVisibility;
 use Spatie\Permission\Traits\HasRoles;
@@ -16,9 +17,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+#[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     use HasApiTokens;
