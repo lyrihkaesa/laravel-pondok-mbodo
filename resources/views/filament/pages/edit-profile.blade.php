@@ -6,6 +6,13 @@
             <x-filament::loading-indicator wire:loading wire:target="updateProfile" class="h-5 w-5" />
         </div>
     </x-filament-panels::form>
+    <x-filament-panels::form wire:submit="updateSocialMediaLink">
+        {{ $this->editSocialMediaLinkForm }}
+        {{-- <div class="flex items-center justify-end gap-x-1">
+            <x-filament-panels::form.actions :actions="$this->getUpdateSocialMediaLinkFormActions()" />
+            <x-filament::loading-indicator wire:loading wire:target="updateSocialMediaLink" class="h-5 w-5" />
+        </div> --}}
+    </x-filament-panels::form>
     <x-filament-panels::form wire:submit="updatePassword">
         {{ $this->editPasswordForm }}
         <div class="flex items-center justify-end gap-x-1">

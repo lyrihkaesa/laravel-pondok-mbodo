@@ -12,6 +12,7 @@ use App\Enums\SocialMediaVisibility;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\SocialMediaLinkService;
 use Filament\Notifications\Notification;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Contracts\Support\Htmlable;
@@ -26,6 +27,7 @@ class EditProfile extends Page implements HasForms
     protected static string $view = 'filament.pages.edit-profile';
 
     public ?array $profileData = [];
+    public ?array $socialMediaLinkData = [];
     public ?array $passwordData = [];
 
     public function getTitle(): string | Htmlable
@@ -57,6 +59,7 @@ class EditProfile extends Page implements HasForms
     {
         return [
             'editProfileForm',
+            'editSocialMediaLinkForm',
             'editPasswordForm',
         ];
     }
@@ -105,6 +108,82 @@ class EditProfile extends Page implements HasForms
             ])
             ->model($this->getUser())
             ->statePath('profileData');
+    }
+
+    public function editSocialMediaLinkForm(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\Section::make(__('Website and Social Media'))
+                    ->description(__('Add your website and links to your social media accounts to provide additional information to visitors of your profile.'))
+                    ->aside()
+                    ->schema([
+                        Forms\Components\Repeater::make('socialMediaLinks')
+                            ->label(false)
+                            ->schema([
+                                Forms\Components\Grid::make()
+                                    ->schema([
+                                        Forms\Components\Select::make('platform')
+                                            ->label(__('Platform'))
+                                            ->options(\App\Enums\SocialMediaPlatform::class)
+                                            ->live(onBlur: true)
+                                            ->required(),
+                                        Forms\Components\TextInput::make('username')
+                                            ->label(__('Username'))
+                                            ->placeholder(__('Username Placeholder'))
+                                            ->maxLength(255)
+                                            ->visible(fn (Forms\Get $get) => $get('platform') !== 'web')
+                                            ->columnSpan(2),
+                                        Forms\Components\TextInput::make('url')
+                                            ->label(__('URL'))
+                                            ->placeholder(__('URL Placeholder'))
+                                            ->url()
+                                            ->visible(fn (Forms\Get $get) => $get('platform') === 'web')
+                                            ->columnSpan(2),
+                                    ])
+                                    ->columns(3),
+                                Forms\Components\ToggleButtons::make('visibility')
+                                    ->label(__('Visibility'))
+                                    ->debounce(delay: 200)
+                                    ->inline()
+                                    ->options(SocialMediaVisibility::class)
+                                    ->default(SocialMediaVisibility::PUBLIC)
+                                    ->helperText(fn ($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
+                                    ->required(),
+                            ]),
+                        // ->deleteAction(fn ($action) => $action->requiresConfirmation()),
+                    ])
+                    ->footerActions([
+                        Forms\Components\Actions\Action::make('saveSocialMediaLinks')
+                            ->label(__('Save Social Media Links'))
+                            ->action(function (Forms\Get $get, $record, SocialMediaLinkService $socialMediaLinkService) {
+                                $socialMediaLinks = $get('socialMediaLinks');
+                                $userModel = $record;
+                                $result = $socialMediaLinkService->insertUpdateDeleteMany($socialMediaLinks, $userModel);
+
+                                if ($result['is_success']) {
+                                    Notification::make()
+                                        ->success()
+                                        ->title(__('Success'))
+                                        ->body($result['message'])
+                                        ->send();
+
+                                    redirect(self::getUrl());
+                                } else {
+                                    Notification::make()
+                                        ->danger()
+                                        ->title(__('Failed'))
+                                        ->body($result['message'])
+                                        ->send();
+                                }
+                            }),
+                    ])
+                    ->footerActionsAlignment(\Filament\Support\Enums\Alignment::End)
+                    ->collapsible()
+                    ->collapsed(),
+            ])
+            ->model($this->getUser())
+            ->statePath('socialMediaLinkData');
     }
 
     public function editPasswordForm(Form $form): Form
@@ -156,6 +235,8 @@ class EditProfile extends Page implements HasForms
     {
         $data = $this->getUser()->attributesToArray();
         $this->editProfileForm->fill($data);
+        $socialMediaLinkData['socialMediaLinks'] = $this->getUser()->socialMediaLinks->toArray();
+        $this->editSocialMediaLinkForm->fill($socialMediaLinkData);
         $this->editPasswordForm->fill();
     }
 

@@ -183,7 +183,7 @@
     "Username Placeholder": "pondokmbodo",
     "URL Placeholder": "https://pondokmbodo.com",
     "Visibility": "Pemirsa",
-    "Save Social Media Links": "Simpan Social Media",
+    "Save Social Media Links": "Simpan Web dan Media Social",
     "Success": "Berhasil",
     "Failed": "Gagal",
     "Title": "Judul",
@@ -211,5 +211,6 @@
     "Current Password": "Kata Sandi Sekarang",
     "New Password": "Kata Sandi Baru",
     "Confirm Password": "Konfirmasi Kata Sandi",
-    "Update Roles": "Perbarui Peran"
+    "Update Roles": "Perbarui Peran",
+    "Add your website and links to your social media accounts to provide additional information to visitors of your profile.": "Tambahkan situs web Anda dan tautan ke akun media sosial Anda untuk memberikan informasi tambahan kepada pengunjung profil Anda."
 }
