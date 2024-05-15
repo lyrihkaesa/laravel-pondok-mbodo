@@ -27,6 +27,7 @@ class CreateStudent extends CreateRecord
             'phone' => $data['phone'],
             'phone_visibility' => $data['phone_visibility'],
             'password' => Hash::make($password),
+            'profile_picture_1x1' => $data['user_profile_picture_1x1'],
         ]);
 
         // Assign 'Student' Role
@@ -39,6 +40,7 @@ class CreateStudent extends CreateRecord
         unset($data['phone']);
         unset($data['password']);
         unset($data['phone_visibility']);
+        unset($data['user_profile_picture_1x1']);
 
         $data['user_id'] = $user->id;
 

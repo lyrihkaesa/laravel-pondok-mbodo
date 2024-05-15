@@ -103,6 +103,7 @@ class EditStudent extends EditRecord
         $data['phone'] = $user->phone;
         $data['phone_visibility'] = $user->phone_visibility;
         $data['socialMediaLinks'] = $user->socialMediaLinks;
+        $data['user_profile_picture_1x1'] = $user->profile_picture_1x1;
 
         return $data;
     }
@@ -117,6 +118,7 @@ class EditStudent extends EditRecord
             'phone' => $data['phone'],
             'phone_visibility' => $data['phone_visibility'],
             'password' => $data['password'] ? Hash::make($data['password']) : $record->user->password,
+            'profile_picture_1x1' => $data['user_profile_picture_1x1'],
         ]);
 
         // Menghilangkan data yang tidak diperlukan
@@ -125,6 +127,7 @@ class EditStudent extends EditRecord
         unset($data['phone_visibility']);
         unset($data['password']);
         unset($data['socialMediaLinks']);
+        unset($data['user_profile_picture_1x1']);
 
         $record->update($data);
 

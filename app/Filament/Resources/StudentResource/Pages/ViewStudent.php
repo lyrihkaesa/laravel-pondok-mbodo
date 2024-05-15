@@ -33,6 +33,8 @@ class ViewStudent extends ViewRecord
         $data['phone'] = $user->phone;
         $data['phone_visibility'] = $user->phone_visibility;
         $data['socialMediaLinks'] = $user->socialMediaLinks;
+        $data['user_profile_picture_1x1'] = $user->profile_picture_1x1;
+
 
         return $data;
     }
