@@ -314,7 +314,7 @@ class EditProfileEmployee extends Page implements HasForms
                             ->preload()
                             ->multiple()
                             ->searchable()
-                            ->disabled(fn () => !$this->getUser()->can('update_role'))
+                            ->disabled(fn () => !$this->getUser()->can('update_employee'))
                             ->hintActions([
                                 Forms\Components\Actions\Action::make('assignRoleAction')
                                     ->label(__('Update Roles'))
@@ -322,7 +322,7 @@ class EditProfileEmployee extends Page implements HasForms
                                     ->icon('heroicon-o-shield-check')
                                     ->color('warning')
                                     ->requiresConfirmation()
-                                    ->disabled(fn () => !$this->getUser()->can('update_role'))
+                                    ->disabled(fn () => !$this->getUser()->can('update_employee'))
                                     ->action(function ($state) {
                                         $this->getUser()->syncRoles([Role::find($state)]);
                                         Notification::make()
