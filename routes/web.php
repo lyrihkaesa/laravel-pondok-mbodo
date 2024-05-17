@@ -2,7 +2,6 @@
 
 use App\Models\Organization;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FinancialTransactionController;
 
 Route::get('/', \App\Livewire\Page::class)->name('home');
