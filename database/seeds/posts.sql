@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               PostgreSQL 16.2, compiled by Visual C++ build 1937, 64-bit
+-- Host:                         90.90.90.90
+-- Server version:               PostgreSQL 15.3 (Debian 15.3-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
 -- Server OS:                    
 -- HeidiSQL Version:             12.1.0.6537
 -- --------------------------------------------------------
