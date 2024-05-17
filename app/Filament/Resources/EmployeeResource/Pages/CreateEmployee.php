@@ -25,6 +25,7 @@ class CreateEmployee extends CreateRecord
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => Hash::make($password),
+            'profile_picture_1x1' => $data['user_profile_picture_1x1'],
         ]);
 
 
@@ -40,6 +41,7 @@ class CreateEmployee extends CreateRecord
         unset($data['phone']);
         unset($data['password']);
         unset($data['roles']);
+        unset($data['user_profile_picture_1x1']);
 
         $data['user_id'] = $user->id;
 

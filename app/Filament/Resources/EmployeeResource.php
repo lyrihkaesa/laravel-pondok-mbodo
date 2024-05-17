@@ -130,6 +130,15 @@ class EmployeeResource extends Resource
                                 ->downloadable()
                                 ->openable()
                                 ->directory('profile_pictures'),
+                            Forms\Components\FileUpload::make('user_profile_picture_1x1')
+                                ->label(__('Avatar User'))
+                                ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                                ->avatar()
+                                ->image()
+                                ->imageEditor()
+                                ->downloadable()
+                                ->openable()
+                                ->directory('profile_pictures'),
                         ])->columnSpan(1),
                     ])
                     ->columns(2),
@@ -524,6 +533,14 @@ class EmployeeResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('user.profile_picture_1x1')
+                    ->label(__('Avatar User'))
+                    ->circular()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\ImageColumn::make('profile_picture_1x1')
+                    ->label(__('Profile Picture 1x1'))
+                    ->circular()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label(__('Full Name'))
                     ->searchable(),

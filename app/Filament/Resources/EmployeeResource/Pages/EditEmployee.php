@@ -105,6 +105,7 @@ class EditEmployee extends EditRecord
         $data['phone_visibility'] = $user->phone_visibility;
         $data['roles'] = $user->roles->pluck('id')->toArray();
         $data['socialMediaLinks'] = $user->socialMediaLinks;
+        $data['user_profile_picture_1x1'] = $user->profile_picture_1x1;
 
         return $data;
     }
@@ -117,6 +118,7 @@ class EditEmployee extends EditRecord
             'phone' => $data['phone'],
             'phone_visibility' => $data['phone_visibility'],
             'password' => $data['password'] ? Hash::make($data['password']) : $record->user->password,
+            'profile_picture_1x1' => $data['user_profile_picture_1x1'],
         ]);
 
         // Menghapus semua peran yang dimiliki oleh user
@@ -129,6 +131,7 @@ class EditEmployee extends EditRecord
         unset($data['password']);
         unset($data['roles']);
         unset($data['socialMediaLinks']);
+        unset($data['user_profile_picture_1x1']);
 
         $record->update($data);
 

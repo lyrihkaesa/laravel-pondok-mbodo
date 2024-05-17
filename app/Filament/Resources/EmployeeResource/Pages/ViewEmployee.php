@@ -34,6 +34,7 @@ class ViewEmployee extends ViewRecord
         $data['phone_visibility'] = $user->phone_visibility;
         $data['roles'] = $user->roles->pluck('id')->toArray();
         $data['socialMediaLinks'] = $user->socialMediaLinks;
+        $data['user_profile_picture_1x1'] = $user->profile_picture_1x1;
 
         return $data;
     }
