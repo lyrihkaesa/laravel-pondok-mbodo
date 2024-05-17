@@ -220,11 +220,8 @@ class Registration extends Component implements HasForms
                                     ])
                                     ->required(),
                             ])
-                            ->columnSpan(1)
-                            ->columns([
-                                'default' => 1,
-                                'sm' => 3,
-                            ]),
+                            ->columns(3)
+                            ->columnSpan(1),
 
                     ])->columns(2),
 

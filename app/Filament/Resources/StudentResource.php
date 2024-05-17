@@ -96,7 +96,8 @@ class StudentResource extends Resource implements HasShieldPermissions
                                                     $set('birth_date', $result->birthDate);
                                                 }
                                             }
-                                        }),
+                                        })
+                                        ->disabled(fn (string $operation): bool => $operation === 'view'),
                                 ]),
                             Forms\Components\ToggleButtons::make('gender')
                                 ->label(__('Gender'))
@@ -118,31 +119,32 @@ class StudentResource extends Resource implements HasShieldPermissions
                                     ->required(),
                             ])->columnSpan(1),
                         ])->columnSpan(1),
-                        Forms\Components\Grid::make(1)->schema([
-                            Forms\Components\FileUpload::make('profile_picture_1x1')
-                                ->label(__('Profile Picture 1x1'))
-                                ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: __('Image Helper Suffix')))
-                                ->getUploadedFileNameForStorageUsing(
-                                    function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                        return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-1x1');
-                                    }
-                                )
-                                ->avatar()
-                                ->image()
-                                ->imageEditor()
-                                ->downloadable()
-                                ->openable()
-                                ->directory('profile_pictures'),
-                            Forms\Components\FileUpload::make('user_profile_picture_1x1')
-                                ->label(__('Avatar User'))
-                                ->helperText(\App\Utilities\FileUtility::getImageHelperText())
-                                ->avatar()
-                                ->image()
-                                ->imageEditor()
-                                ->downloadable()
-                                ->openable()
-                                ->directory('profile_pictures'),
-                        ])
+                        Forms\Components\Grid::make()
+                            ->schema([
+                                Forms\Components\FileUpload::make('profile_picture_1x1')
+                                    ->label(__('Profile Picture 1x1'))
+                                    ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: __('Image Helper Suffix')))
+                                    ->getUploadedFileNameForStorageUsing(
+                                        function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
+                                            return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-1x1');
+                                        }
+                                    )
+                                    ->avatar()
+                                    ->image()
+                                    ->imageEditor()
+                                    ->downloadable()
+                                    ->openable()
+                                    ->directory('profile_pictures'),
+                                Forms\Components\FileUpload::make('user_profile_picture_1x1')
+                                    ->label(__('Avatar User'))
+                                    ->helperText(\App\Utilities\FileUtility::getImageHelperText())
+                                    ->avatar()
+                                    ->image()
+                                    ->imageEditor()
+                                    ->downloadable()
+                                    ->openable()
+                                    ->directory('profile_pictures'),
+                            ])
                             ->columns(2)
                             ->columnSpan(1),
                     ])
@@ -325,7 +327,8 @@ class StudentResource extends Resource implements HasShieldPermissions
                                                         $set('postal_code', $village->postal_code);
                                                     }
                                                 }
-                                            }),
+                                            })
+                                            ->disabled(fn (string $operation): bool => $operation === 'view'),
                                     ]),
                             ])->columnSpan(1),
 
