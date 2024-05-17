@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Storage;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements FilamentUser, HasAvatar
@@ -107,6 +106,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->profile_picture_1x1 ? \Illuminate\Support\Facades\Storage::disk('minio_public')->url($this->profile_picture_1x1) : null;
+        if ($this->profile_picture_1x1 === null) {
+            return null;
+        }
+
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+        $disk = \Illuminate\Support\Facades\Storage::disk('minio_public');
+        return $disk->url($this->profile_picture_1x1);
     }
 }
