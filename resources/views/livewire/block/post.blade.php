@@ -17,7 +17,7 @@
             <x-blog.card.index href="{{ route('posts.show', $post->slug) }}">
                 <x-blog.card.header>
                     <x-blog.card.image
-                        src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('images\thumbnails\images-dark.webp') }}"
+                        src="{{ $post->thumbnail ? Storage::disk('minio_public')->url($post->thumbnail) : asset('images\thumbnails\images-dark.webp') }}"
                         alt="{{ $post->title }}" />
                 </x-blog.card.header>
 

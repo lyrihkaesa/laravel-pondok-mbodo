@@ -14,7 +14,7 @@
             <div class="pb-8">
                 <div class="">
                     <div class="space-y-8 bg-cover bg-center lg:space-y-16"
-                        style="background-image: url({{ $this->post->thumbnail ? asset('storage/' . $this->post->thumbnail) : asset('images\thumbnails\images-dark.webp') }});">
+                        style="background-image: url({{ $this->post->thumbnail ? Storage::disk('minio_public')->url($this->post->thumbnail) : asset('images\thumbnails\images-dark.webp') }});">
                         <div class="px-4 pt-8 sm:px-6 lg:px-8">
                             <a class="inline-flex items-center gap-x-1.5 rounded-full bg-gray-950 py-2 pe-6 ps-4 text-sm text-blue-500 decoration-2 hover:underline"
                                 href="{{ route('posts.index') }}">
@@ -192,8 +192,8 @@
                     <a class="group flex flex-row items-center gap-x-3" href="#">
                         <div class="block flex-shrink-0">
                             <img class="size-10 rounded-full"
-                                src="https://images.unsplash.com/photo-1669837401587-f9a4cfe3126e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
-                                alt="Image Description">
+                                src="{{ $this->post->author->getFilamentAvatarUrl() ? $this->post->author->getFilamentAvatarUrl() : asset('images\thumbnails\images-dark.webp') }}"
+                                alt="{{ $this->post->author->name }}">
                         </div>
                         <div class="group block grow">
                             <h5
@@ -208,8 +208,8 @@
                     <a class="group flex flex-row items-center gap-x-3" href="###">
                         <div class="block flex-shrink-0">
                             <img class="size-10 rounded-full"
-                                src="https://images.unsplash.com/photo-1669837401587-f9a4cfe3126e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
-                                alt="Image Description">
+                                src="{{ $this->post->editor->getFilamentAvatarUrl() ? $this->post->editor->getFilamentAvatarUrl() : asset('images\thumbnails\images-dark.webp') }}"
+                                alt="{{ $this->post->editor->name }}">
                         </div>
 
                         <div class="group block grow">

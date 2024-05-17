@@ -12,7 +12,8 @@
             <x-block.slider.index>
                 <x-block.slider.main>
                     @foreach ($block['data']['slides'] as $slide)
-                        <x-block.slider.item src="{{ asset('storage/' . $slide['url']) }}" alt="{{ $slide['alt'] }}" />
+                        <x-block.slider.item src="{{ Storage::disk('minio_public')->url($slide['url']) }}"
+                            alt="{{ $slide['alt'] }}" />
                     @endforeach
                 </x-block.slider.main>
                 <x-block.slider.button-prev />
@@ -31,7 +32,7 @@
                 </x-block.team.header>
                 <x-block.team.grid>
                     @foreach ($block['data']['teams'] as $member)
-                        <x-block.team.item imageUrl="{{ asset('storage/' . $member['url']) }}"
+                        <x-block.team.item imageUrl="{{ Storage::disk('minio_public')->url($member['url']) }}"
                             imageAlt="{{ $member['alt'] }}"
                             role="{{ $member['role'] }}">{{ $member['name'] }}</x-block.team.item>
                     @endforeach
@@ -51,7 +52,8 @@
                                 {{ $block['data']['sub_title'] }}
                             @endisset
                             @isset($block['data']['url'])
-                                <img src="{{ asset('storage/' . $block['data']['url']) }}" alt="{{ $block['data']['alt'] }}">
+                                <img src="{{ Storage::disk('minio_public')->url($block['data']['url']) }}"
+                                    alt="{{ $block['data']['alt'] }}">
                             @endisset
                         </x-block.article.sub-title>
                     @endif
@@ -77,7 +79,8 @@
                     </x-block.hero.button-layout>
                 </x-block.hero.left>
                 <x-block.hero.right>
-                    <img class="w-full rounded-md" src="{{ asset('storage/' . $block['data']['image']) }}"
+                    <img class="w-full rounded-md"
+                        src="{{ Storage::disk('minio_public')->url($block['data']['image']) }}"
                         alt="{{ $block['data']['image_alt'] }}">
                 </x-block.hero.right>
             </x-block.hero.index>

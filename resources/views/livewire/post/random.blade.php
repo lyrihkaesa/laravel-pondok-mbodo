@@ -16,7 +16,7 @@
 
             <div class="size-20 relative flex-shrink-0 overflow-hidden rounded-lg">
                 <img class="size-full absolute start-0 top-0 rounded-lg object-cover"
-                    src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : asset('images\thumbnails\images-dark.webp') }}"
+                    src="{{ $post->thumbnail ? Storage::disk('minio_public')->url($post->thumbnail) : asset('images\thumbnails\images-dark.webp') }}"
                     alt="{{ $post->title }}">
             </div>
         </a>
