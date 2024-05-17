@@ -25,7 +25,7 @@ class UserObserver
 
             // Hapus file gambar lama dari sistem file
             if ($oldProfilePicture) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($oldProfilePicture);
+                \Illuminate\Support\Facades\Storage::disk('minio_public')->delete($oldProfilePicture);
             }
         }
     }

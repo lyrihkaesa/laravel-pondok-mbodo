@@ -39,7 +39,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
@@ -54,6 +54,33 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
+        ],
+
+        // Minio Default (Privat)
+        'minio' => [
+            'driver' => 's3',
+            'key' => env('MINIO_ACCESS_KEY_ID'),
+            'secret' => env('MINIO_SECRET_ACCESS_KEY'),
+            'region' => env('MINIO_DEFAULT_REGION'),
+            'bucket' => env('MINIO_BUCKET'),
+            'url' => env('MINIO_URL'),
+            'endpoint' => env('MINIO_ENDPOINT'),
+            'use_path_style_endpoint' => env('MINIO_USE_PATH_STYLE_ENDPOINT', false),
+            'use_ssl' => env('MINIO_USE_SSL', false),
+            'throw' => env('MINIO_THROW', env('APP_DEBUG', false)),
+        ],
+
+        'minio_public' => [
+            'driver' => 's3',
+            'key' => env('MINIO_PUBLIC_ACCESS_KEY_ID', env('MINIO_ACCESS_KEY_ID')),
+            'secret' => env('MINIO_PUBLIC_SECRET_ACCESS_KEY', env('MINIO_SECRET_ACCESS_KEY')),
+            'region' => env('MINIO_PUBLIC_DEFAULT_REGION', env('MINIO_DEFAULT_REGION')),
+            'bucket' => env('MINIO_PUBLIC_BUCKET'),
+            'url' => env('MINIO_PUBLIC_URL', env('MINIO_URL')),
+            'endpoint' => env('MINIO_PUBLIC_ENDPOINT', env('MINIO_ENDPOINT')),
+            'use_path_style_endpoint' => env('MINIO_PUBLIC_USE_PATH_STYLE_ENDPOINT', env('MINIO_USE_PATH_STYLE_ENDPOINT', false)),
+            'use_ssl' => env('MINIO_PUBLIC_USE_SSL', env('MINIO_USE_SSL', false)),
+            'throw' => env('MINIO_PUBLIC_THROW', env('MINIO_THROW', env('APP_DEBUG', false))),
         ],
 
     ],
