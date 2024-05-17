@@ -214,6 +214,12 @@
     "Update Roles": "Perbarui Peran",
     "Add your website and links to your social media accounts to provide additional information to visitors of your profile.": "Tambahkan situs web Anda dan tautan ke akun media sosial Anda untuk memberikan informasi tambahan kepada pengunjung profil Anda.",
     "Manage Members": "Manajemen Anggota",
-    "Guardian Optional": "Wali Lainnya (Opsional)",
-    "Avatar User": "Profile Umum"
+    "Guardian Optional": "[Opsional] Wali Lainnya",
+    "Avatar User": "Profile Umum",
+    "Kip Opsional": "[Opsional] KIP (Kartu Indonesia Pintar)",
+    "Kip Helper Text": "Kosongkan jika tidak memiliki KIP.",
+    "Nisn Opsional": "NISN (Nomor Induk Siswa Nasional)",
+    "Nisn Helper Text": "Kosongkan jika tidak memiliki NISN. Misalnya pada PAUD/TK.",
+    "Current Name School Opsional": "Asal Sekolah",
+    "Current Name School Helper Text": "Kosongkan jika tidak ada baru sekolah. Misalnya pada PAUD/TK."
 }

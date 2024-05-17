@@ -83,19 +83,21 @@ class Registration extends Component implements HasForms
                             ->required()
                             ->default(Gender::MALE)
                             ->inline(),
-                        Forms\Components\Grid::make([
-                            'default' => 1,
-                            'sm' => 2,
-                        ])->schema([
-                            Forms\Components\TextInput::make('birth_place')
-                                ->label(__('Birth Place'))
-                                ->placeholder(__('Birth Place Placeholder'))
-                                ->required(),
-                            Forms\Components\DatePicker::make('birth_date')
-                                ->label(__('Birth Date'))
-                                ->default(now())
-                                ->required(),
-                        ])->columnSpan(1),
+                        Forms\Components\Grid::make()
+                            ->schema([
+                                Forms\Components\TextInput::make('birth_place')
+                                    ->label(__('Birth Place'))
+                                    ->placeholder(__('Birth Place Placeholder'))
+                                    ->required(),
+                                Forms\Components\DatePicker::make('birth_date')
+                                    ->label(__('Birth Date'))
+                                    ->required(),
+                            ])
+                            ->columnSpan(1)
+                            ->columns([
+                                'default' => 1,
+                                'sm' => 2,
+                            ]),
                     ])
                     ->columns(2),
 
@@ -116,7 +118,8 @@ class Registration extends Component implements HasForms
                                 }
                                 return $state;
                             })
-                            ->searchable(),
+                            ->searchable()
+                            ->required(),
                         Forms\Components\Select::make('regency')
                             ->label(__('Regency'))
                             ->disabled(fn (Forms\Get $get): bool => $get('province') == null)
@@ -138,7 +141,8 @@ class Registration extends Component implements HasForms
                                 }
                                 return $state;
                             })
-                            ->searchable(fn (Forms\Get $get): bool => $get('province') != null),
+                            ->searchable(fn (Forms\Get $get): bool => $get('province') != null)
+                            ->required(),
                         Forms\Components\Select::make('district')
                             ->label(__('District'))
                             ->disabled(fn (Forms\Get $get): bool => $get('regency') == null)
@@ -158,7 +162,8 @@ class Registration extends Component implements HasForms
                                 }
                                 return $state;
                             })
-                            ->searchable(fn (Forms\Get $get): bool => $get('regency') != null),
+                            ->searchable(fn (Forms\Get $get): bool => $get('regency') != null)
+                            ->required(),
                         Forms\Components\Select::make('village')
                             ->label(__('Village'))
                             ->disabled(fn (Forms\Get $get): bool => $get('district') == null)
@@ -172,24 +177,24 @@ class Registration extends Component implements HasForms
                                 }
                                 return $villages;
                             })
-                            ->searchable(fn (Forms\Get $get): bool => $get('district') != null),
+                            ->searchable(fn (Forms\Get $get): bool => $get('district') != null)
+                            ->required(),
                         Forms\Components\Textarea::make('address')
                             ->label(__('Full Address'))
                             ->autosize()
                             ->placeholder(__('Full Address Placeholder')),
-                        Forms\Components\Grid::make([
-                            'default' => 1,
-                            'sm' => 3,
-                        ])
+                        Forms\Components\Grid::make()
                             ->schema([
                                 Forms\Components\TextInput::make('rt')
                                     ->label(__('RT'))
                                     ->placeholder(__('RT Placeholder'))
-                                    ->length(3),
+                                    ->length(3)
+                                    ->required(),
                                 Forms\Components\TextInput::make('rw')
                                     ->label(__('RW'))
                                     ->placeholder(__('RW Placeholder'))
-                                    ->length(3),
+                                    ->length(3)
+                                    ->required(),
                                 Forms\Components\TextInput::make('postal_code')
                                     ->label(__('Postal Code'))
                                     ->placeholder(__('Postal Code Placeholder'))
@@ -212,8 +217,14 @@ class Registration extends Component implements HasForms
                                                     }
                                                 }
                                             }),
-                                    ]),
-                            ])->columnSpan(1),
+                                    ])
+                                    ->required(),
+                            ])
+                            ->columnSpan(1)
+                            ->columns([
+                                'default' => 1,
+                                'sm' => 3,
+                            ]),
 
                     ])->columns(2),
 
@@ -224,18 +235,21 @@ class Registration extends Component implements HasForms
                         Forms\Components\Group::make()
                             ->schema([
                                 Forms\Components\TextInput::make('nisn')
-                                    ->label(__('Nisn'))
+                                    ->label(__('Nisn Opsional'))
                                     ->placeholder(__('Nisn Placeholder'))
+                                    ->helperText(__('Nisn Helper Text'))
                                     ->unique(ignoreRecord: true),
                                 Forms\Components\TextInput::make('kip')
-                                    ->label(__('Kip'))
+                                    ->label(__('Kip Opsional'))
                                     ->placeholder(__('Kip Placeholder'))
+                                    ->helperText(__('Kip Helper Text'))
                                     ->unique(ignoreRecord: true),
                             ])
                             ->columns(2),
                         Forms\Components\TextInput::make('current_name_school')
-                            ->label(__('Current Name School'))
-                            ->placeholder(__('Current Name School Placeholder')),
+                            ->label(__('Current Name School Opsional'))
+                            ->placeholder(__('Current Name School Placeholder'))
+                            ->helperText(__('Current Name School Helper Text')),
                         Forms\Components\ToggleButtons::make('category')
                             ->label(__('Category'))
                             ->inline()
