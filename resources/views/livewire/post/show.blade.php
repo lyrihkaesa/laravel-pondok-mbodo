@@ -2,9 +2,9 @@
     <x-ppdb.header />
 </x-slot>
 
-<x-slot name="css">
+@push('styles')
     @vite('resources/css/markdown.css')
-</x-slot>
+@endpush
 
 <!-- Blog Article -->
 <div class="mx-auto max-w-[85rem]">
