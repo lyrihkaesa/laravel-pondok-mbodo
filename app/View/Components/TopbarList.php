@@ -18,7 +18,7 @@ class TopbarList extends Component
         $this->items = $items ?? [
             [
                 'type' => 'link',
-                'href' => '#',
+                'href' => route('guardian.login'),
                 'slot' => 'Orang Tua',
             ],
             [
@@ -32,17 +32,17 @@ class TopbarList extends Component
             ],
             [
                 'type' => 'icon',
-                'href' => '#',
+                'href' => 'https://www.facebook.com/profile.php?id=100010159720610',
                 'slot' => 'icon-facebook',
             ],
             [
                 'type' => 'icon',
-                'href' => '#',
+                'href' => 'https://www.instagram.com/pondokmbodo/',
                 'slot' => 'icon-instagram',
             ],
             [
                 'type' => 'icon',
-                'href' => '#',
+                'href' => 'https://www.youtube.com/@pondokmbodochannel1385',
                 'slot' => 'icon-youtube',
             ],
         ];

@@ -221,5 +221,10 @@
     "Nisn Opsional": "NISN (Nomor Induk Siswa Nasional)",
     "Nisn Helper Text": "Kosongkan jika tidak memiliki NISN. Misalnya pada PAUD/TK.",
     "Current Name School Opsional": "Asal Sekolah",
-    "Current Name School Helper Text": "Kosongkan jika tidak ada baru sekolah. Misalnya pada PAUD/TK."
+    "Current Name School Helper Text": "Kosongkan jika tidak ada baru sekolah. Misalnya pada PAUD/TK.",
+    "View Profile Student": "Lihat Profil Santri",
+    "View Profile Student...": "Lihat Profil Santri...",
+    "Guardian Phone": "Nomor Telepon (Whatsapp) Orang Tua",
+    "Nip Childern": "NIP (Nomor Induk Pesantren) Anak",
+    "Students not found, make sure the NIP data and parents telephone numbers are correct!": "Santri tidak ditemukan, pastikan data NIP dan Nomor Telepon Orang Tua benar!"
 }

@@ -19,7 +19,7 @@ class Product extends Model
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(Student::class, 'student_product')
-            ->using(StudentProduct::class)->withPivot('id');
+            ->using(StudentProduct::class)->withPivot(['id', 'product_name', 'product_price', 'validated_at', 'validated_by'])->withTimestamps();
     }
 
     public function packages(): BelongsToMany

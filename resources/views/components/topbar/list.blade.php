@@ -4,7 +4,7 @@
         @if ($item['type'] === 'link')
             <x-topbar.link href="{{ $item['href'] }}">{{ $item['slot'] }}</x-topbar.link>
         @elseif ($item['type'] === 'icon')
-            <x-topbar.link-icon href="{{ $item['href'] }}">@svg($item['slot'])</x-topbar.link-icon>
+            <x-topbar.link-icon target="_blank" href="{{ $item['href'] }}">@svg($item['slot'])</x-topbar.link-icon>
         @elseif ($item['type'] === 'h-divinder')
             <x-topbar.h-divinder />
         @endif

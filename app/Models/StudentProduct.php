@@ -31,6 +31,10 @@ class StudentProduct extends Pivot
     //     );
     // }
 
+    protected $with = [
+        'validator',
+    ];
+
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');

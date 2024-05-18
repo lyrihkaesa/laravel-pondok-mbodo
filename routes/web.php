@@ -18,6 +18,9 @@ Route::get('/lembaga/{slug}', \App\Livewire\Organization\Show::class)->name('org
 Route::get('/blog', \App\Livewire\Post\Index::class)->name('posts.index');
 Route::get('/blog/{slug}', \App\Livewire\Post\Show::class)->name('posts.show');
 
+Route::get('/orang-tua', \App\Livewire\Guardian\Login::class)->name('guardian.login');
+Route::get('/orang-tua/santri/{token}', \App\Livewire\Guardian\ViewProfileStudent::class)->name('guardian.view-profile-student');
+
 Route::middleware('auth')->group(function () {
     Route::get('/admin/financial-transactions/pdf', [FinancialTransactionController::class, 'generatePdfReport'])->name('admin.financial-transactions.pdf');
 });
