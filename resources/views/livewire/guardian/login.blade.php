@@ -1,5 +1,5 @@
 <x-slot name="header">
-    <x-header :isScrolled="!(request()->is('ppdb*') || request()->is('blog/*'))" />
+    <x-header :isScrolled="!(request()->is('ppdb*') || request()->is('blog/*') || request()->is('orang-tua*'))" />
 </x-slot>
 
 @push('styles')
