@@ -3,12 +3,12 @@
 </x-slot>
 
 @push('styles')
-    @filamentStyles()
+    @filamentStyles
     @vite('resources/css/filament/admin/theme.css')
 @endpush
 
 @push('scripts')
-    @filamentScripts()
+    @filamentScripts
 @endpush
 
 <div class="mx-auto max-w-[85rem] px-4 py-2 sm:px-6 lg:px-8 lg:py-4">
