@@ -53,7 +53,7 @@ class AcademicYearResource extends Resource
                             return;
                         }
 
-                        $set('slug', str()->slug($state));
+                        $set('slug', str_replace('/', '-', $state));
                     })
                     ->columnSpan(2),
                 Forms\Components\TextInput::make('slug')
