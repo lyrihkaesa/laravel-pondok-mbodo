@@ -165,6 +165,7 @@ class ClassroomResource extends Resource
                     ->relationship('organisation', 'name'),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -187,6 +188,7 @@ class ClassroomResource extends Resource
         return [
             'index' => Pages\ListClassrooms::route('/'),
             'create' => Pages\CreateClassroom::route('/create'),
+            'view' => Pages\ViewClassroom::route('/{record}'),
             'edit' => Pages\EditClassroom::route('/{record}/edit'),
         ];
     }
