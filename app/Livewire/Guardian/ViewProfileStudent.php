@@ -60,13 +60,17 @@ class ViewProfileStudent extends Component implements HasInfolists, HasForms
                             ->schema([
                                 Infolists\Components\TextEntry::make('name')
                                     ->label(__('Full Name')),
+                                Infolists\Components\TextEntry::make('status')
+                                    ->label(__('Status'))
+                                    ->badge(),
                                 Infolists\Components\TextEntry::make('nip')
                                     ->label(__('Nip'))
                                     ->badge()
                                     ->color('pink')
                                     ->copyable(),
+
                             ])
-                            ->columns(1)
+                            ->columns(2)
                             ->columnSpan(1),
                     ])
                     ->columns(2),

@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('enrollments', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBiginteger('classroom_id')->unsigned();
             $table->unsignedBiginteger('student_id')->unsigned();
             $table->foreign('classroom_id')->on('classrooms')->references('id')->onDelete('cascade');
             $table->foreign('student_id')->on('students')->references('id')->onDelete('cascade');
-            $table->primary(['classroom_id', 'student_id']);
+            $table->unique(['classroom_id', 'student_id']);
             $table->timestamps();
         });
     }

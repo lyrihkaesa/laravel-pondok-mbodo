@@ -34,12 +34,15 @@ class Classroom extends Model
 
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(Student::class, 'enrollments', 'classroom_id', 'student_id')->withTimestamps();
+        return $this->belongsToMany(Student::class, 'enrollments', 'classroom_id', 'student_id')
+            ->using(Enrollment::class)
+            ->withTimestamps();
     }
 
     public function homeroomTeacher(): BelongsTo
     {
-        return $this->belongsTo(Employee::class, 'homeroom_teacher_id', 'id');
+        return $this->belongsTo(Employee::class, 'homeroom_teacher_id', 'id')
+            ->without('user');
     }
 
     protected function fullName(): Attribute

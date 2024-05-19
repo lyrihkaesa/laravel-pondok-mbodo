@@ -43,7 +43,9 @@ class Student extends Model
 
     public function classrooms(): BelongsToMany
     {
-        return $this->belongsToMany(Classroom::class, 'enrollments', 'student_id', 'classroom_id')->withTimestamps();
+        return $this->belongsToMany(Classroom::class, 'enrollments', 'student_id', 'classroom_id')
+            ->using(Enrollment::class)
+            ->withTimestamps();
     }
 
     public function lastEnrolledClassroom(): BelongsToMany
@@ -57,7 +59,9 @@ class Student extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'student_product')
-            ->using(StudentProduct::class)->withPivot(['id', 'product_name', 'product_price', 'validated_at', 'validated_by'])->withTimestamps();
+            ->using(StudentProduct::class)
+            ->withPivot(['id', 'product_name', 'product_price', 'validated_at', 'validated_by'])
+            ->withTimestamps();
     }
 
     public function guardians(): BelongsToMany
