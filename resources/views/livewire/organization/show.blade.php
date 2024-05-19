@@ -1,10 +1,6 @@
-<x-slot name="header">
-    <x-header />
-</x-slot>
-
-<x-slot name="css">
+@push('styles')
     @vite('resources/css/markdown.css')
-</x-slot>
+@endpush
 
 <div class="mx-auto max-w-[85rem]">
     <!-- Hero -->

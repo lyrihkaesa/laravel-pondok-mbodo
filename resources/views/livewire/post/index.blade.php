@@ -1,7 +1,3 @@
-<x-slot name="header">
-    <x-ppdb.header />
-</x-slot>
-
 <div class="min-h-[55vh]">
     <div class="mx-auto max-w-7xl">
         <div class="mt-12 flex flex-col px-5 2xl:px-0">

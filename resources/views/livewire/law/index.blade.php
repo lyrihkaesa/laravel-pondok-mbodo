@@ -1,7 +1,3 @@
-<x-slot name="header">
-    <x-header />
-</x-slot>
-
 <div class="mx-auto max-w-[85rem]">
 
     <div class="mx-auto flex items-center justify-center pb-5 pt-10">

@@ -32,6 +32,8 @@
         <!-- Page Heading -->
         @isset($header)
             {{ $header }}
+        @else
+            <x-header :isScrolled="!(request()->is('ppdb*') || request()->is('blog/*') || request()->is('orang-tua*'))" />
         @endisset
 
         <!-- Page Content -->

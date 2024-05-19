@@ -1,7 +1,3 @@
-<x-slot name="header">
-    <x-ppdb.header />
-</x-slot>
-
 @push('styles')
     @filamentStyles
     @vite('resources/css/filament/admin/theme.css')

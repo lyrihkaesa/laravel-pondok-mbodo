@@ -1,7 +1,3 @@
-<x-slot name="header">
-    <x-ppdb.header />
-</x-slot>
-
 @push('styles')
     @vite('resources/css/markdown.css')
 @endpush

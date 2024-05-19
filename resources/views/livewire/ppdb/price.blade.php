@@ -1,7 +1,3 @@
-<x-slot name="header">
-    <x-ppdb.header />
-</x-slot>
-
 <div class="mx-auto max-w-[85rem]">
     <div class="px-4 py-4 sm:px-6 lg:px-8 lg:py-6">
         <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Biaya Pendidikan</h3>
