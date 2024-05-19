@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Validation\Rules\Unique;
+use Filament\Notifications;
+use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
 
 class Registration extends Component implements HasForms
@@ -604,6 +606,27 @@ class Registration extends Component implements HasForms
             // Commit transaction jika tidak ada error
             DB::commit();
 
+            Notification::make()
+                ->title($studentModel->name . ' Telah Mendaftar!')
+                ->success()
+                ->actions([
+                    Notifications\Actions\Action::make('viewStudent')
+                        ->label(__('View Student'))
+                        ->color('pink')
+                        ->url(route('filament.admin.resources.students.view', $studentModel))
+                        ->openUrlInNewTab(),
+                    Notifications\Actions\Action::make('chatWhatsapp')
+                        ->label(__('Chat Whatsapp'))
+                        ->color('success')
+                        ->url('https://wa.me/' . $userModel->phone)
+                        ->openUrlInNewTab(),
+                ])
+                ->sendToDatabase(User::withOut(['roles'])
+                    ->whereHas('roles.permissions', function ($query) {
+                        $query->where('name', 'update_student');
+                    })
+                    ->get());
+
             $this->isSuccessful = true;
             $this->dispatch('open-modal', id: 'final-create-student');
         } catch (\Exception $e) {
@@ -611,6 +634,22 @@ class Registration extends Component implements HasForms
             DB::rollBack();
             // Log error
             Log::error('Error creating student: ' . $e->getMessage());
+            Notification::make()
+                ->title($state['name'] . ' Gagal Mendaftar!')
+                ->body($e->getMessage())
+                ->danger()
+                ->actions([
+                    Notifications\Actions\Action::make('markAsRead')
+                        ->label(__('Mark as read'))
+                        ->markAsRead(),
+                    Notifications\Actions\Action::make('markAsUnread')
+                        ->label(__('Mark as unread'))
+                        ->color('warning')
+                        ->markAsUnread(),
+                ])
+                ->sendToDatabase(User::withOut('roles')->whereHas('roles', function ($query) {
+                    $query->where('name', 'super_admin');
+                })->get());
             // Atau lakukan penanganan error sesuai kebutuhan
             $this->isSuccessful = false;
             $this->dispatch('open-modal', id: 'final-create-student');
