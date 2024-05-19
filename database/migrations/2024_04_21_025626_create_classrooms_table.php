@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('combined_name')->unique();
-            $table->unsignedBigInteger('organization_id')->nullable()->after('combined_name');
+            $table->unsignedBigInteger('organization_id')->nullable();
             $table->unsignedBigInteger('academic_year_id')->nullable();
             $table->unsignedBigInteger('homeroom_teacher_id')->nullable();
+            $table->timestamp('end_date')->nullable();
             $table->timestamps();
 
             $table->foreign('organization_id')->references('id')->on('organizations')->nullOnDelete();

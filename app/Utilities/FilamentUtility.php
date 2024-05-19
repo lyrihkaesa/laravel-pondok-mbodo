@@ -18,6 +18,8 @@ class FilamentUtility
             -89 => __('Student'),
             -88 => __('Employee'),
             -87 => __('Guardian'),
+            -86 => __('Classroom'),
+            -85 => __('Academic Year'),
         ];
 
         $key = array_search($label, $navigationSort);

@@ -12,8 +12,6 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Student::factory(50)->create([
-            'status' => 'Aktif',
-        ]);
+        // \App\Models\Student::factory(50)->create();
     }
 }

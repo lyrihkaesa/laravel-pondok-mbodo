@@ -226,5 +226,11 @@
     "View Profile Student...": "Lihat Profil Santri...",
     "Guardian Phone": "Nomor Telepon (Whatsapp) Orang Tua",
     "Nip Childern": "NIP (Nomor Induk Pesantren) Anak",
-    "Students not found, make sure the NIP data and parents telephone numbers are correct!": "Santri tidak ditemukan, pastikan data NIP dan Nomor Telepon Orang Tua benar!"
+    "Students not found, make sure the NIP data and parents telephone numbers are correct!": "Santri tidak ditemukan, pastikan data NIP dan Nomor Telepon Orang Tua benar!",
+    "Manage Academic": "Manajemen Akademik",
+    "Academic Year": "Tahun Ajaran",
+    "Classroom Information": "Informasi Kelas",
+    "classroom Status": "Status Kelas",
+    "Is Active": "Aktif",
+    "End Date": "Tanggal Berakhir"
 }

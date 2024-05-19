@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Gender;
+use App\Models\Student;
+use App\Enums\StudentStatus;
 use App\Models\AcademicYear;
 use App\Models\Organization;
 use Illuminate\Database\Seeder;
@@ -14,7 +17,8 @@ class OrganizationSeeder extends Seeder
      */
     public function run(): void
     {
-        $academicYear = AcademicYear::where('name', '2023/2024')->first();
+        $academicYear = AcademicYear::where('name', '2024/2025')->first();
+
         $categories = [
             'Yayasan' => [
                 "Yayasan Pondok Pesantren Ki Ageng Mbodo" => [
@@ -84,7 +88,7 @@ class OrganizationSeeder extends Seeder
                 ],
             ],
             'Sekolah Formal' => [
-                'Paud/TK' => [
+                'Paud/TK Al-Hawi' => [
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -101,7 +105,7 @@ class OrganizationSeeder extends Seeder
                         ],
                     ],
                 ],
-                'MI/SD' => [
+                'Madrasah Ibtidaiyyah Al-Hawi' => [
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -115,7 +119,7 @@ class OrganizationSeeder extends Seeder
                         ],
                     ],
                 ],
-                'SMP Islam Al Hawi' => [
+                'SMP Islam Al-Hawi' => [
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -129,7 +133,7 @@ class OrganizationSeeder extends Seeder
                         ],
                     ],
                 ],
-                'Madrasah Aliyah Plus Islam Al Hawi' => [
+                'Madrasah Aliyah Plus Islam Al-Hawi' => [
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -271,7 +275,11 @@ class OrganizationSeeder extends Seeder
             ],
         ];
 
-        $homeroom_teacher_last_id = 2;
+        $homeroom_teacher_last_id = 3;
+        $studentint = 5;
+        $counter = 1;
+        $studentCounter = 0;
+        $startTime = microtime(true);
         foreach ($categories as $category => $organizations) {
             foreach ($organizations as $organizationName => $organization) {
                 $organizationModel = Organization::create([
@@ -303,30 +311,69 @@ class OrganizationSeeder extends Seeder
                     ]);
                 }
 
-
                 foreach ($organization['classrooms'] as $className => $count) {
                     for ($i = 1; $i <= $count; $i++) {
-                        if ($homeroom_teacher_last_id == 100) {
-                            $homeroom_teacher_last_id = 2;
+                        if ($homeroom_teacher_last_id == 51) {
+                            $homeroom_teacher_last_id = 3;
                         }
+
+                        // Kelas Putra
                         $classroomName = $className . ' ' . $i . ' Putra';
-                        $organizationModel->classrooms()->create([
+                        $classroomMale = $organizationModel->classrooms()->create([
                             'name' => $classroomName,
                             'combined_name' => $classroomName . ' - ' . $academicYear->name,
                             'academic_year_id' => $academicYear->id,
                             'homeroom_teacher_id' => $homeroom_teacher_last_id,
                         ]);
+
+                        // Info Command
+                        $seconds = number_format((microtime(true) - $startTime), 2);
+                        $this->command->info($counter . ' ' . $organizationModel->name . ' ' . 'Classroom created: ' . $classroomName . ' ....... ' . $seconds . ' seconds.');
+
+                        // Create Student
+                        $classroomMale->students()->createMany(Student::factory($studentint)->make([
+                            'gender' => Gender::MALE,
+                            'status' => StudentStatus::ACTIVE,
+                        ])->toArray());
+
+                        // Info Command
+                        $studentCounter += $studentint;
+                        $seconds = number_format((microtime(true) - $startTime), 2);
+                        $this->command->line('   ->  [' . $studentCounter . ']  -->  ' . $studentint . ' Student created. (' . $seconds . ') seconds.',);
+
+                        // Create Homeroom Teacher
                         $organizationModel->users()->attach($homeroom_teacher_last_id, ['role' => 'Wali Kelas ' . $classroomName]);
                         $homeroom_teacher_last_id++;
+                        $counter++;
+
+                        // Kelas Putri
                         $classroomName = $className . ' ' . $i . ' Putri';
-                        $organizationModel->classrooms()->create([
+                        $classroomFemale = $organizationModel->classrooms()->create([
                             'name' => $classroomName,
                             'combined_name' => $classroomName . ' - ' . $academicYear->name,
                             'academic_year_id' => $academicYear->id,
                             'homeroom_teacher_id' => $homeroom_teacher_last_id,
                         ]);
+
+                        // Info Command
+                        $seconds = number_format((microtime(true) - $startTime), 2);
+                        $this->command->warn($counter . ' ' . $organizationModel->name . ' ' . 'Classroom created: ' . $classroomName . ' ....... ' . $seconds . ' seconds.');
+
+                        // Create Student
+                        $classroomFemale->students()->createMany(Student::factory($studentint)->make([
+                            'gender' => Gender::FEMALE,
+                            'status' => StudentStatus::ACTIVE,
+                        ])->toArray());
+
+                        // Info Command
+                        $studentCounter += $studentint;
+                        $seconds = number_format((microtime(true) - $startTime), 2);
+                        $this->command->line('   ->  [' . $studentCounter . ']  -->  ' . $studentint . ' Student created. (' . $seconds . ') seconds.',);
+
+                        // Create Homeroom Teacher
                         $organizationModel->users()->attach($homeroom_teacher_last_id, ['role' => 'Wali Kelas ' . $classroomName]);
                         $homeroom_teacher_last_id++;
+                        $counter++;
                     }
                 }
             }

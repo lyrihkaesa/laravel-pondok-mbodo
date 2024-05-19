@@ -25,7 +25,7 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         $user = User::factory()->create([
-            'name' => $this->faker->name,
+            'name' => $this->faker->firstName . ' ' . $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'phone' => '628' . $this->faker->unique()->numberBetween(100000000, 999999999),
             'phone_visibility' => 'public',
@@ -82,6 +82,7 @@ class StudentFactory extends Factory
             'status' => $this->faker->randomElement(['Mendaftar', 'Aktif', 'Lulus', 'Tidak Aktif']),
             'current_school' => $this->faker->randomElement(['PAUD/TK', 'MI', 'SMP', 'MA', 'Takhasus']),
             'category' => $this->faker->randomElement(['Santri Reguler', 'Santri Ndalem', 'Santri Berprestasi']),
+            'family_card_number' => $nik,
         ];
     }
 }

@@ -14,10 +14,11 @@ class Classroom extends Model
     protected $table = 'classrooms';
     protected $fillable = [
         'name',
-        'school_id',
+        'combined_name',
         'academic_year_id',
         'homeroom_teacher_id',
-        'combined_name',
+        'organization_id',
+        'end_date',
     ];
 
     public function organisation(): BelongsTo
@@ -27,7 +28,8 @@ class Classroom extends Model
 
     public function academicYear(): BelongsTo
     {
-        return $this->belongsTo(AcademicYear::class, 'academic_year_id', 'id');
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id', 'id')
+            ->orderByDesc('name');
     }
 
     public function students(): BelongsToMany
