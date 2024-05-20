@@ -105,4 +105,9 @@ class StudentBillPolicy
     {
         return $user->can('reorder_student::bill');
     }
+
+    public function export(User $user): bool
+    {
+        return $user->can('export_student::bill');
+    }
 }

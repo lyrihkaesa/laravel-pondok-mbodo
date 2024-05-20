@@ -1,8 +1,7 @@
 <?php
 
-use App\Models\Organization;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FinancialTransactionController;
+use App\Http\Controllers;
 
 Route::get('/', \App\Livewire\Page::class)->name('home');
 Route::get('/tentang', \App\Livewire\Page::class)->name('about');
@@ -22,13 +21,14 @@ Route::get('/orang-tua', \App\Livewire\Guardian\Login::class)->name('guardian.lo
 Route::get('/orang-tua/santri/{token}', \App\Livewire\Guardian\ViewProfileStudent::class)->name('guardian.view-profile-student');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/financial-transactions/pdf', [FinancialTransactionController::class, 'generatePdfReport'])->name('admin.financial-transactions.pdf');
+    Route::get('/admin/financial-transactions/pdf', [Controllers\FinancialTransactionController::class, 'generatePdfReport'])->name('admin.financial-transactions.pdf');
+    Route::get('/admin/student-bill/pdf', [Controllers\StudentBillController::class, 'generatePdfReport'])->name('admin.student-bill.pdf');
 });
 
 Route::get('/pdf', function () {
     return view('reports.pdf_financial_transactions_v2', [
         'transactions' => [],
-        'yayasan' => Organization::query()
+        'yayasan' =>  \App\Models\Organization::query()
             ->where('slug', 'yayasan-pondok-pesantren-ki-ageng-mbodo')
             ->first(),
     ]);

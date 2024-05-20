@@ -130,6 +130,7 @@ class FinancialTransactionController extends Controller
             ->where('slug', 'yayasan-pondok-pesantren-ki-ageng-mbodo')
             ->first();
 
+        // GENERATE PDF
         $pdf = PDF::loadView('reports.pdf_financial_transactions_v2', [
             'transactions' => $transactions,
             'yayasan' => $yayasan,
@@ -141,8 +142,10 @@ class FinancialTransactionController extends Controller
             'startDate' => $startDate,
             'endDate' => $endDate,
         ]);
-        $pdf->setPaper('a4',);
+
+        $pdf->setPaper('a4');
         $pdf->render();
+
         return $pdf->stream(__('Financial Report') . ' ' . $request->wallet_id . ' ' . $request->start_transaction_at . ' - ' . $request->end_transaction_at . '.pdf');
     }
 }

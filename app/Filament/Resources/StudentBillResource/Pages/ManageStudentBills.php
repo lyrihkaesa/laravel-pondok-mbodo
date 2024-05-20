@@ -131,26 +131,34 @@ class ManageStudentBills extends ManageRecords
                 // ->labeledFrom('md')
                 ->model(StudentBill::class)
                 ->form([
-                    Forms\Components\Select::make('current_school')
-                        ->label(__('Student Product School'))
-                        ->options(StudentCurrentSchool::class)
-                        ->multiple()
-                        ->required(),
+                    Forms\Components\Grid::make()
+                        ->schema([
+                            Forms\Components\Select::make('current_school')
+                                ->label(__('Student Product School'))
+                                ->options(StudentCurrentSchool::class)
+                                ->multiple()
+                                ->required(),
+                            Forms\Components\Select::make('category')
+                                ->label(__('Category'))
+                                ->options(StudentCategory::class)
+                                ->multiple()
+                                ->required(),
+                        ]),
                 ])
                 ->action(function (array $data) {
                     $this->replaceMountedAction('viewPdf', arguments: $data);
                 })
-                ->visible(fn (): bool => auth()->user()->can('export_financial::transaction')),
+                ->visible(fn (): bool => auth()->user()->can('export_student::bill')),
         ];
     }
 
-    public function viewPdf(array $data): Actions\Action
+    public function viewPdfAction(): Actions\Action
     {
         return  Actions\Action::make('viewPdf')
-            ->label(__('View Financial Report'))
+            ->label(__('View Student Bill'))
             ->modal()
             ->modalContent(fn ($arguments) => view('components.object-pdf', [
-                'src' => route('admin.financial-transactions.pdf', $arguments),
+                'src' => route('admin.student-bill.pdf', $arguments),
             ]))
             ->slideOver()
             ->modalWidth(MaxWidth::FiveExtraLarge)
