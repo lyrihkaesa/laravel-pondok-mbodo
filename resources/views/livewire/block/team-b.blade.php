@@ -20,7 +20,7 @@
         @foreach ($this->members as $member)
             <div class="text-center">
                 <img class="sm:size-48 lg:size-60 mx-auto rounded-xl"
-                    src="{{ $member->profile_picture_1x1 ? asset('storage/' . $member->profile_picture_1x1) : asset('images\thumbnails\images-dark.webp') }}"
+                    src="{{ $member->profile_picture_1x1 ? Storage::disk('minio_public')->url($member->profile_picture_1x1) : asset('images\thumbnails\images-dark.webp') }}"
                     alt="{{ $member->name }}">
                 <div class="mt-2 sm:mt-4">
                     <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 sm:text-base lg:text-lg">
@@ -30,9 +30,30 @@
                         $member->phone_visibility->value === 'public' ||
                             ($member->phone_visibility->value === 'member' && $user) ||
                             ($member->phone_visibility->value === 'private' && $user?->hasRole('pengurus')))
-                        <p class="text-xs text-gray-600 dark:text-gray-400 sm:text-sm lg:text-base">
-                            {{ $member->phone }}
-                        </p>
+                        <div class="flex justify-center gap-3" x-data="{
+                            isCopy: false,
+                            copy: function() {
+                                navigator.clipboard.writeText({{ $member->phone }});
+                                this.isCopy = true;
+                            },
+                        }">
+                            <p class="text-xs text-gray-600 dark:text-gray-400 sm:text-sm lg:text-base">
+                                {{ $member->phone }}
+                            </p>
+                            @if ($member->phone !== '')
+                                <div class="flex items-center justify-end gap-1 text-amber-400">
+                                    <x-filament::icon-button icon="icon-whatsapp" tooltip="Whatsapp" size="lg"
+                                        href="https://wa.me/{{ $member->phone }}?text={{ rawurlencode('Asslaualaikum') }}"
+                                        tag="a" target="_blank" />
+                                    <x-filament::icon-button x-cloak x-show="!isCopy" tooltip="Salin Nomor"
+                                        size="lg" icon="heroicon-m-clipboard-document" x-data
+                                        x-on:click="copy();" />
+                                    <x-filament::icon-button x-cloak x-show="isCopy" tooltip="Nomor Tersalin"
+                                        size="lg" icon="heroicon-m-clipboard-document-check" x-data
+                                        x-on:click="copy();" />
+                                </div>
+                            @endif
+                        </div>
                     @endif
                 </div>
             </div>

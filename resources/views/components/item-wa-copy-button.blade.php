@@ -11,7 +11,7 @@
         <span>{{ $name }}{{ $phone === '' ? '' : ': ' . $phone }}</span>
         @if ($phone !== '')
             <div class="flex items-center justify-end gap-1">
-                <x-filament::icon-button icon="icon-whatsapp" class="fill-amber-400" tooltip="Whatsapp" size="lg"
+                <x-filament::icon-button icon="icon-whatsapp" color="warning" tooltip="Whatsapp" size="lg"
                     href="https://wa.me/{{ $phone }}?text={{ rawurlencode($message) }}" tag="a"
                     target="_blank" />
                 <x-filament::icon-button x-cloak x-show="!isCopy" tooltip="Salin Nomor" size="lg"
