@@ -30,7 +30,7 @@ class ViewProfileStudent extends Component implements HasInfolists, HasForms
     private function student(): Student
     {
         try {
-            $payload = \Firebase\JWT\JWT::decode($this->token, new \Firebase\JWT\Key(env('JWT_SECRET'), 'HS256'));
+            $payload = \Firebase\JWT\JWT::decode($this->token, new \Firebase\JWT\Key(config('app-custom.jwt.secret'), 'HS256'));
             return  Student::with(['user:id,profile_picture_1x1'])->where('nip', $payload->student_nip)->firstOrFail();;
         } catch (\Exception $e) {
             redirect()->route('guardian.login');

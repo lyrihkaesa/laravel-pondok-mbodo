@@ -68,7 +68,7 @@ class Login extends Component implements HasForms
         ];
 
         // Membuat JwtToken
-        $JwtToken = \Firebase\JWT\JWT::encode($payload, env('JWT_SECRET'), 'HS256');
+        $JwtToken = \Firebase\JWT\JWT::encode($payload, config('app-custom.jwt.secret'), 'HS256');
 
         redirect()->route('guardian.view-profile-student', [
             'token' => $JwtToken,
