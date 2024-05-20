@@ -3,7 +3,7 @@
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Student;
-use App\Models\StudentProduct;
+use App\Models\StudentBill;
 use App\Services\WalletService;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\WalletSeeder;
@@ -13,7 +13,7 @@ use Database\Seeders\StudentSeeder;
 use App\Models\FinancialTransaction;
 
 beforeEach(function () {
-    DB::delete("delete from student_product");
+    DB::delete("delete from student_bill");
     DB::delete("delete from products");
     DB::delete("delete from students");
     DB::delete("delete from users");
@@ -30,7 +30,7 @@ test('transfer from SYSTEM to YAYASAN success with data', function () {
 
     $studentModel = Student::first();
     $productModel = Product::first();
-    $studentProductModel = StudentProduct::create([
+    $studentBillModel = StudentBill::create([
         'student_id' => $studentModel->id,
         'product_id' => $productModel->id,
         'product_name' => $productModel->name,
@@ -41,9 +41,9 @@ test('transfer from SYSTEM to YAYASAN success with data', function () {
 
     $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $studentModel->name . ' #' . $studentModel->id . ' - ' . $studentModel->user->phone;
 
-    $result = $this->WalletService->transfer('SYSTEM', 'YAYASAN', $studentProductModel->product_price, [
-        'student_product_id' => $studentProductModel->id,
-        'name' => $studentProductModel->product_name,
+    $result = $this->WalletService->transfer('SYSTEM', 'YAYASAN', $studentBillModel->product_price, [
+        'student_bill_id' => $studentBillModel->id,
+        'name' => $studentBillModel->product_name,
         'type' => 'credit,validation,system',
         'description' => $description,
     ]);
@@ -51,10 +51,10 @@ test('transfer from SYSTEM to YAYASAN success with data', function () {
 
     $financialTransaction = FinancialTransaction::first();
     $this->assertNotNull($financialTransaction);
-    $this->assertEquals($studentProductModel->id, $financialTransaction->student_product_id);
-    $this->assertEquals($studentProductModel->product_name, $financialTransaction->name);
+    $this->assertEquals($studentBillModel->id, $financialTransaction->student_bill_id);
+    $this->assertEquals($studentBillModel->product_name, $financialTransaction->name);
     $this->assertEquals('credit,validation,system', $financialTransaction->type);
-    $this->assertEquals($studentProductModel->product_price, $financialTransaction->amount);
+    $this->assertEquals($studentBillModel->product_price, $financialTransaction->amount);
     $this->assertEquals($description, $financialTransaction->description);
     $this->assertEquals('SYSTEM', $financialTransaction->from_wallet_id);
     $this->assertEquals('YAYASAN', $financialTransaction->to_wallet_id);

@@ -8,22 +8,41 @@ use Filament\Tables;
 use App\Models\Product;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use App\Models\StudentProduct;
+use App\Models\StudentBill;
 use App\Services\WalletService;
 use Filament\Resources\Resource;
 use App\Models\FinancialTransaction;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\StudentProductResource\Pages;
+use App\Filament\Resources\StudentBillResource\Pages;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
-use App\Filament\Resources\StudentProductResource\RelationManagers;
+use App\Filament\Resources\StudentBillResource\RelationManagers;
 
-class StudentProductResource extends Resource implements HasShieldPermissions
+class StudentBillResource extends Resource implements HasShieldPermissions
 {
-    protected static ?string $model = StudentProduct::class;
+    protected static ?string $model = StudentBill::class;
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
-    protected static ?string $navigationGroup = 'Manajemen Keuangan';
+
+    public static function getNavigationSort(): ?int
+    {
+        return \App\Utilities\FilamentUtility::getNavigationSort(__('Student Financial'));
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Manage Financial');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Student Financial');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Student Financial');
+    }
 
     public static function form(Form $form): Form
     {
@@ -85,7 +104,7 @@ class StudentProductResource extends Resource implements HasShieldPermissions
                                     $component->state($record->validated_at ? true : false);
                                 }
                             })
-                            ->disabled(fn (string $operation): bool => $operation === 'edit' || !auth()->user()->can('validate_student::product'))
+                            ->disabled(fn (string $operation): bool => $operation === 'edit' || !auth()->user()->can('validate_student::bill'))
                             ->columnSpan([
                                 'default' => 1,
                             ]),
@@ -104,7 +123,7 @@ class StudentProductResource extends Resource implements HasShieldPermissions
                                 return $state;
                             })
                             // ->visible(fn (string $operation): bool => $operation === 'edit')
-                            ->disabled(fn ($state): bool => $state === null || !auth()->user()->can('validate_student::product'))
+                            ->disabled(fn ($state): bool => $state === null || !auth()->user()->can('validate_student::bill'))
                             ->columnSpan([
                                 'default' => 3,
                             ]),
@@ -141,21 +160,21 @@ class StudentProductResource extends Resource implements HasShieldPermissions
                     ->badge(),
                 Tables\Columns\ToggleColumn::make('is_validated')
                     ->label(__('Is Validated'))
-                    ->updateStateUsing(function ($state, StudentProduct $record, WalletService $walletService) {
+                    ->updateStateUsing(function ($state, StudentBill $record, WalletService $walletService) {
                         // dd([$state, $record, $walletService]);
-                        $studentProductModel = $record;
-                        $student = $studentProductModel->student;
-                        $studentProductId = $studentProductModel->id;
+                        $studentBillModel = $record;
+                        $student = $studentBillModel->student;
+                        $studentBillId = $studentBillModel->id;
                         $userLogin = auth()->user();
                         if ($state) {
                             $description = $userLogin->name . ' - ' . $userLogin->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
                             $financialTransaction = new FinancialTransaction();
-                            $financialTransaction->student_product_id = $studentProductId;
-                            $financialTransaction->name = $studentProductModel->product_name;
+                            $financialTransaction->student_bill_id = $studentBillId;
+                            $financialTransaction->name = $studentBillModel->product_name;
                             $financialTransaction->type = 'credit-yayasan,validation,system';
                             $financialTransaction->description = $description;
-                            $result = $walletService->transferSystemToYayasan($studentProductModel->product_price, $financialTransaction);
+                            $result = $walletService->transferSystemToYayasan($studentBillModel->product_price, $financialTransaction);
 
                             // dd($result);
                             if ($result['is_success'] === false) {
@@ -167,14 +186,14 @@ class StudentProductResource extends Resource implements HasShieldPermissions
 
                                 return false;
                             } else {
-                                $studentProductModel->update([
+                                $studentBillModel->update([
                                     'validated_at' => now(),
                                     'validated_by' => $userLogin->id,
                                 ]);
 
                                 Notification::make()
                                     ->title('Melakukan Validasi')
-                                    ->body('Berhasil melakukan validasi ' . $studentProductModel->product_name . ' - ' . $student->name)
+                                    ->body('Berhasil melakukan validasi ' . $studentBillModel->product_name . ' - ' . $student->name)
                                     ->success()
                                     ->send();
 
@@ -184,11 +203,11 @@ class StudentProductResource extends Resource implements HasShieldPermissions
                             $description = $userLogin->name . ' - ' . $userLogin->phone . ' membatalkan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
                             $financialTransaction = new FinancialTransaction();
-                            $financialTransaction->student_product_id = $studentProductId;
-                            $financialTransaction->name = $studentProductModel->product_name;
+                            $financialTransaction->student_bill_id = $studentBillId;
+                            $financialTransaction->name = $studentBillModel->product_name;
                             $financialTransaction->type = 'debit-yayasan,unvalidation,system';
                             $financialTransaction->description = $description;
-                            $result = $walletService->transferYayasanToSystem($studentProductModel->product_price, $financialTransaction);
+                            $result = $walletService->transferYayasanToSystem($studentBillModel->product_price, $financialTransaction);
 
                             if ($result['is_success'] === false) {
                                 Notification::make()
@@ -199,14 +218,14 @@ class StudentProductResource extends Resource implements HasShieldPermissions
 
                                 return true;
                             } else {
-                                $studentProductModel->update([
+                                $studentBillModel->update([
                                     'validated_at' => null,
                                     'validated_by' => null,
                                 ]);
 
                                 Notification::make()
                                     ->title('Membatalkan Validasi')
-                                    ->body('Berhasil membatalkan validasi ' . $studentProductModel->product_name . ' - ' . $student->name)
+                                    ->body('Berhasil membatalkan validasi ' . $studentBillModel->product_name . ' - ' . $student->name)
                                     ->success()
                                     ->iconColor('danger')
                                     ->send();
@@ -218,13 +237,12 @@ class StudentProductResource extends Resource implements HasShieldPermissions
                     ->default(function ($record) {
                         return $record->validated_at === null ? false : true;
                     })
-                    ->visible(fn (): bool => auth()->user()->can('validate_student::product')),
+                    ->visible(fn (): bool => auth()->user()->can('validate_student::bill')),
                 Tables\Columns\TextColumn::make('validated_at')
                     ->label(__('Validated At'))
                     ->dateTime(format: 'd/m/Y H:i', timezone: 'Asia/Jakarta'),
-                Tables\Columns\TextColumn::make('validated_by')
-                    ->label(__('Validated By'))
-                    ->formatStateUsing(fn (string $state): string => $state ? User::find($state)->name : '-'),
+                Tables\Columns\TextColumn::make('validator.name')
+                    ->label(__('Validated By')),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('Created At'))
                     ->since()
@@ -265,7 +283,8 @@ class StudentProductResource extends Resource implements HasShieldPermissions
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
-            ])->defaultSort('validated_at', 'desc');
+            ])
+            ->defaultSort('validated_at', 'desc');
     }
 
     public static function getRelations(): array
@@ -278,18 +297,8 @@ class StudentProductResource extends Resource implements HasShieldPermissions
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListStudentProducts::route('/'),
+            'index' => Pages\ManageStudentBills::route('/'),
         ];
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return __('Student Financial');
-    }
-
-    public static function getModelLabel(): string
-    {
-        return __('Student Financial');
     }
 
     public static function getPermissionPrefixes(): array
@@ -308,6 +317,7 @@ class StudentProductResource extends Resource implements HasShieldPermissions
             // 'replicate',
             // 'reorder',
             'validate',
+            'export',
         ];
     }
 }

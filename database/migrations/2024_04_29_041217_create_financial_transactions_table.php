@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('from_wallet_id')->nullable();
             $table->string('to_wallet_id')->nullable();
-            $table->unsignedBigInteger('student_product_id')->nullable();
+            $table->unsignedBigInteger('student_bill_id')->nullable();
             $table->unsignedBigInteger('validated_by')->nullable();
             $table->datetime('transaction_at')->nullable();
             $table->json('image_attachments')->nullable();
@@ -28,7 +28,7 @@ return new class extends Migration
 
             $table->foreign('from_wallet_id')->references('id')->on('wallets')->onDelete('set null');
             $table->foreign('to_wallet_id')->references('id')->on('wallets')->onDelete('set null');
-            $table->foreign('student_product_id')->references('id')->on('student_product')->onDelete('set null');
+            $table->foreign('student_bill_id')->references('id')->on('student_bill')->onDelete('set null');
             $table->foreign('validated_by')->references('id')->on('users')->onDelete('set null');
         });
     }

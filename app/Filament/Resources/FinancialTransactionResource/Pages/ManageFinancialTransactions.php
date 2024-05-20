@@ -22,21 +22,7 @@ class ManageFinancialTransactions extends ManageRecords
         return [
             Actions\CreateAction::make()
                 ->action(function (array $data, WalletService $walletService) {
-                    $result = $walletService->transfer($data['from_wallet_id'], $data['to_wallet_id'], $data['amount'], new FinancialTransaction($data));
-
-                    if ($result['is_success'] === true) {
-                        Notification::make()
-                            ->title('Berhasil')
-                            ->body($result['message'])
-                            ->success()
-                            ->send();
-                    } else {
-                        Notification::make()
-                            ->title('Gagal')
-                            ->body($result['message'])
-                            ->danger()
-                            ->send();
-                    }
+                    $this->transfer($data, $walletService);
                 })
                 ->createAnother(false),
             Actions\CreateAction::make('expense')
@@ -50,21 +36,7 @@ class ManageFinancialTransactions extends ManageRecords
                     'validated_by' => auth()->id(),
                 ])
                 ->action(function (array $data, WalletService $walletService) {
-                    $result = $walletService->transfer($data['from_wallet_id'], $data['to_wallet_id'], $data['amount'], new FinancialTransaction($data));
-
-                    if ($result['is_success'] === true) {
-                        Notification::make()
-                            ->title('Berhasil')
-                            ->body($result['message'])
-                            ->success()
-                            ->send();
-                    } else {
-                        Notification::make()
-                            ->title('Gagal')
-                            ->body($result['message'])
-                            ->danger()
-                            ->send();
-                    }
+                    $this->transfer($data, $walletService);
                 })
                 ->createAnother(false),
             Actions\CreateAction::make('income')
@@ -78,21 +50,7 @@ class ManageFinancialTransactions extends ManageRecords
                     'validated_by' => auth()->id(),
                 ])
                 ->action(function (array $data, WalletService $walletService) {
-                    $result = $walletService->transfer($data['from_wallet_id'], $data['to_wallet_id'], $data['amount'], new FinancialTransaction($data));
-
-                    if ($result['is_success'] === true) {
-                        Notification::make()
-                            ->title('Berhasil')
-                            ->body($result['message'])
-                            ->success()
-                            ->send();
-                    } else {
-                        Notification::make()
-                            ->title('Gagal')
-                            ->body($result['message'])
-                            ->danger()
-                            ->send();
-                    }
+                    $this->transfer($data, $walletService);
                 })
                 ->createAnother(false),
             Actions\CreateAction::make('dana_bos')
@@ -106,21 +64,7 @@ class ManageFinancialTransactions extends ManageRecords
                     'validated_by' => auth()->id(),
                 ])
                 ->action(function (array $data, WalletService $walletService) {
-                    $result = $walletService->transfer($data['from_wallet_id'], $data['to_wallet_id'], $data['amount'], new FinancialTransaction($data));
-
-                    if ($result['is_success'] === true) {
-                        Notification::make()
-                            ->title('Berhasil')
-                            ->body($result['message'])
-                            ->success()
-                            ->send();
-                    } else {
-                        Notification::make()
-                            ->title('Gagal')
-                            ->body($result['message'])
-                            ->danger()
-                            ->send();
-                    }
+                    $this->transfer($data, $walletService);
                 })
                 ->createAnother(false),
             Actions\Action::make('generate_report_pdf')
@@ -187,5 +131,24 @@ class ManageFinancialTransactions extends ManageRecords
             // ->closeModalByClickingAway(false)
             ->modalSubmitAction(false)
             ->modalCancelAction(false);
+    }
+
+    private function transfer(array $data, WalletService $walletService): void
+    {
+        $result = $walletService->transfer($data['from_wallet_id'], $data['to_wallet_id'], $data['amount'], new FinancialTransaction($data));
+
+        if ($result['is_success'] === true) {
+            Notification::make()
+                ->title('Berhasil')
+                ->body($result['message'])
+                ->success()
+                ->send();
+        } else {
+            Notification::make()
+                ->title('Gagal')
+                ->body($result['message'])
+                ->danger()
+                ->send();
+        }
     }
 }

@@ -5,7 +5,7 @@ namespace App\Livewire\Guardian;
 use Filament\Tables;
 use Livewire\Component;
 use App\Models\Enrollment;
-use App\Models\StudentProduct;
+use App\Models\StudentBill;
 use Filament\Tables\Table;
 use Livewire\Attributes\Locked;
 use Illuminate\Contracts\View\View;

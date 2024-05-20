@@ -24,7 +24,7 @@ class FinancialTransaction extends Model
         'description',
         'from_wallet_id',
         'to_wallet_id',
-        'student_product_id',
+        'student_bill_id',
         'validated_by',
         'transaction_at',
         'image_attachments',
@@ -49,9 +49,9 @@ class FinancialTransaction extends Model
         return $this->belongsTo(Wallet::class, 'to_wallet_id');
     }
 
-    public function studentProduct(): BelongsTo
+    public function studentBill(): BelongsTo
     {
-        return $this->belongsTo(StudentProduct::class, 'student_product_id');
+        return $this->belongsTo(StudentBill::class, 'student_bill_id');
     }
 
     public function validator(): BelongsTo

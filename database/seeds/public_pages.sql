@@ -13,7 +13,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Dumping data for table public.public_pages: 4 rows
+-- Dumping data for table public.public_pages: -1 rows
 DELETE FROM "public_pages";
 /*!40000 ALTER TABLE "public_pages" DISABLE KEYS */;
 INSERT INTO "public_pages" ("id", "title", "path", "content", "published_at", "created_at", "updated_at", "deleted_at") VALUES

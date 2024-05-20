@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class StudentProduct extends Pivot
+class StudentBill extends Pivot
 {
     public $incrementing = true;
-    protected $table = 'student_product';
+    protected $table = 'student_bill';
     protected $primaryKey = 'id';
     protected $fillable = [
         'student_id',
@@ -37,7 +37,8 @@ class StudentProduct extends Pivot
 
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->belongsTo(Student::class, 'student_id')
+            ->withOut('user');
     }
 
     public function product()

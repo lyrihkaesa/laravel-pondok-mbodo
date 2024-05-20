@@ -5,7 +5,7 @@ namespace App\Livewire\Guardian;
 use Filament\Tables;
 use Livewire\Component;
 use Filament\Tables\Table;
-use App\Models\StudentProduct;
+use App\Models\StudentBill;
 use Livewire\Attributes\Locked;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 
-class ListStudentProducts extends Component implements HasForms, HasTable
+class ListStudentBills extends Component implements HasForms, HasTable
 {
     use InteractsWithForms;
     use InteractsWithTable;
@@ -26,7 +26,7 @@ class ListStudentProducts extends Component implements HasForms, HasTable
     {
         return $table
             ->heading(__('Student Financial'))
-            ->query(StudentProduct::query()->where('student_id', $this->studentId))
+            ->query(StudentBill::query()->where('student_id', $this->studentId))
             ->columns([
                 Tables\Columns\TextColumn::make('product_name')
                     ->label(__('Student Product Name')),
@@ -66,6 +66,6 @@ class ListStudentProducts extends Component implements HasForms, HasTable
 
     public function render(): View
     {
-        return view('livewire.guardian.list-student-products');
+        return view('livewire.guardian.list-student-bills');
     }
 }

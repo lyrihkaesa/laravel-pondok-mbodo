@@ -84,20 +84,20 @@ class ProductsRelationManager extends RelationManager
                     ->label(__('Is Validated'))
                     ->updateStateUsing(function ($state, $record, WalletService $walletService) {
                         // dd([$state, $record, $record->pivot->pivotParent, $record->pivot->id]);
-                        $studentProductModel = $record->pivot;
+                        $studentBillModel = $record->pivot;
 
-                        $student = $studentProductModel->student;
-                        $studentProductId = $studentProductModel->id;
+                        $student = $studentBillModel->student;
+                        $studentBillId = $studentBillModel->id;
                         $userLogin = auth()->user();
                         if ($state) {
                             $description = $userLogin->name . ' - ' . $userLogin->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
                             $financialTransaction = new FinancialTransaction();
-                            $financialTransaction->student_product_id = $studentProductId;
-                            $financialTransaction->name = $studentProductModel->product_name;
+                            $financialTransaction->student_bill_id = $studentBillId;
+                            $financialTransaction->name = $studentBillModel->product_name;
                             $financialTransaction->type = 'credit-yayasan,validation,system';
                             $financialTransaction->description = $description;
-                            $result = $walletService->transferSystemToYayasan($studentProductModel->product_price, $financialTransaction);
+                            $result = $walletService->transferSystemToYayasan($studentBillModel->product_price, $financialTransaction);
 
                             // dd($result);
                             if ($result['is_success'] === false) {
@@ -109,14 +109,14 @@ class ProductsRelationManager extends RelationManager
 
                                 return false;
                             } else {
-                                $studentProductModel->update([
+                                $studentBillModel->update([
                                     'validated_at' => now(),
                                     'validated_by' => $userLogin->id,
                                 ]);
 
                                 Notification::make()
                                     ->title('Melakukan Validasi')
-                                    ->body('Berhasil melakukan validasi ' . $studentProductModel->product_name . ' - ' . $student->name)
+                                    ->body('Berhasil melakukan validasi ' . $studentBillModel->product_name . ' - ' . $student->name)
                                     ->success()
                                     ->send();
 
@@ -126,11 +126,11 @@ class ProductsRelationManager extends RelationManager
                             $description = $userLogin->name . ' - ' . $userLogin->phone . ' membatalkan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
                             $financialTransaction = new FinancialTransaction();
-                            $financialTransaction->student_product_id = $studentProductId;
-                            $financialTransaction->name = $studentProductModel->product_name;
+                            $financialTransaction->student_bill_id = $studentBillId;
+                            $financialTransaction->name = $studentBillModel->product_name;
                             $financialTransaction->type = 'debit-yayasan,unvalidation,system';
                             $financialTransaction->description = $description;
-                            $result = $walletService->transferYayasanToSystem($studentProductModel->product_price, $financialTransaction);
+                            $result = $walletService->transferYayasanToSystem($studentBillModel->product_price, $financialTransaction);
 
                             if ($result['is_success'] === false) {
                                 Notification::make()
@@ -141,14 +141,14 @@ class ProductsRelationManager extends RelationManager
 
                                 return true;
                             } else {
-                                $studentProductModel->update([
+                                $studentBillModel->update([
                                     'validated_at' => null,
                                     'validated_by' => null,
                                 ]);
 
                                 Notification::make()
                                     ->title('Membatalkan Validasi')
-                                    ->body('Berhasil membatalkan validasi ' . $studentProductModel->product_name . ' - ' . $student->name)
+                                    ->body('Berhasil membatalkan validasi ' . $studentBillModel->product_name . ' - ' . $student->name)
                                     ->success()
                                     ->iconColor('danger')
                                     ->send();
@@ -160,7 +160,7 @@ class ProductsRelationManager extends RelationManager
                     ->default(function ($record) {
                         return $record->validated_at === null ? false : true;
                     })
-                    ->visible(fn (): bool => auth()->user()->can('validate_student::product')),
+                    ->visible(fn (): bool => auth()->user()->can('validate_student::bill')),
                 Tables\Columns\TextColumn::make('validated_at')
                     ->label(__('Validated At'))
                     ->dateTime(format: 'd/m/Y H:i', timezone: 'Asia/Jakarta'),

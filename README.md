@@ -70,7 +70,7 @@ Website Sistem Informasi Yayasan Pondok Pesantren Ki Ageng Mbodo, digunakan untu
 
 ### Modul Administrasi
 
--   [ ] Administrasi Santri `StudentProduct`
+-   [ ] Administrasi Santri `StudentBill`
 -   [ ] Jenis Biaya `Product`
 -   [ ] Paket `Package`
 -   [ ] Transaksi `Transaction`

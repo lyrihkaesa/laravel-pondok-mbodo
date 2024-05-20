@@ -18,13 +18,17 @@ class Product extends Model
 
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(Student::class, 'student_product')
-            ->using(StudentProduct::class)->withPivot(['id', 'product_name', 'product_price', 'validated_at', 'validated_by'])->withTimestamps();
+        return $this->belongsToMany(Student::class, 'student_bill')
+            ->using(StudentBill::class)
+            ->withPivot(['id', 'product_name', 'product_price', 'validated_at', 'validated_by'])
+            ->withTimestamps();
     }
 
     public function packages(): BelongsToMany
     {
-        return $this->belongsToMany(Package::class, 'package_product')->withPivot('id')->withTimestamps();
+        return $this->belongsToMany(Package::class, 'package_product')
+            ->withPivot('id')
+            ->withTimestamps();
     }
 
     public function categories(): BelongsToMany

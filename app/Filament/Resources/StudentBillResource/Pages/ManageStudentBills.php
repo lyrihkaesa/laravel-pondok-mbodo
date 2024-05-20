@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\StudentProductResource\Pages;
+namespace App\Filament\Resources\StudentBillResource\Pages;
 
 use Filament\Forms;
 use Filament\Actions;
@@ -9,16 +9,18 @@ use App\Models\Product;
 use App\Models\Student;
 use Livewire\Component;
 use App\Enums\StudentCategory;
+use App\Models\StudentBill;
 use App\Services\WalletService;
 use App\Enums\StudentCurrentSchool;
 use App\Models\FinancialTransaction;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Notifications\Notification;
-use Filament\Resources\Pages\ListRecords;
-use App\Filament\Resources\StudentProductResource;
+use Filament\Resources\Pages\ManageRecords;
+use App\Filament\Resources\StudentBillResource;
 
-class ListStudentProducts extends ListRecords
+class ManageStudentBills extends ManageRecords
 {
-    protected static string $resource = StudentProductResource::class;
+    protected static string $resource = StudentBillResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -33,13 +35,13 @@ class ListStudentProducts extends ListRecords
                     $record = self::getModel()::query()->create($data);
 
                     $student = $record->student;
-                    $studentProductId = $record->id;
+                    $studentBillId = $record->id;
                     if ($record->validated_at !== null) {
                         $description = $userLogin->name . ' - ' . $userLogin->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
                         $financialTransaction = new FinancialTransaction();
 
-                        $financialTransaction->student_product_id = $studentProductId;
+                        $financialTransaction->student_bill_id = $studentBillId;
                         $financialTransaction->name = $record->product_name;
                         $financialTransaction->type = 'credit-yayasan,validation,system';
                         $financialTransaction->description = $description;
@@ -120,7 +122,40 @@ class ListStudentProducts extends ListRecords
                         ->body('Santri ' . $students->count() . ' telah dilengkapi dengan SPP ' . $product_names . ' ' . $suffix)
                         ->send();
                 })
-                ->visible(fn (): bool => auth()->user()->can('create_student::product')),
+                ->visible(fn (): bool => auth()->user()->can('create_student::bill')),
+            Actions\Action::make('generateReportPdf')
+                ->label(__('Generate Report PDF'))
+                ->color('danger')
+                ->icon('heroicon-m-document-text')
+                // ->iconButton()
+                // ->labeledFrom('md')
+                ->model(StudentBill::class)
+                ->form([
+                    Forms\Components\Select::make('current_school')
+                        ->label(__('Student Product School'))
+                        ->options(StudentCurrentSchool::class)
+                        ->multiple()
+                        ->required(),
+                ])
+                ->action(function (array $data) {
+                    $this->replaceMountedAction('viewPdf', arguments: $data);
+                })
+                ->visible(fn (): bool => auth()->user()->can('export_financial::transaction')),
         ];
+    }
+
+    public function viewPdf(array $data): Actions\Action
+    {
+        return  Actions\Action::make('viewPdf')
+            ->label(__('View Financial Report'))
+            ->modal()
+            ->modalContent(fn ($arguments) => view('components.object-pdf', [
+                'src' => route('admin.financial-transactions.pdf', $arguments),
+            ]))
+            ->slideOver()
+            ->modalWidth(MaxWidth::FiveExtraLarge)
+            // ->closeModalByClickingAway(false)
+            ->modalSubmitAction(false)
+            ->modalCancelAction(false);
     }
 }
