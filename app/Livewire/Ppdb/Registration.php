@@ -10,6 +10,7 @@ use Livewire\Component;
 use App\Models\Guardian;
 use Filament\Forms\Form;
 use App\Models\PublicPage;
+use Filament\Notifications;
 use App\Enums\StudentCategory;
 use Illuminate\Support\Facades\DB;
 use App\Enums\StudentCurrentSchool;
@@ -18,7 +19,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Validation\Rules\Unique;
-use Filament\Notifications;
 use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
 
@@ -271,9 +271,12 @@ class Registration extends Component implements HasForms
                         Forms\Components\TextInput::make('phone')
                             ->label(__('Phone'))
                             ->placeholder(__('Phone Placeholder'))
+                            ->helperText(__('Phone Helper Text'))
                             ->required()
                             ->tel()
-                            ->helperText(__('Phone Helper Text'))
+                            ->mask(\Filament\Support\RawJs::make(<<<'JS'
+                                $input.replace(/^0/, '62');
+                            JS))
                             ->unique(table: 'users', column: 'phone', modifyRuleUsing: function (Unique $rule,  Component $livewire, string $operation) {
                                 if ($operation === 'edit') {
                                     return $rule->ignore($livewire->data['user_id'], 'id');
@@ -318,10 +321,13 @@ class Registration extends Component implements HasForms
                                     ->required(),
                                 Forms\Components\TextInput::make('father_phone')
                                     ->label(__('Phone'))
-                                    ->tel()
-                                    ->required()
                                     ->placeholder(__('Phone Placeholder'))
                                     ->helperText(__('Phone Helper Text'))
+                                    ->tel()
+                                    ->mask(\Filament\Support\RawJs::make(<<<'JS'
+                                        $input.replace(/^0/, '62');
+                                    JS))
+                                    ->required()
                                     ->maxLength(255),
                                 Forms\Components\Textarea::make('father_address')
                                     ->label(__('Full Address'))
@@ -351,9 +357,12 @@ class Registration extends Component implements HasForms
                                     ->label(__('Phone'))
                                     ->placeholder(__('Phone Placeholder'))
                                     ->helperText(__('Phone Helper Text'))
-                                    ->maxLength(18)
                                     ->tel()
-                                    ->required(),
+                                    ->mask(\Filament\Support\RawJs::make(<<<'JS'
+                                        $input.replace(/^0/, '62');
+                                    JS))
+                                    ->required()
+                                    ->maxLength(255),
                                 Forms\Components\Textarea::make('mother_address')
                                     ->label(__('Full Address'))
                                     ->placeholder(__('Guardian Full Address Placeholder'))
@@ -411,9 +420,12 @@ class Registration extends Component implements HasForms
                                             ->label(__('Phone'))
                                             ->placeholder(__('Phone Placeholder'))
                                             ->helperText(__('Phone Helper Text'))
-                                            ->maxLength(18)
                                             ->tel()
-                                            ->required(),
+                                            ->mask(\Filament\Support\RawJs::make(<<<'JS'
+                                                $input.replace(/^0/, '62');
+                                            JS))
+                                            ->required()
+                                            ->maxLength(255),
                                         Forms\Components\Textarea::make('address')
                                             ->label(__('Full Address'))
                                             ->placeholder(__('Guardian Full Address Placeholder'))

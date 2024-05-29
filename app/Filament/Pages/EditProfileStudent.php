@@ -544,6 +544,9 @@ class EditProfileStudent extends Page
                                     ->helperText(__('Phone Helper Text'))
                                     ->maxLength(18)
                                     ->tel()
+                                    ->mask(\Filament\Support\RawJs::make(<<<'JS'
+                                        $input.replace(/^0/, '62');
+                                    JS))
                                     ->required(),
                                 Forms\Components\Textarea::make('address')
                                     ->label(__('Full Address'))

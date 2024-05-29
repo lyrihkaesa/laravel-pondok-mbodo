@@ -377,9 +377,12 @@ class StudentResource extends Resource implements HasShieldPermissions
                         Forms\Components\TextInput::make('phone')
                             ->label(__('Phone'))
                             ->placeholder(__('Phone Placeholder'))
+                            ->helperText(__('Phone Helper Text'))
                             ->required()
                             ->tel()
-                            ->helperText(__('Phone Helper Text'))
+                            ->mask(\Filament\Support\RawJs::make(<<<'JS'
+                                $input.replace(/^0/, '62');
+                            JS))
                             ->unique(table: 'users', column: 'phone', modifyRuleUsing: function (Unique $rule,  Livewire $livewire, string $operation) {
                                 if ($operation === 'edit') {
                                     return $rule->ignore($livewire->data['user_id'], "id");
@@ -578,9 +581,12 @@ class StudentResource extends Resource implements HasShieldPermissions
                                     ->label(__('Phone'))
                                     ->placeholder(__('Phone Placeholder'))
                                     ->helperText(__('Phone Helper Text'))
-                                    ->maxLength(18)
                                     ->tel()
-                                    ->required(),
+                                    ->mask(\Filament\Support\RawJs::make(<<<'JS'
+                                        $input.replace(/^0/, '62');
+                                    JS))
+                                    ->required()
+                                    ->maxLength(18),
                                 Forms\Components\Textarea::make('address')
                                     ->label(__('Full Address'))
                                     ->placeholder(__('Guardian Full Address Placeholder'))

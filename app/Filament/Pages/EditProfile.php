@@ -96,6 +96,9 @@ class EditProfile extends Page implements HasForms
                             ->helperText(__('Phone Helper Text'))
                             ->unique(ignoreRecord: true)
                             ->tel()
+                            ->mask(\Filament\Support\RawJs::make(<<<'JS'
+                                $input.replace(/^0/, '62');
+                            JS))
                             ->required()
                             ->maxLength(255),
                         Forms\Components\ToggleButtons::make('phone_visibility')

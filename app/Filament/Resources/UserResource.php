@@ -38,6 +38,9 @@ class UserResource extends Resource implements HasShieldPermissions
                         Forms\Components\TextInput::make('phone')
                             ->label(__('Phone'))
                             ->tel()
+                            ->mask(\Filament\Support\RawJs::make(<<<'JS'
+                                $input.replace(/^0/, '62');
+                            JS))
                             ->required()
                             ->maxLength(255),
                         Forms\Components\ToggleButtons::make('phone_visibility')

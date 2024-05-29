@@ -35,6 +35,9 @@ class Login extends Component implements HasForms
                     ->placeholder(__('Phone Placeholder'))
                     ->helperText(__('Phone Helper Text'))
                     ->tel()
+                    ->mask(\Filament\Support\RawJs::make(<<<'JS'
+                        $input.replace(/^0/, '62');
+                    JS))
                     ->required()
                     ->maxLength(255),
             ])
