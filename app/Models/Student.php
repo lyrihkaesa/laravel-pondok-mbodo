@@ -60,7 +60,7 @@ class Student extends Model
     {
         return $this->belongsToMany(Product::class, 'student_bill')
             ->using(StudentBill::class)
-            ->withPivot(['id', 'product_name', 'product_price', 'validated_at', 'validated_by'])
+            ->withPivot(['id', 'product_name', 'product_price', 'validated_at', 'validated_by', 'bill_date_time'])
             ->withTimestamps();
     }
 

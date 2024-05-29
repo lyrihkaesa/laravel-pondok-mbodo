@@ -124,7 +124,7 @@
     </table>
     <section class="text-center">
         <h2>LAPORAN TAGIHAN SANTRI</h2>
-        <p>{{ $date }}</p>
+        <p>{{ $startDate }} - {{ $endDate }}</p>
     </section>
     <br>
     <table class="tg">
@@ -154,7 +154,7 @@
         <tfoot>
             <tr>
                 <th colspan="3" class="text-start">TOTAL</th>
-                <th class="text-center">{{ $student_total_bills ?? '0' }}</th>
+                <th class="text-start">{{ $student_total_bills ?? '0' }}</th>
             </tr>
         </tfoot>
     </table>

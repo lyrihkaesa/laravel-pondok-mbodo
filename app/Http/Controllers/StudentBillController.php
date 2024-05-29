@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\StudentCurrentSchool;
 use App\Models\Student;
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Number;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Enums\OrganizationCategory;
+use App\Enums\StudentCurrentSchool;
 
 class StudentBillController extends Controller
 {
@@ -16,9 +17,13 @@ class StudentBillController extends Controller
     {
         $this->authorize('export_student::bill');
 
+        $billDateTimeStart = Carbon::parse($request->bill_date_time_start);
+        $billDateTimeEnd = Carbon::parse($request->bill_date_time_end);
+
         $students = Student::withOut('user')
-            ->with(['products' => function ($query) {
-                $query->whereNull('validated_at');
+            ->with(['products' => function ($query) use ($billDateTimeStart, $billDateTimeEnd) {
+                $query->whereNull('validated_at')
+                    ->whereBetween('bill_date_time', [$billDateTimeStart, $billDateTimeEnd]);
             }])
             ->select('id', 'name', 'nip', 'status', 'current_school')
             ->where('status', 'Aktif')
@@ -42,30 +47,31 @@ class StudentBillController extends Controller
         }
 
         $students = $students
-            ->sortByDesc(function ($student) {
-                return $student->current_school;
-            })
             ->sortBy(function ($student) {
                 return $student->total_bills;
+            })
+            ->sortByDesc(function ($student) {
+                return $student->current_school;
             });
 
         $yayasan = Organization::query()
             ->where('category', OrganizationCategory::YAYASAN)
             ->first();
 
-        $date = now()->isoFormat('DD MMMM Y, HH:mm:ss');
+
 
         // GENERATE PDF
         $pdf = PDF::loadView('reports.pdf_student_bills', [
             'students' => $students,
             'yayasan' => $yayasan,
-            'date' => $date,
+            'startDate' => $billDateTimeStart->isoFormat('DD MMMM Y, HH:mm:ss'),
+            'endDate' => $billDateTimeEnd->isoFormat('DD MMMM Y, HH:mm:ss'),
             'student_total_bills' => Number::currency($student_total_bills, 'IDR'),
         ]);
 
         $pdf->setPaper('a4');
         $pdf->render();
 
-        return $pdf->stream(__('Student Bill Report') . ' ' . $date . '.pdf');
+        return $pdf->stream(__('Student Bill Report') . ' ' . $billDateTimeStart->isoFormat('DD-MM-YYYY HH:mm:ss') . ' - ' . $billDateTimeEnd->isoFormat('DD-MM-YYYY HH:mm:ss') . '.pdf');
     }
 }

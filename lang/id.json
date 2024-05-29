@@ -241,5 +241,7 @@
     "Student Bill Report": "Laporan Tagihan Santri",
     "View Student Bill": "Lihat Tagihan Santri",
     "Product": "Produk",
-    "Bill Date": "Tanggal Tagihan"
+    "Bill Date": "Tanggal Tagihan",
+    "Bill Date Start": "Mulai Tanggal Tagihan",
+    "Bill Date End": "Akhir Tanggal Tagihan"
 }

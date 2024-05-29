@@ -169,6 +169,14 @@ class ManageStudentBills extends ManageRecords
                 ->form([
                     Forms\Components\Grid::make()
                         ->schema([
+                            Forms\Components\DateTimePicker::make('bill_date_time_start')
+                                ->label(__('Bill Date Start'))
+                                ->default(now()->firstOfMonth())
+                                ->required(),
+                            Forms\Components\DateTimePicker::make('bill_date_time_end')
+                                ->label(__('Bill Date End'))
+                                ->default(now()->endOfMonth())
+                                ->required(),
                             Forms\Components\Select::make('current_school')
                                 ->label(__('Student Product School'))
                                 ->options(StudentCurrentSchool::class)
