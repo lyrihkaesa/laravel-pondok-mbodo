@@ -274,14 +274,13 @@ class StudentBillResource extends Resource implements HasShieldPermissions
                     })
                     ->visible(fn (): bool => auth()->user()->can('validate_student::bill')),
                 Tables\Columns\TextColumn::make('validated_at')
-                    ->label(__('Validated At'))
-                    ->dateTime(format: 'd/m/Y H:i', timezone: 'Asia/Jakarta'),
+                    ->dateTime(format: 'd-m-Y H:i', timezone: 'Asia/Jakarta')
+                    ->label(__('Validated At')),
                 Tables\Columns\TextColumn::make('validator.name')
                     ->label(__('Validated By')),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label(__('Created At'))
-                    ->since()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('bill_date_time')
+                    ->dateTime(format: 'd-m-Y H:i', timezone: 'Asia/Jakarta')
+                    ->label(__('Bill Date')),
             ])
             ->filters([
                 Tables\Filters\Filter::make('validated_at')
@@ -319,7 +318,7 @@ class StudentBillResource extends Resource implements HasShieldPermissions
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
             ])
-            ->defaultSort('validated_at', 'desc');
+            ->defaultSort('updated_at', 'desc');
     }
 
     public static function getRelations(): array

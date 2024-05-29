@@ -28,7 +28,7 @@ class ManageStudentBills extends ManageRecords
             Actions\CreateAction::make()
                 ->action(function (array $data, WalletService $walletService) {
                     $userLogin = auth()->user();
-                    if ($data['validated_at'] !== null) {
+                    if ($data['is_validated']) {
                         $data['validated_by'] = $userLogin->id;
                     }
 
@@ -54,17 +54,34 @@ class ManageStudentBills extends ManageRecords
                             ->send();
                     }
                 }),
+
             Actions\Action::make('generateStudentsProducts')
                 ->label("Administrasi Umum")
                 ->fillForm(fn ($record): array => [
-                    'suffix' => now()->translatedFormat('F Y'),
+                    'suffix' => now()->translatedFormat('M Y'),
+                    'bill_date_time' => now()->toDateTimeString(),
+                    'category' => [StudentCategory::REGULER],
                 ])
                 ->form([
-                    Forms\Components\TextInput::make('suffix')
-                        ->label('Akhiran')
-                        ->helperText(fn ($state): string => 'Contoh: Catering ' . $state)
-                        ->live(onBlur: true)
-                        ->required(),
+                    Forms\Components\Grid::make()
+                        ->schema([
+                            Forms\Components\DateTimePicker::make('bill_date_time')
+                                ->timezone('Asia/Jakarta')
+                                ->label(__('Bill Date'))
+                                ->live(onBlur: true)
+                                ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
+                                    $set('suffix', \Illuminate\Support\Carbon::parse($state)->translatedFormat('M Y'));
+                                })
+                                ->required(),
+
+                            Forms\Components\TextInput::make('suffix')
+                                ->label('Akhiran')
+                                ->helperText(fn ($state): string => 'Contoh: Catering ' . $state)
+                                ->live(onBlur: true)
+                                ->required(),
+                        ]),
+
+
                     Forms\Components\Select::make('product')
                         ->label(__('Student Product Name'))
                         ->relationship('product', 'name')
@@ -72,6 +89,8 @@ class ManageStudentBills extends ManageRecords
                         ->preload()
                         ->searchable()
                         ->required(),
+
+
                     Forms\Components\Grid::make()
                         ->schema([
                             Forms\Components\Select::make('current_school')
@@ -79,6 +98,7 @@ class ManageStudentBills extends ManageRecords
                                 ->options(StudentCurrentSchool::class)
                                 ->multiple()
                                 ->required(),
+
                             Forms\Components\Select::make('category')
                                 ->label(__('Category'))
                                 ->options(StudentCategory::class)
@@ -86,43 +106,59 @@ class ManageStudentBills extends ManageRecords
                                 ->required(),
                         ]),
                 ])
-                ->action(function (Component $livewire): void {
+                ->action(function (Component $livewire, array $data): void {
                     $currentSchool = $livewire->mountedActionsData[0]["current_school"];
                     $category = $livewire->mountedActionsData[0]["category"];
-                    $students = Student::query()->where('status', '=', 'Aktif')->whereIn('current_school', $currentSchool)->whereIn('category', $category)->get();
+                    $students = Student::query()
+                        ->where('status', '=', 'Aktif')
+                        ->whereIn('current_school', $currentSchool)
+                        ->whereIn('category', $category)
+                        ->get();
 
                     $product_ids = $livewire->mountedActionsData[0]["product"];
-                    $products = Product::query()->whereIn('id', $product_ids)->get();
+                    $products = Product::query()
+                        ->whereIn('id', $product_ids)
+                        ->get();
 
+                    $billDateTimeString = $livewire->mountedActionsData[0]["bill_date_time"];
+                    $billDateTime = \Illuminate\Support\Carbon::parse($billDateTimeString, 'Asia/Jakarta')->setTimezone('UTC');
                     $suffix = $livewire->mountedActionsData[0]["suffix"];
 
-                    $studentProducts = [];
-                    $timestamps = now();
+                    $studentBills = [];
+                    $nowTimestamp = now();
 
                     foreach ($students as $student) {
                         foreach ($products as $product) {
-                            $studentProducts[] = [
+                            $studentBills[] = [
+                                'bill_date_time' => $billDateTime,
                                 'student_id' => $student->id,
                                 'product_id' => $product->id,
                                 'product_name' => $product->name . ' ' . $suffix,
                                 'product_price' => $product->price,
-                                'created_at' => $timestamps,
-                                'updated_at' => $timestamps,
+                                'updated_at' => $nowTimestamp, // Karena menggunakan insert bukan create jadi perlu masukan updated_at
+                                'created_at' => $nowTimestamp, // Karena menggunakan insert bukan create jadi perlu masukan updated_at
                             ];
                         }
                     }
 
-                    self::getModel()::query()->insert($studentProducts);
+                    self::getModel()::query()->insert($studentBills);
 
                     $product_names = $products->pluck('name')->implode(', ');
 
                     Notification::make()
                         ->success()
-                        ->title('Generate Berhasil')
-                        ->body('Santri ' . $students->count() . ' telah dilengkapi dengan SPP ' . $product_names . ' ' . $suffix)
-                        ->send();
+                        ->title('Generate Administrasi Santri Berhasil')
+                        ->body($students->count() . ' Santri ditambahkan Tagihan "' . $product_names . '" (' . $suffix . ') by ' . auth()->user()->name)
+                        ->send()
+                        ->sendToDatabase(\App\Models\User::withOut(['roles'])
+                            ->whereHas('roles.permissions', function ($query) {
+                                $query->where('name', 'create_student::bill');
+                            })
+                            ->get());
                 })
                 ->visible(fn (): bool => auth()->user()->can('create_student::bill')),
+
+
             Actions\Action::make('generateReportPdf')
                 ->label(__('Generate Report PDF'))
                 ->color('danger')
