@@ -131,6 +131,8 @@ class EmployeeResource extends Resource
                                     ->imageEditor()
                                     ->downloadable()
                                     ->openable()
+                                    ->disk('minio')
+                                    ->visibility('private')
                                     ->directory('profile_pictures'),
                                 Forms\Components\FileUpload::make('user_profile_picture_1x1')
                                     ->label(__('Avatar User'))
@@ -442,6 +444,8 @@ class EmployeeResource extends Resource
                             ->image()
                             ->downloadable()
                             ->openable()
+                            ->disk('minio')
+                            ->visibility('private')
                             ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('profile_picture_4x6')
                             ->label(__('Profile Picture 4x6'))
@@ -454,6 +458,8 @@ class EmployeeResource extends Resource
                             ->image()
                             ->downloadable()
                             ->openable()
+                            ->disk('minio')
+                            ->visibility('private')
                             ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('birth_certificate')
                             ->label(__('Birth Certificate'))
@@ -465,6 +471,8 @@ class EmployeeResource extends Resource
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
+                            ->disk('minio')
+                            ->visibility('private')
                             ->directory('birth_certificates'),
                         Forms\Components\FileUpload::make('family_card')
                             ->label(__('Family Card'))
@@ -476,6 +484,8 @@ class EmployeeResource extends Resource
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
+                            ->disk('minio')
+                            ->visibility('private')
                             ->directory('family_cards')
                             ->hintActions([
                                 Forms\Components\Actions\Action::make('preview-fc')
@@ -520,6 +530,8 @@ class EmployeeResource extends Resource
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
+                            ->disk('minio')
+                            ->visibility('private')
                             ->directory('skhun'),
                         Forms\Components\FileUpload::make('ijazah')
                             ->label(__('Ijazah'))
@@ -531,6 +543,8 @@ class EmployeeResource extends Resource
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
+                            ->disk('minio')
+                            ->visibility('private')
                             ->directory('ijazah'),
                     ])
                     ->columns(2),
