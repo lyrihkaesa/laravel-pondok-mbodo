@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        $startTime = microtime(true);
+
         $this->call([
             // PermissionSeeder::class,
             // RoleSeeder::class,
@@ -36,5 +38,8 @@ class DatabaseSeeder extends Seeder
             PostSeeder::class,
             PublicPageSeeder::class,
         ]);
+
+        $seconds = number_format((microtime(true) - $startTime), 2);
+        $this->command->info("Seeding completed in $seconds seconds");
     }
 }

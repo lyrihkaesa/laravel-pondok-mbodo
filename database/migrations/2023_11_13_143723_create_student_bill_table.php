@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->nullable();
             $table->string('product_name')->nullable();
             $table->integer('product_price')->nullable();
-            $table->timestamp('bill_date_time')->nullable(); // Tanggal Taggihan
+            $table->timestamp('bill_date_time')->default(now()); // Tanggal Taggihan
             $table->datetime('validated_at')->nullable();
             $table->unsignedBigInteger('validated_by')->nullable();
             $table->text('description')->nullable();

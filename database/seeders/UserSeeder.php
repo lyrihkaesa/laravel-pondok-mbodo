@@ -16,6 +16,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // $password = Hash::make('password');
+        $password = '$2y$10$LRwNfyUnjpOgX2o0vbvLiuM1oVTo9yx.MbHKoHWeazIc8bLEw9hNq';
         // Membuat user untuk peran "Super Admin"
         $adminSuperRole = Role::where('name', 'super_admin')->first();
         $userKaesa = User::create([
@@ -23,7 +25,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'phone' => '628111222333', // Ganti dengan nomor telepon yang diinginkan
             'phone_visibility' => 'private',
-            'password' => '$2y$10$LRwNfyUnjpOgX2o0vbvLiuM1oVTo9yx.MbHKoHWeazIc8bLEw9hNq', // password
+            'password' => $password, // password
         ]);
 
         $userKaesa->wallets()->create([
@@ -52,7 +54,7 @@ class UserSeeder extends Seeder
             'email' => 'abah@gmail.com',
             'phone' => '628999888777', // Ganti dengan nomor telepon yang diinginkan
             'phone_visibility' => 'private',
-            'password' => '$2y$10$LRwNfyUnjpOgX2o0vbvLiuM1oVTo9yx.MbHKoHWeazIc8bLEw9hNq', // password
+            'password' => $password, // password
         ]);
 
         $userPengurus01->wallets()->create([
@@ -79,7 +81,7 @@ class UserSeeder extends Seeder
             'email' => 'yani@gmail.com',
             'phone' => '6282136687558', // Ganti dengan nomor telepon yang diinginkan
             'phone_visibility' => 'public',
-            'password' => '$2y$10$LRwNfyUnjpOgX2o0vbvLiuM1oVTo9yx.MbHKoHWeazIc8bLEw9hNq', // password
+            'password' => $password, // password
         ]);
 
         $userPengurus02->wallets()->create([
@@ -106,7 +108,7 @@ class UserSeeder extends Seeder
             'email' => 'ulfa@gmail.com',
             'phone' => '6282134125855', // Ganti dengan nomor telepon yang diinginkan
             'phone_visibility' => 'public',
-            'password' => '$2y$10$LRwNfyUnjpOgX2o0vbvLiuM1oVTo9yx.MbHKoHWeazIc8bLEw9hNq', // password
+            'password' => $password, // password
         ]);
 
         $userPengurus03->wallets()->create([
@@ -133,7 +135,7 @@ class UserSeeder extends Seeder
             'email' => 'toriq@gmail.com',
             'phone' => '6285803036153', // Ganti dengan nomor telepon yang diinginkan
             'phone_visibility' => 'public',
-            'password' => '$2y$10$LRwNfyUnjpOgX2o0vbvLiuM1oVTo9yx.MbHKoHWeazIc8bLEw9hNq', // password
+            'password' => $password, // password
         ]);
 
         $userPengurus04->wallets()->create([

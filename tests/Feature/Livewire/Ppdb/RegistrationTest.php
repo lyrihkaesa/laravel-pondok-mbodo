@@ -56,7 +56,6 @@ function getValidFormData()
         "current_school" => "SMP",
         "phone" => "6281231231231",
         "email" => "email@gmail.com",
-        "password" => "password",
         "family_card_number" => "3315040909090002",
         "father_name" => "Marmin Suparjo",
         "father_nik" => "3315040909090003",

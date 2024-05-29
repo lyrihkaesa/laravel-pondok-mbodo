@@ -289,11 +289,6 @@ class Registration extends Component implements HasForms
                                 }
                             })
                             ->required(),
-                        Forms\Components\TextInput::make('password')
-                            ->label(__('Password'))
-                            ->password()
-                            ->revealable()
-                            ->helperText(__('Password Helper Text Create')),
                     ])->columns(2),
                 Forms\Components\Section::make(__('Parent Information'))
                     ->description(__('Parent Information Description'))
@@ -599,7 +594,7 @@ class Registration extends Component implements HasForms
 
             if ($package) {
                 foreach ($package->products as $product) {
-                    $studentModel->products()->attach($product, ['product_name' => $product->name . ' Awal ' . now()->translatedFormat('F Y'), 'product_price' => $product->price]);
+                    $studentModel->products()->attach($product, ['product_name' => $product->name . ' Awal ' . now()->translatedFormat('M Y'), 'product_price' => $product->price]);
                 }
             }
 
