@@ -48,13 +48,39 @@ class StudentBillResource extends Resource implements HasShieldPermissions
     {
         return $form
             ->schema([
+                Forms\Components\DateTimePicker::make('bill_date_time')
+                    ->timezone('Asia/Jakarta')
+                    ->label(__('Bill Date'))
+                    ->required()
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $old, ?string $state) {
+                        if ($state === null) {
+                            return;
+                        }
+
+                        $product_id = $get('product_id');
+
+                        if ($product_id === null) {
+                            return;
+                        }
+
+                        $product = Product::find($product_id);
+
+                        $set('product_name', \App\Utilities\FinancialUtility::getProductNameWithDate($product->name, $state));
+                        $set('product_price', $product->price);
+                        return $state;
+                    })
+                    ->default(now())
+                    ->columnSpanFull(),
+
                 Forms\Components\Select::make('student_id')
                     ->label(__('Student'))
                     ->required()
                     ->relationship('student', 'name')
                     ->searchable(),
+
                 Forms\Components\Select::make('product_id')
-                    ->label(__('Product Name'))
+                    ->label(__('Product'))
                     ->helperText(__('Product Name Helper Text', [
                         'product_name' => __('Student Product Name'),
                         'product_price' => __('Student Product Price'),
@@ -63,29 +89,36 @@ class StudentBillResource extends Resource implements HasShieldPermissions
                     ->relationship('product', 'name')
                     ->searchable()
                     ->preload()
-                    ->live()
+                    ->live(onBlur: true)
                     ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $old, ?string $state) {
                         if ($state === null) {
                             return;
                         };
+
                         $product = Product::find($state);
 
-                        $set('product_name', $product->name . ' ' . now()->translatedFormat('F Y'));
+                        $set('product_name', \App\Utilities\FinancialUtility::getProductNameWithDate($product->name, $get('bill_date_time')));
                         $set('product_price', $product->price);
                         return $state;
                     }),
+
                 Forms\Components\TextInput::make('product_name')
                     ->label(__('Student Product Name'))
+                    ->placeholder(__('Catering Mei 2024'))
                     ->helperText(__('Student Product Name Helper Text', [
-                        'product' => __('Product Name'),
+                        'product' => __('Product'),
                     ]))
                     ->required(),
+
                 Forms\Components\TextInput::make('product_price')
                     ->label(__('Student Product Price'))
+                    ->placeholder(__('100000'))
                     ->helperText(__('Student Product Price Helper Text', [
-                        'product' => __('Product Name'),
+                        'product' => __('Product'),
                     ]))
                     ->required(),
+
+
                 Forms\Components\Group::make()
                     ->schema([
                         Forms\Components\Toggle::make('is_validated')
@@ -108,6 +141,7 @@ class StudentBillResource extends Resource implements HasShieldPermissions
                             ->columnSpan([
                                 'default' => 1,
                             ]),
+
                         Forms\Components\DateTimePicker::make('validated_at')
                             ->timezone('Asia/Jakarta')
                             ->label(__('Validated At'))
@@ -127,6 +161,7 @@ class StudentBillResource extends Resource implements HasShieldPermissions
                             ->columnSpan([
                                 'default' => 3,
                             ]),
+
                         Forms\Components\Select::make('validated_by')
                             ->relationship('validator', 'name')
                             ->label(__('Validated By'))

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\StudentCurrentSchool;
 use App\Models\Student;
 use App\Models\Organization;
 use Illuminate\Http\Request;
@@ -40,9 +41,13 @@ class StudentBillController extends Controller
             $student->total_bills_formated = $total_bills === 0 ? "Lunas" : Number::currency($total_bills, 'IDR');
         }
 
-        $students = $students->sortBy(function ($student) {
-            return $student->total_bills;
-        });
+        $students = $students
+            ->sortByDesc(function ($student) {
+                return $student->current_school;
+            })
+            ->sortBy(function ($student) {
+                return $student->total_bills;
+            });
 
         $yayasan = Organization::query()
             ->where('category', OrganizationCategory::YAYASAN)
