@@ -243,5 +243,11 @@
     "Product": "Produk",
     "Bill Date": "Tanggal Tagihan",
     "Bill Date Start": "Mulai Tanggal Tagihan",
-    "Bill Date End": "Akhir Tanggal Tagihan"
+    "Bill Date End": "Akhir Tanggal Tagihan",
+    "Browser Sessions": "Sesi Browser",
+    "Manage and log out your active sessions on other browsers and devices.": "Kelola dan keluar dari sesi aktif Anda di browser dan perangkat lain.",
+    "If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.": "Jika perlu, Anda dapat keluar dari semua sesi browser Anda di semua perangkat. Beberapa sesi terbaru Anda tercantum di bawah ini; namun, daftar ini mungkin tidak mencakup semua sesi. Jika Anda merasa akun Anda telah dibajak, Anda juga harus memperbarui kata sandi Anda.",
+    "Unknown": "Tidak diketahui",
+    "This device": "Perangkat ini",
+    "Last active": "Terakhir aktif"
 }
