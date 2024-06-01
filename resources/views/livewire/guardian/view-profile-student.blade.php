@@ -12,7 +12,7 @@
     {{ $this->studentInfolist }}
 
     @isset($this->student->id)
-        <livewire:guardian.list-student-products :studentId="$this->student->id" />
+        <livewire:guardian.list-student-bills :studentId="$this->student->id" />
         <livewire:guardian.list-student-enrollments :studentId="$this->student->id" />
     @endisset
 </div>
