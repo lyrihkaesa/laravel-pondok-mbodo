@@ -1,0 +1,65 @@
+@startuml pondokmbodo
+left to right direction
+
+actor "Tamu (Guest)" as Guest
+actor "Pengguna" as User
+actor "Pengurus" as Employee
+actor "Santri" as Student
+actor "Orang Tua/Wali" as Guardian
+actor "Calon Santri" as StudentCandidate
+
+rectangle "Sistem Informasi Yayasan Pondok Mbodo" {
+    rectangle "Halaman Publik Pondok Mbodo" {
+        usecase "Login Admin Panel" as LoginAdminPanel
+        usecase "PPDB Registration" as PpdbRegistration
+        usecase "Login Portal Orang Tua" as LoginPortalGuardian
+        usecase "Melihat Public Page" as ShowPublicPage
+        usecase "Melihat Artikel" as ShowPost
+        usecase "Melihat Profile Anaknya (Santri)" as GuardianViewProfileStudent
+    }
+
+    rectangle "Admin Panel (Privat)" as AdminPanel {
+        usecase "Management Santri" as StudentResource
+        usecase "Management Pengurus" as EmployeeResource
+        usecase "Management Administrasi Santri" as StudentBillResource
+        usecase "Management Transaksi Keuangan" as FinancialTransactionResource
+        usecase "Management Public Page" as PublicPageResource
+        usecase "Management Artikel" as PostResource
+        usecase "Management Peran" as ShieldResource
+        usecase "Edit Profile Saya" as EditProfilePage
+        usecase "Edit Profile Pengurus Saya" as EditProfileEmployeePage
+        usecase "Edit Profile Santri Saya" as EditProfileStudentPage
+    }
+}
+
+Guest <|-- StudentCandidate
+Guest <|-- Guardian
+
+User <|-- Employee
+User <|-- Student
+
+User --> LoginAdminPanel
+User --> EditProfilePage
+
+Guardian --> GuardianViewProfileStudent
+
+StudentCandidate --> PpdbRegistration
+Guest --> ShowPublicPage
+Guest --> ShowPost
+
+GuardianViewProfileStudent .> LoginPortalGuardian : include
+
+AdminPanel .> LoginAdminPanel : include
+
+Employee --> StudentResource
+Employee --> EmployeeResource
+Employee --> StudentBillResource
+Employee --> FinancialTransactionResource
+Employee --> PublicPageResource
+Employee --> PostResource
+Employee --> ShieldResource
+Employee --> EditProfileEmployeePage
+
+Student --> EditProfileStudentPage
+
+@enduml
