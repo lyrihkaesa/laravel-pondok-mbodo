@@ -1,0 +1,198 @@
+@startuml "Class Diagram"
+
+class User {
+    +id: bigint <<PK>>
+    +name: string
+    +email: ?string
+    +phone: string
+    +phone_visibility: string|SocialMediaVisibility::class
+    +email_verified_at: ?timestamp|datetime
+    +password: string|hash
+    +profile_picture_1x1: ?string
+    +updated_at: ?timestamp
+    +created_at: ?timestamp
+    +deleted_at: ?timestamp
+
+    +canAccessPanel() : bool
+    +student(): HasOne
+    +employee(): HasOne
+    +organization(): BelongsToMany
+    +wallets(): HasMAny
+    +socialMediaLinks(): HasMany
+    +getAvatarUrl(): string
+    +getFilamentAvatarUrl(): ?string
+}
+
+class Student {
+    +id: bigint <<PK>>
+    +user_id: bigInt <<FK>>
+    +name: string
+    +nik: string
+    +profile_picture_1x1: ?string
+    +profile_picture_3x4: ?string
+    +profile_picture_4x6: ?string
+    +nip: ?string
+    +nisn: ?string
+    +kip: ?string
+    +gender: Enum['Laki-Laki', 'Perempuan']|Gender::class
+    +religion: string
+    +birth_place: ?string
+    +birth_date: ?date
+    +province: ?string
+    +regency: ?string
+    +distric: ?string
+    +village: ?string
+    +address: ?string
+    +rt: ?string
+    +rw: ?string
+    +postal_code: ?string
+    +full_address: ?string
+    +status: string|StudentStatus::class
+    +current_name_school: ?string
+    +current_school: ?string|StudentCurrentSchool::class
+    +category: ?string|StudentCategory::class
+    +birth_certificate: ?string
+    +family_card: ?string
+    +family_card_number: ?string
+    +skhun: ?string
+    +ijazah: ?string
+    +updated_at: timestamp
+    +created_at: timestamp
+    +deleted_at: ?timestamp
+
+    +user(): BelongsTo
+    +socialMediaLinks(): HasManyThrough
+    +classrooms(): BelongsToMany
+    +lastEnrolledClassroom(): BelongsToMany
+    +products(): BelongsToMany
+    +guardians(): BelongsToMany
+}
+
+class Employee {
+    +id: bigint <<PK>>
+    +user_id: bigInt <<FK>>
+    +name: string
+    +nik: string
+    +profile_picture_1x1: ?string
+    +profile_picture_3x4: ?string
+    +profile_picture_4x6: ?string
+    +nip: ?string
+    +nisn: ?string
+    +kip: ?string
+    +gender: Enum['Laki-Laki', 'Perempuan']|Gender::class
+    +religion: string
+    +birth_place: ?string
+    +birth_date: ?date
+    +province: ?string
+    +regency: ?string
+    +distric: ?string
+    +village: ?string
+    +address: ?string
+    +rt: ?string
+    +rw: ?string
+    +postal_code: ?string
+    +full_address: ?string
+    +status: string|StudentStatus::class
+    +current_name_school: ?string
+    +current_school: ?string|StudentCurrentSchool::class
+    +category: ?string|StudentCategory::class
+    +birth_certificate: ?string
+    +family_card: ?string
+    +family_card_number: ?string
+    +skhun: ?string
+    +ijazah: ?string
+    +updated_at: timestamp
+    +created_at: timestamp
+    +deleted_at: ?timestamp
+
+    +user(): BelongsTo
+}
+
+class Guardian {
+
+}
+
+class Role {
+
+}
+
+class Permission {
+
+}
+
+class StudentBill {
+
+}
+
+class FinancialTransaction {
+
+}
+
+class Post {
+
+}
+
+class PublicPage {
+
+}
+
+class Wallet {
+
+}
+
+class Organization {
+
+}
+
+class Product {
+
+}
+
+class Package {
+
+}
+
+class Program {
+
+}
+
+class Facility {
+
+}
+
+' class Law {
+
+' }
+
+class Classroom {
+
+}
+
+User "1..1" -- "0..1" Student
+User "1..1" -- "0..1" Employee
+User "1..*" -- "1..*" Wallet
+User "1..1" -- "0..1" Post
+User "1..1" -- "0..1" PublicPage
+User "1..*" -- "1..*" Role
+
+Role "1..*" -- "1..*" Permission
+
+
+Student "1..*" -- "0..*" Product
+(Student, Product) . StudentBill
+Student "1..*" -- "0..*" Guardian
+
+StudentBill "1..1" -- "1..1" FinancialTransaction
+Product "1..*" -- "1..*" Package
+
+Student "1..*" -- "1..*" Classroom
+Employee "1..*" -- "1..*" Classroom
+
+Organization "1..*" -- "0..*" Program
+Organization "1..*" -- "0..*" Package
+Organization "1..*" -- "0..*" Employee
+Organization "1..*" -- "0..*" Facility
+
+FinancialTransaction "1..*" -- "1..*" User
+FinancialTransaction "1..*" -- "1..*" Wallet
+@enduml

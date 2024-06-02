@@ -1,4 +1,4 @@
-@startuml pondokmbodo
+@startuml "Usecase Diagram"
 left to right direction
 
 actor "Tamu (Guest)" as Guest
