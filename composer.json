@@ -27,6 +27,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.12",
         "beyondcode/laravel-er-diagram-generator": "^3.0",
+        "doctrine/dbal": "^3.8",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^2.0",
         "laravel/pint": "^1.0",
