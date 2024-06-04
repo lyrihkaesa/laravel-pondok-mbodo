@@ -17,7 +17,11 @@ class EventFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => $this->faker->sentence(),
+            'location' => $this->faker->address(),
+            'description' => $this->faker->paragraph(),
+            'start' => now()->startOfMonth()->addDays(random_int(1, now()->endOfMonth()->day))->startOfDay(),
+            'end' => now()->startOfMonth()->addDays(random_int(1, now()->endOfMonth()->day))->addHour(),
         ];
     }
 }
