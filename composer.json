@@ -22,6 +22,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^3.0",
         "matomo/device-detector": "^6.3",
+        "saade/filament-fullcalendar": "^3.0",
         "spatie/laravel-permission": "^6.0"
     },
     "require-dev": {
