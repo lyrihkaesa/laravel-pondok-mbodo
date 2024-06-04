@@ -13,7 +13,7 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::unprepared(file_get_contents(database_path('seeds/posts.sql')));
+        DB::unprepared(file_get_contents(database_path('sql/posts.sql')));
         DB::statement('ALTER SEQUENCE posts_id_seq RESTART WITH 12');
     }
 }

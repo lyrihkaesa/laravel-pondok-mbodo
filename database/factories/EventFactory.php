@@ -16,12 +16,14 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+        $start = now()->startOfMonth()->addDays(random_int(1, now()->endOfMonth()->day));
         return [
             'title' => $this->faker->sentence(),
             'location' => $this->faker->address(),
             'description' => $this->faker->paragraph(),
-            'start' => now()->startOfMonth()->addDays(random_int(1, now()->endOfMonth()->day))->startOfDay(),
-            'end' => now()->startOfMonth()->addDays(random_int(1, now()->endOfMonth()->day))->addHour(),
+            'start' => $start->copy()->addHours(random_int(1, 11)),
+            'end' => $start->copy()->addDays(random_int(0, 7))->addHours(random_int(11, 24)),
+            'color' => $this->faker->hexColor(),
         ];
     }
 }

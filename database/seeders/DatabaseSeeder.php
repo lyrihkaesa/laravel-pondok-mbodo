@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             LawSeeder::class,
             PostSeeder::class,
             PublicPageSeeder::class,
+            EventSeeder::class,
         ]);
 
         $seconds = number_format((microtime(true) - $startTime), 2);
