@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
+            $table->string('title'); // Google Calendar field is: summary
+            $table->string('location')->nullable();
+            $table->text('description')->nullable();
             $table->dateTime('start');
             $table->dateTime('end');
             $table->timestamps();
