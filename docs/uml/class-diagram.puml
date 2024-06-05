@@ -168,12 +168,59 @@ class Classroom {
 
 }
 
+class Calendar {
+    + id: bigInt <<PK>>
+    + user_id: bigInt <<FK>>
+    + google_calendar_id: string
+    + name: string
+    + description: text
+    + color: string
+    + timezone: sring
+    + updated_at: timestamp
+    + created_at: timestamp
+}
+
+class Event {
+    + id: bigInt <<PK>>
+    + calendar_id: bigInt <<PK>>
+    + title: string
+    + location: ?string
+    + description: ?text
+    + start: datetime
+    + end: datetime
+    + color: ?string
+    + updated_at: timestamp
+    + created_at: timestamp
+}
+
+class ConnectedAccount {
+    + id: bigInt <<PK>>
+    + user_id: bigInt <<FK>>
+    + provider: string
+    + provider_id: string
+    + name: string
+    + nickname: string
+    + email: string
+    + telephone: string
+    + avatar_path: text
+    + token: string
+    + secret: string
+    + refresh_token: string
+    + expires_at: datetime
+    + created_at: timestamp
+    + updated_at: timestamp
+}
+
 User "1..1" -- "0..1" Student
 User "1..1" -- "0..1" Employee
 User "1..*" -- "1..*" Wallet
 User "1..1" -- "0..1" Post
 User "1..1" -- "0..1" PublicPage
 User "1..*" -- "1..*" Role
+
+User "1..1" -- "1..*" Calendar
+User "1..1" -- "1..*" ConnectedAccount
+Calendar "1..1" -- "1..*" Event
 
 Role "1..*" -- "1..*" Permission
 
