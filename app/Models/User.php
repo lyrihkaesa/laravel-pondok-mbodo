@@ -114,4 +114,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         $disk = \Illuminate\Support\Facades\Storage::disk('minio_public');
         return $disk->url($this->profile_picture_1x1);
     }
+
+    public function connectedAccounts(): HasMany
+    {
+        return $this->hasMany(ConnectedAccount::class);
+    }
 }
