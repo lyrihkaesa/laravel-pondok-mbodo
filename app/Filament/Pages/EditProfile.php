@@ -372,4 +372,9 @@ class EditProfile extends Page implements HasForms
     {
         $this->redirect('/auth/google');
     }
+
+    public function disconnectGoogle($connectedAccountId): void
+    {
+        $this->getUser()->connectedAccounts()->where('id', $connectedAccountId)->delete();
+    }
 }

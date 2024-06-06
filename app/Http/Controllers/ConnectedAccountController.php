@@ -54,6 +54,6 @@ class ConnectedAccountController extends Controller
         $connectedAccount->save();
 
         // Redirect to the appropriate page after successful authentication
-        return redirect()->route('filament.admin.pages.dashboard');
+        return redirect()->intended('/admin/my');
     }
 }

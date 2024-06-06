@@ -52,32 +52,35 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <x-filament::button color="danger" disabled>
+                                    <x-filament::button color="danger"
+                                        wire:click='disconnectGoogle({{ $connectedAccount->id }})'>
                                         {{ __('Disconnect') }}
-                                    </x-filament::button>
-                                </div>
-                            </div>
-                        @else
-                            <div class="flex flex-row justify-between">
-                                <div class="flex flex-row justify-start gap-3 font-semibold">
-                                    <x-heroicon-o-globe-alt class="h-8 w-8 text-gray-500" />
-                                    <div>
-                                        <div class="text-sm text-gray-800 dark:text-gray-200">
-                                            Google
-                                        </div>
-                                        <div class="text-xs text-gray-600 dark:text-gray-300">
-                                            Tidak terkoneksi
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <x-filament::button wire:click="connectGoogle">
-                                        {{ __('Connect') }}
                                     </x-filament::button>
                                 </div>
                             </div>
                         @endif
                     @endforeach
+                @else
+                    <div>
+                        <div class="flex flex-row justify-between">
+                            <div class="flex flex-row justify-start gap-3 font-semibold">
+                                <x-heroicon-o-globe-alt class="h-8 w-8 text-gray-500" />
+                                <div>
+                                    <div class="text-sm text-gray-800 dark:text-gray-200">
+                                        Google
+                                    </div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-300">
+                                        Tidak terkoneksi
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <x-filament::button wire:click="connectGoogle">
+                                    {{ __('Connect') }}
+                                </x-filament::button>
+                            </div>
+                        </div>
+                    </div>
                 @endif
             </div>
         </x-filament::section>
