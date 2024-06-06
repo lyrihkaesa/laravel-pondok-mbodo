@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EventResource\Pages;
-use App\Filament\Resources\EventResource\RelationManagers;
-use App\Models\Event;
+use App\Filament\Resources\CalendarResource\Pages;
+use App\Filament\Resources\CalendarResource\RelationManagers;
+use App\Models\Calendar;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class EventResource extends Resource
+class CalendarResource extends Resource
 {
-    protected static ?string $model = Event::class;
+    protected static ?string $model = Calendar::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,23 +23,20 @@ class EventResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('calendar_id')
+                Forms\Components\TextInput::make('user_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('google_event_id')
+                Forms\Components\TextInput::make('google_calendar_id')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('title')
+                Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('location')
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
                     ->columnSpanFull(),
-                Forms\Components\DateTimePicker::make('start')
-                    ->required(),
-                Forms\Components\DateTimePicker::make('end')
-                    ->required(),
                 Forms\Components\TextInput::make('color')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('timezone')
+                    ->required()
                     ->maxLength(255),
             ]);
     }
@@ -48,22 +45,16 @@ class EventResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('calendar_id')
+                Tables\Columns\TextColumn::make('user_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('google_event_id')
+                Tables\Columns\TextColumn::make('google_calendar_id')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('title')
+                Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('location')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('start')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('end')
-                    ->dateTime()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('color')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('timezone')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -92,7 +83,7 @@ class EventResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageEvents::route('/'),
+            'index' => Pages\ManageCalendars::route('/'),
         ];
     }
 }
