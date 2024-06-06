@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('calendars', function (Blueprint $table) {
             $table->id();
-            $table->string('title'); // Google Calendar field is: summary
-            $table->string('location')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('google_calendar_id')->nullable();
+            $table->string('name');
             $table->text('description')->nullable();
-            $table->dateTime('start');
-            $table->dateTime('end');
             $table->string('color')->nullable();
+            $table->string('timezone');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('calendars');
     }
 };

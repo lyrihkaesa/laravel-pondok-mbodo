@@ -12,13 +12,13 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Event::truncate();
-        \App\Models\Event::factory(5)->create();
-        \App\Models\Event::factory(5)->create(
-            [
-                'start' => now(),
-                'end' => now()->addHours(3),
-            ]
-        );
+        // \App\Models\Event::truncate();
+        // \App\Models\Event::factory(5)->create();
+        // \App\Models\Event::factory(5)->create(
+        //     [
+        //         'start' => now(),
+        //         'end' => now()->addHours(3),
+        //     ]
+        // );
     }
 }
