@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', \App\Livewire\Page::class)->name('home');
 Route::get('/tentang', \App\Livewire\Page::class)->name('about');
@@ -19,6 +19,12 @@ Route::get('/blog/{slug}', \App\Livewire\Post\Show::class)->name('posts.show');
 
 Route::get('/orang-tua', \App\Livewire\Guardian\Login::class)->name('guardian.login');
 Route::get('/orang-tua/santri/{token}', \App\Livewire\Guardian\ViewProfileStudent::class)->name('guardian.view-profile-student');
+
+Route::get('auth/{provider}', [\App\Http\Controllers\ConnectedAccountController::class, 'redirectToProvider'])
+    ->name('auth.redirect');
+
+Route::get('auth/{provider}/callback', [\App\Http\Controllers\ConnectedAccountController::class, 'handleProviderCallback'])
+    ->name('auth.callback');
 
 Route::middleware('auth')->group(function () {
     Route::get('/admin/financial-transactions/pdf', [Controllers\FinancialTransactionController::class, 'generatePdfReport'])->name('admin.financial-transactions.pdf');

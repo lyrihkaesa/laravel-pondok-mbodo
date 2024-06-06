@@ -23,6 +23,70 @@
     <x-filament-panels::form>
         <x-filament::section aside>
             <x-slot name="heading">
+                {{ __('Connected Accounts') }}
+            </x-slot>
+
+            <x-slot name="description">
+                {{ __('Manage and remove your connected accounts.') }}
+            </x-slot>
+            <div class="grid gap-y-6">
+                {{-- <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    {{ __('You have no connected accounts.') }}</h2> --}}
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                    {{ __('You are free to connect any social accounts to your profile and may remove any connected accounts at any time. If you feel any of your connected accounts have been compromised, you should disconnect them immediately and change your password.') }}
+                </p>
+
+                @if (count($this->connectedAccounts) > 0)
+                    @foreach ($this->connectedAccounts as $connectedAccount)
+                        @if ($connectedAccount->provider === 'google')
+                            <div class="flex flex-row justify-between">
+                                <div class="flex flex-row justify-start gap-3 font-semibold">
+                                    <x-heroicon-o-globe-alt class="h-8 w-8 text-gray-500" />
+                                    <div>
+                                        <div class="text-sm text-gray-800 dark:text-gray-200">
+                                            Google
+                                        </div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-300">
+                                            {{ $connectedAccount->email }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <x-filament::button color="danger" disabled>
+                                        {{ __('Disconnect') }}
+                                    </x-filament::button>
+                                </div>
+                            </div>
+                        @else
+                            <div class="flex flex-row justify-between">
+                                <div class="flex flex-row justify-start gap-3 font-semibold">
+                                    <x-heroicon-o-globe-alt class="h-8 w-8 text-gray-500" />
+                                    <div>
+                                        <div class="text-sm text-gray-800 dark:text-gray-200">
+                                            Google
+                                        </div>
+                                        <div class="text-xs text-gray-600 dark:text-gray-300">
+                                            Tidak terkoneksi
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <x-filament::button wire:click="connectGoogle">
+                                        {{ __('Connect') }}
+                                    </x-filament::button>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
+            </div>
+        </x-filament::section>
+    </x-filament-panels::form>
+
+    {{-- Browser Sessions Start --}}
+    <x-filament-panels::form>
+        <x-filament::section aside>
+            <x-slot name="heading">
                 {{ __('Browser Sessions') }}
             </x-slot>
 

@@ -8,6 +8,7 @@ use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Illuminate\Support\Carbon;
+use Livewire\Attributes\Computed;
 use DeviceDetector\DeviceDetector;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -359,5 +360,16 @@ class EditProfile extends Page implements HasForms
         $deviceDetector->parse();
 
         return $deviceDetector;
+    }
+
+    #[Computed()]
+    public function connectedAccounts(): Collection
+    {
+        return $this->getUser()->connectedAccounts;
+    }
+
+    public function connectGoogle(): void
+    {
+        $this->redirect('/auth/google');
     }
 }
