@@ -70,7 +70,7 @@
                                         Google
                                     </div>
                                     <div class="text-xs text-gray-600 dark:text-gray-300">
-                                        Tidak terkoneksi
+                                        {{ __('Not connected') }}
                                     </div>
                                 </div>
                             </div>
