@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('color')->nullable();
             $table->string('timezone');
+            $table->string('visibility')->default('private');
             $table->timestamps();
         });
     }

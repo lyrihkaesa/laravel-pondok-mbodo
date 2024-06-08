@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('platform');
             $table->string('username')->nullable();
             $table->string('url')->nullable();
-            $table->string('visibility');
+            $table->string('visibility')->default('public');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

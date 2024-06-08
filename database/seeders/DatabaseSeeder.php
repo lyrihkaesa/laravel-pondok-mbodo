@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             LawSeeder::class,
             PostSeeder::class,
             PublicPageSeeder::class,
+            CalendarSeeder::class,
             EventSeeder::class,
         ]);
 

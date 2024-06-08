@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('title'); // Google Calendar field is: summary
             $table->string('location')->nullable();
             $table->text('description')->nullable();
-            $table->dateTime('start');
-            $table->dateTime('end');
+            $table->boolean('is_all_day')->default(false);
+            $table->dateTime('start_at');
+            $table->dateTime('end_at');
             $table->string('color')->nullable();
             $table->timestamps();
         });

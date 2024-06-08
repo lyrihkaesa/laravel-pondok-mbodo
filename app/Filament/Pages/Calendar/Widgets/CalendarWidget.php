@@ -1,16 +1,19 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Pages\Calendar\Widgets;
 
-use App\Models\Event;
+
 use Filament\Forms;
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Model;
-use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 use Saade\FilamentFullCalendar\Actions;
+use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
 
 class CalendarWidget extends FullCalendarWidget
 {
     public Model | string | null $model = Event::class;
+
+    public ?array $selectedCalendarIds = [];
 
     protected function headerActions(): array
     {
@@ -19,9 +22,10 @@ class CalendarWidget extends FullCalendarWidget
                 ->mountUsing(
                     function (Forms\Form $form, array $arguments) {
                         $form->fill([
+                            'calendar_id' => $this->selectedCalendarIds[0] ?? null,
                             'color' => '#a3e635',
-                            'start' => $arguments['start'] ?? null,
-                            'end' => $arguments['end'] ?? null,
+                            'start_at' => $arguments['start'] ?? null,
+                            'end_at' => $arguments['end'] ?? null,
                         ]);
                     }
                 ),
@@ -39,8 +43,8 @@ class CalendarWidget extends FullCalendarWidget
                             'location' => $record->location,
                             'description' => $record->description,
                             'color' => $record->color,
-                            'start' => $arguments['event']['start'] ?? $record->start,
-                            'end' => $arguments['event']['end'] ?? $record->end,
+                            'start_at' => $arguments['event']['start'] ?? $record->start_at,
+                            'end_at' => $arguments['event']['end'] ?? $record->end_at,
                         ]);
                     }
                 ),
@@ -51,8 +55,9 @@ class CalendarWidget extends FullCalendarWidget
     public function fetchEvents(array $fetchInfo): array
     {
         return Event::query()
-            ->where('start', '>=', $fetchInfo['start'])
-            ->where('end', '<=', $fetchInfo['end'])
+            ->whereIn('calendar_id', $this->selectedCalendarIds)
+            ->where('start_at', '>=', $fetchInfo['start'])
+            ->where('end_at', '<=', $fetchInfo['end'])
             ->get()
             ->map(
                 fn (Event $event) => [
@@ -61,8 +66,8 @@ class CalendarWidget extends FullCalendarWidget
                     'location' => $event->location,
                     'description' => $event->description,
                     'color' => $event->color,
-                    'start' => $event->start,
-                    'end' => $event->end,
+                    'start' => $event->start_at,
+                    'end' => $event->end_at,
                 ]
             )
             ->all();
@@ -71,6 +76,10 @@ class CalendarWidget extends FullCalendarWidget
     public function getFormSchema(): array
     {
         return [
+            Forms\Components\Select::make('calendar_id')
+                ->relationship('calendar', 'name', modifyQueryUsing: fn ($query) => $query->where('user_id', auth()->id())->orWhere('visibility', 'public'))
+                ->getOptionLabelFromRecordUsing(fn ($record) => $record->name . ' - ' . str($record->visibility->value)->upper())
+                ->required(),
             Forms\Components\TextInput::make('title')
                 ->required()
                 ->maxLength(255),
@@ -84,9 +93,9 @@ class CalendarWidget extends FullCalendarWidget
                 ->columnSpanFull(),
             Forms\Components\Grid::make()
                 ->schema([
-                    Forms\Components\DateTimePicker::make('start')
+                    Forms\Components\DateTimePicker::make('start_at')
                         ->required(),
-                    Forms\Components\DateTimePicker::make('end')
+                    Forms\Components\DateTimePicker::make('end_at')
                         ->required(),
                 ]),
         ];

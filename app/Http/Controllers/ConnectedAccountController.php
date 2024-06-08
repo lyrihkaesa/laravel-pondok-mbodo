@@ -30,7 +30,7 @@ class ConnectedAccountController extends Controller
         if ($connectedAccount) {
             Auth::login($connectedAccount->user);
             Session::regenerate();
-            return redirect()->intended('/admin/my');
+            return redirect()->route('filament.admin.pages.my');
         }
 
         $userModel = Auth::user();
@@ -54,6 +54,6 @@ class ConnectedAccountController extends Controller
         $connectedAccount->save();
 
         // Redirect to the appropriate page after successful authentication
-        return redirect()->intended('/admin/my');
+        return redirect()->route('filament.admin.pages.my');
     }
 }
