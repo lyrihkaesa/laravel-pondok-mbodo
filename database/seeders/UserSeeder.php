@@ -16,8 +16,10 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // $password = Hash::make('password');
-        $password = '$2y$10$LRwNfyUnjpOgX2o0vbvLiuM1oVTo9yx.MbHKoHWeazIc8bLEw9hNq';
+        // Gunakan Hash::make() jika mendapatkan error berikut:
+        // RuntimeException Could not verify the hashed value's configuration.
+        $password = Hash::make('password');
+        // $password = '$2y$10$LRwNfyUnjpOgX2o0vbvLiuM1oVTo9yx.MbHKoHWeazIc8bLEw9hNq';
         // Membuat user untuk peran "Super Admin"
         $adminSuperRole = Role::where('name', 'super_admin')->first();
         $userKaesa = User::create([

@@ -75,7 +75,6 @@ class EditEmployee extends EditRecord
                             ->send();
                     } catch (Exception $exception) {
                         DB::rollBack();
-                        dd($exception);
 
                         Notification::make()
                             ->title(__('Failed'))
