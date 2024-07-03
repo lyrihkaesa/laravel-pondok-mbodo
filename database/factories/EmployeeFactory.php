@@ -40,7 +40,7 @@ class EmployeeFactory extends Factory
         $user->assignRole($rolePengurus);
 
         $user->wallets()->create([
-            'id' => $user->phone,
+            'wallet_code' => $user->phone,
             'name' => 'Dompet Utama',
             'balance' => 0,
         ]);

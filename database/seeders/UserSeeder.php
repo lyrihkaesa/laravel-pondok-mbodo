@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
         ]);
 
         $userKaesa->wallets()->create([
-            'id' => $userKaesa->phone,
+            'wallet_code' => $userKaesa->phone,
             'name' => 'Dompet Utama',
             'balance' => 0,
         ]);
@@ -60,7 +60,7 @@ class UserSeeder extends Seeder
         ]);
 
         $userPengurus01->wallets()->create([
-            'id' => $userPengurus01->phone,
+            'wallet_code' => $userPengurus01->phone,
             'name' => 'Dompet Utama',
             'balance' => 0,
         ]);
@@ -87,7 +87,7 @@ class UserSeeder extends Seeder
         ]);
 
         $userPengurus02->wallets()->create([
-            'id' => $userPengurus02->phone,
+            'wallet_code' => $userPengurus02->phone,
             'name' => 'Dompet Utama',
             'balance' => 0,
         ]);
@@ -114,7 +114,7 @@ class UserSeeder extends Seeder
         ]);
 
         $userPengurus03->wallets()->create([
-            'id' => $userPengurus03->phone,
+            'wallet_code' => $userPengurus03->phone,
             'name' => 'Dompet Utama',
             'balance' => 0,
         ]);
@@ -141,7 +141,7 @@ class UserSeeder extends Seeder
         ]);
 
         $userPengurus04->wallets()->create([
-            'id' => $userPengurus04->phone,
+            'wallet_code' => $userPengurus04->phone,
             'name' => 'Dompet Utama',
             'balance' => 0,
         ]);

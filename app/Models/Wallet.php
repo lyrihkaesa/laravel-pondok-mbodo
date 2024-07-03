@@ -4,23 +4,20 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Organization;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Wallet extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $primaryKey = 'id'; // Mengatur primary key menjadi 'id'
-    protected $keyType = 'string'; // Mengatur tipe primary key menjadi string
-    public $incrementing = false; // Menonaktifkan auto increment
-
     protected $fillable = [
-        'id',
+        'wallet_code',
         'name',
         'balance',
         'user_id',
@@ -74,5 +71,30 @@ class Wallet extends Model
     {
         return FinancialTransaction::where('from_wallet_id', $this->id)
             ->orWhere('to_wallet_id', $this->id);
+    }
+
+    public function scopeYayasan(Builder $query): Builder
+    {
+        return $query->where('wallet_code', 'YAYASAN');
+    }
+
+    public function scopeIncome(Builder $query): Builder
+    {
+        return $query->where('wallet_code', 'INCOME');
+    }
+
+    public function scopeExpense(Builder $query): Builder
+    {
+        return $query->where('wallet_code', 'EXPENSE');
+    }
+
+    public function scopeDanaBos(Builder $query): Builder
+    {
+        return $query->where('wallet_code', 'DANA_BOS');
+    }
+
+    public function scopeSystem(Builder $query): Builder
+    {
+        return $query->where('wallet_code', 'SYSTEM');
     }
 }

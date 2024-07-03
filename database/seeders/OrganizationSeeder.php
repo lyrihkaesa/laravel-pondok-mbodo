@@ -297,7 +297,7 @@ class OrganizationSeeder extends Seeder
                 if (isset($organization['wallets'])) {
                     foreach ($organization['wallets'] as $key => $value) {
                         $organizationModel->wallets()->create([
-                            'id' => $key,
+                            'wallet_code' => $key,
                             'name' => $value['name'],
                             'balance' => $value['balance'],
                             'policy' => $value['policy'] ?? null,
@@ -305,7 +305,7 @@ class OrganizationSeeder extends Seeder
                     };
                 } else {
                     $organizationModel->wallets()->create([
-                        'id' => str($organizationModel->name)->upper()->replace(' ', '_'),
+                        'wallet_code' => str($organizationModel->name)->upper()->replace(' ', '_'),
                         'name' => 'Dompet Utama',
                         'balance' => 0,
                     ]);

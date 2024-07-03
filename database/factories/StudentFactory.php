@@ -38,7 +38,7 @@ class StudentFactory extends Factory
         $user->assignRole($studentRole);
 
         $user->wallets()->create([
-            'id' => $user->phone,
+            'wallet_code' => $user->phone,
             'name' => 'Dompet Utama',
             'balance' => 0,
         ]);

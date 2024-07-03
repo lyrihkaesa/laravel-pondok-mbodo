@@ -25,8 +25,8 @@ class WalletResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
-                    ->label(__('Wallet Id'))
+                Forms\Components\TextInput::make('wallet_code')
+                    ->label(__('Wallet Code'))
                     ->unique(ignoreRecord: true)
                     ->required()
                     ->maxLength(255),
@@ -60,8 +60,8 @@ class WalletResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label(__('Wallet Id'))
+                Tables\Columns\TextColumn::make('wallet_code')
+                    ->label(__('Wallet Code'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('Name'))

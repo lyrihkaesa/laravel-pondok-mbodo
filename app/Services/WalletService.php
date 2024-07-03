@@ -6,7 +6,7 @@ use App\Models\FinancialTransaction;
 
 interface WalletService
 {
-    public function transfer(string $fromWalletId, string $toWalletId, float $amount, FinancialTransaction $financialTransaction): array;
+    public function transfer(int $fromWalletId, int $toWalletId, float $amount, FinancialTransaction $financialTransaction): array;
 
     public function transferSystemToYayasan(float $amount, FinancialTransaction $financialTransaction): array;
 

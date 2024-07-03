@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('wallets', function (Blueprint $table) {
-            $table->string('id')->primary(); // Menggunakan string sebagai primary key
+            $table->id();
+            $table->string('wallet_code')->unique();
             $table->string('name');
             $table->decimal('balance', 20, 2)->default(0);
             $table->unsignedBigInteger('user_id')->nullable();

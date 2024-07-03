@@ -15,38 +15,38 @@ class WalletSeeder extends Seeder
     {
         $wallets = [
             [
-                'id' => 'SYSTEM',
+                'wallet_code' => 'SYSTEM',
                 'name' => 'Dompet System',
                 'balance' => 0,
                 'canMinus' => false,
             ],
             [
-                'id' => 'YAYASAN',
+                'wallet_code' => 'YAYASAN',
                 'name' => 'Dompet Yayasan',
                 'balance' => 0,
             ],
             [
-                'id' => 'DONATUR',
+                'wallet_code' => 'DONATUR',
                 'name' => 'Dompet Donatur',
                 'balance' => 0,
             ],
             [
-                'id' => 'DANA_BOS',
+                'wallet_code' => 'DANA_BOS',
                 'name' => 'Dompet Dana BOS',
                 'balance' => 0,
             ],
             [
-                'id' => 'DANA_BOS',
+                'wallet_code' => 'DANA_BOS',
                 'name' => 'Dompet Dana BOS',
                 'balance' => 0,
             ],
             [
-                'id' => '62811122233301',
+                'wallet_code' => '62811122233301',
                 'name' => 'Dompet Utama',
                 'balance' => 0,
             ],
             [
-                'id' => '62811122233302',
+                'wallet_code' => '62811122233302',
                 'name' => 'Dompet Utama',
                 'balance' => 0,
             ],

@@ -18,7 +18,7 @@ class WalletServiceImpl implements WalletService
         //
     }
 
-    public function transfer(string $fromWalletId, string $toWalletId, float $amount, FinancialTransaction $financialTransaction): array
+    public function transfer(int $fromWalletId, int $toWalletId, float $amount, FinancialTransaction $financialTransaction): array
     {
         // Mulai transaksi database
         DB::beginTransaction();
@@ -49,7 +49,7 @@ class WalletServiceImpl implements WalletService
 
             $financialTransaction->name = $financialTransaction->name ?? "Transfer Saldo";
             $financialTransaction->type = $financialTransaction->type ?? "transfer";
-            $financialTransaction->description = $financialTransaction->description ?? "Transfer saldo " . Number::currency($amount, 'IDR', 'id') . " dari #$fromWallet->id ke #$toWallet->id";
+            $financialTransaction->description = $financialTransaction->description ?? "Transfer saldo " . Number::currency($amount, 'IDR', 'id') . " dari #$fromWallet->wallet_code ke #$toWallet->wallet_code";
             $financialTransaction->validated_by = $financialTransaction->validated_by ?? auth()->user()->id;
 
             $financialTransaction->save();
@@ -58,7 +58,7 @@ class WalletServiceImpl implements WalletService
             DB::commit();
             return [
                 'is_success' => true,
-                'message' => 'Transfer saldo ' . $amount . ' dari ' . $fromWallet->id . ' ke ' . $toWallet->id . ' berhasil',
+                'message' => 'Transfer saldo ' . $amount . ' dari ' . $fromWallet->wallet_code . ' ke ' . $toWallet->wallet_code . ' berhasil',
             ]; // Transfer berhasil
         } catch (\Exception $e) {
             // Rollback transaksi database jika terjadi kesalahan
@@ -73,12 +73,16 @@ class WalletServiceImpl implements WalletService
     public function transferSystemToYayasan(float $amount, FinancialTransaction $financialTransaction): array
     {
         $financialTransaction->transaction_at = now();
-        return $this->transfer('SYSTEM', 'YAYASAN', $amount, $financialTransaction);
+        $idWalletSystem = Wallet::system()->first()->id;
+        $idWalletYayasan = Wallet::yayasan()->first()->id;
+        return $this->transfer($idWalletSystem, $idWalletYayasan, $amount, $financialTransaction);
     }
 
     public function transferYayasanToSystem(float $amount, FinancialTransaction $financialTransaction): array
     {
         $financialTransaction->transaction_at = now();
-        return $this->transfer('YAYASAN', 'SYSTEM', $amount, $financialTransaction);
+        $idWalletSystem = Wallet::system()->first()->id;
+        $idWalletYayasan = Wallet::yayasan()->first()->id;
+        return $this->transfer($idWalletYayasan,  $idWalletSystem, $amount, $financialTransaction);
     }
 }

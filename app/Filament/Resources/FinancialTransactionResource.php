@@ -29,19 +29,19 @@ class FinancialTransactionResource extends Resource implements HasShieldPermissi
                 Forms\Components\Section::make(__('Wallet'))
                     ->schema([
                         Forms\Components\Select::make('from_wallet_id')
-                            ->label(__('From Wallet Id'))
+                            ->label(__('From Wallet'))
                             ->relationship('fromWallet')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => (in_array("ALLOW_NEGATIVE_BALANCE", $record->policy ?? []) ? "🔻" : "")  . "{$record->id} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
+                            ->getOptionLabelFromRecordUsing(fn ($record) => (in_array("ALLOW_NEGATIVE_BALANCE", $record->policy ?? []) ? "🔻" : "")  . "{$record->wallet_code} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
                             ->required()
-                            ->searchable(['id', 'name'])
+                            ->searchable(['id', 'wallet_code', 'name'])
                             ->preload()
                             ->disabled(fn ($operation) => $operation === 'edit'),
                         Forms\Components\Select::make('to_wallet_id')
-                            ->label(__('To Wallet Id'))
+                            ->label(__('To Wallet'))
                             ->relationship('toWallet')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->id} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
+                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->wallet_code} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
                             ->required()
-                            ->searchable(['id', 'name'])
+                            ->searchable(['id', 'wallet_code', 'name'])
                             ->preload()
                             ->disabled(fn ($operation) => $operation === 'edit'),
                     ])
@@ -123,13 +123,13 @@ class FinancialTransactionResource extends Resource implements HasShieldPermissi
                     ->copyMessageDuration(1500)
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('from_wallet_id')
-                    ->label(__('From Wallet Id'))
+                Tables\Columns\TextColumn::make('formWallet.wallet_code')
+                    ->label(__('From Wallet'))
                     ->badge()
                     ->color('danger')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('to_wallet_id')
-                    ->label(__('To Wallet Id'))
+                Tables\Columns\TextColumn::make('toWallet.wallet_code')
+                    ->label(__('To Wallet'))
                     ->badge()
                     ->color('success')
                     ->toggleable(isToggledHiddenByDefault: false),
@@ -170,12 +170,12 @@ class FinancialTransactionResource extends Resource implements HasShieldPermissi
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('from_wallet_id')
-                    ->label(__('From Wallet Id'))
-                    ->relationship('fromWallet', 'id')
+                    ->label(__('From Wallet'))
+                    ->relationship('fromWallet', 'wallet_code')
                     ->searchable(),
                 Tables\Filters\SelectFilter::make('to_wallet_id')
-                    ->label(__('To Wallet Id'))
-                    ->relationship('toWallet', 'id')
+                    ->label(__('To Wallet'))
+                    ->relationship('toWallet', 'wallet_code')
                     ->searchable(),
             ])
             ->actions([

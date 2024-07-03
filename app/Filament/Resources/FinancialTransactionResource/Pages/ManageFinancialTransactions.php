@@ -4,6 +4,7 @@ namespace App\Filament\Resources\FinancialTransactionResource\Pages;
 
 use Filament\Forms;
 use Filament\Actions;
+use App\Models\Wallet;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Number;
 use App\Services\WalletService;
@@ -30,8 +31,8 @@ class ManageFinancialTransactions extends ManageRecords
                 ->color('danger')
                 ->icon('heroicon-o-arrow-trending-down')
                 ->fillForm(fn (): array => [
-                    'from_wallet_id' => 'YAYASAN',
-                    'to_wallet_id' => 'EXPENSE',
+                    'from_wallet_id' => Wallet::yayasan()->first()->id,
+                    'to_wallet_id' => Wallet::expense()->first()->id,
                     'transaction_at' => now(),
                     'validated_by' => auth()->id(),
                 ])
@@ -44,8 +45,8 @@ class ManageFinancialTransactions extends ManageRecords
                 ->color('success')
                 ->icon('heroicon-o-arrow-trending-up')
                 ->fillForm(fn (): array => [
-                    'from_wallet_id' => 'INCOME',
-                    'to_wallet_id' => 'YAYASAN',
+                    'from_wallet_id' => Wallet::income()->first()->id,
+                    'to_wallet_id' => Wallet::yayasan()->first()->id,
                     'transaction_at' => now(),
                     'validated_by' => auth()->id(),
                 ])
@@ -58,8 +59,8 @@ class ManageFinancialTransactions extends ManageRecords
                 ->color('success')
                 ->icon('heroicon-o-building-library')
                 ->fillForm(fn (): array => [
-                    'from_wallet_id' => 'DANA_BOS',
-                    'to_wallet_id' => 'YAYASAN',
+                    'from_wallet_id' => Wallet::danaBos()->first()->id,
+                    'to_wallet_id' => Wallet::yayasan()->first()->id,
                     'transaction_at' => now(),
                     'validated_by' => auth()->id(),
                 ])
