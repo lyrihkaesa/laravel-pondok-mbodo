@@ -16,8 +16,12 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class CalendarResource extends Resource
 {
     protected static ?string $model = Calendar::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Calendar');
+    }
 
     public static function form(Form $form): Form
     {
