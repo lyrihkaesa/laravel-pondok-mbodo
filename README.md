@@ -94,3 +94,97 @@ Website Sistem Informasi Yayasan Pondok Pesantren Ki Ageng Mbodo, digunakan untu
 ### Modul Donatur
 
 -   [ ] Create Donatur
+
+---
+
+## Menggunakan Docker
+
+Pertama clone project
+
+```bash
+git clone -b dev https://github.com/lyrihkaesa/laravel-pondok-mbodo.git pondokmbodo
+```
+
+Pindah ke directori project pondokmbodo:
+
+```bash
+cd pondokmbodo
+```
+
+Setelah itu jalankan perintah berikut:
+
+```bash
+docker compose up
+```
+
+Jika error storage permission ketik perintah ini
+
+```bash
+docker exec -it pondokmbodo-app-1 sh
+```
+
+Jika tidak bisa masuk ke terminal
+
+```bash
+docker exec -it pondokmbodo-app-1 bash
+```
+
+Ganti owner dari folder storage
+
+```bash
+chown -R www-data:www-data /var/www/html/storage/*
+```
+
+Jika ingin performa baik:
+
+```bash
+php artisan optimize:clear
+```
+
+```bash
+php artisan optimize
+```
+
+Jangan lupa cache icons blade filament
+
+```bash
+php artisan icons:cache
+```
+
+Jika lupa build css dan js, error vite, jalankan perintah:
+
+```bash
+npm run build
+```
+
+### Build Image Docker
+
+Jika ingin build ulang
+
+```bash
+docker compose build
+```
+
+### Menjalankan Docker Compose
+
+```bash
+docker compose up
+```
+
+Jika ingin menjalankan compose dengan nama lain
+
+```bash
+docker compose -p pondokmbodo up -d
+```
+
+### Menghentikan Docker Compose
+
+```bash
+docker compose down
+```
+
+Jika sebelumnya menjalankan docker compose dengan nama lain, maka perlu nama lain tersebut untuk menghentikannya
+
+```bash
+docker compose -p pondokmbodo down
+```
