@@ -42,6 +42,7 @@ RUN apk update && \
     openssl-dev \
     nodejs \
     npm \
+    libpq-dev \
     $PHPIZE_DEPS
 
 RUN docker-php-ext-configure zip && \
