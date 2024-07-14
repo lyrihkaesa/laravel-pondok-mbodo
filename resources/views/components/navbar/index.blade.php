@@ -7,7 +7,7 @@
     class="mx-auto w-full max-w-[85rem] border-b-2 border-gray-100 bg-white px-4 py-2 transition-colors duration-500 dark:border-gray-700 dark:bg-gray-800 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
     aria-label="Global">
     <div class="flex items-center justify-between">
-        <a wire:navigate href="/" class="inline-flex items-center gap-x-2 font-semibold dark:text-white">
+        <a href="/" class="inline-flex items-center gap-x-2 font-semibold dark:text-white">
             <img class="h-auto w-10" src="/favicon-150x150.png" alt="Logo">
             <span class="whitespace-nowrap text-base sm:text-xl">Pondok Mbodo</span>
         </a>

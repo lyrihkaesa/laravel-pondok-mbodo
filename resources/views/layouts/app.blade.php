@@ -52,11 +52,11 @@
     @stack('scripts')
 
     {{-- SPA (Single Page Application) solve bug wire:navigate for livewire & preline.co --}}
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
         document.addEventListener("livewire:navigated", () => {
             window.HSStaticMethods.autoInit();
         });
-    </script>
+    </script> --}}
 </body>
 
 </html>
