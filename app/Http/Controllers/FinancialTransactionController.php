@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Wallet;
 use App\Models\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -15,7 +16,11 @@ class FinancialTransactionController extends Controller
     public function generatePdfReport(Request $request)
     {
         $this->authorize('export_financial::transaction');
-        $defaultWalletId = 'YAYASAN';
+
+        $walletYayasan = Wallet::yayasan()->first();
+        $wallet = Wallet::find($request->wallet_id);
+        $defaultWalletId = $walletYayasan->id;
+
         $transactionDebits = FinancialTransaction::query()
             ->select('name', DB::raw('MAX(transaction_at) as transaction_at'), DB::raw('SUM(amount) as total_amount'), DB::raw('COUNT(*) as count'))
             ->when($request->wallet_id, function ($query) use ($request) {
@@ -138,7 +143,7 @@ class FinancialTransactionController extends Controller
             'totalDebit' => $totalDebit,
             'totalCredit' => $totalCredit,
             'totalBalance' => $totalBalance,
-            'walletId' => $request->wallet_id ?? $defaultWalletId,
+            'wallet' => $wallet ?? $walletYayasan,
             'startDate' => $startDate,
             'endDate' => $endDate,
         ]);

@@ -79,10 +79,10 @@ class ManageFinancialTransactions extends ManageRecords
                     Forms\Components\Select::make('wallet_id')
                         ->label(__('Wallet Id'))
                         ->relationship('fromWallet')
-                        ->getOptionLabelFromRecordUsing(fn ($record) => (in_array("ALLOW_NEGATIVE_BALANCE", $record->policy ?? []) ? "🔻" : "")  . "{$record->id} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
-                        ->searchable(['id', 'name'])
+                        ->getOptionLabelFromRecordUsing(fn ($record) => (in_array("ALLOW_NEGATIVE_BALANCE", $record->policy ?? []) ? "🔻" : "")  . "{$record->wallet_code} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
+                        ->searchable(['id', 'wallet_code', 'name'])
                         ->preload()
-                        ->default('YAYASAN')
+                        ->default(Wallet::yayasan()->first()->id)
                         ->required(),
                     Forms\Components\Grid::make()
                         ->schema([

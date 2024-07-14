@@ -109,7 +109,7 @@
                 <h1>{{ $yayasan->name }}</h1>
                 <p class="pb-2">{{ $yayasan->address }}</p>
                 <p class="pb-2">
-                    <i>{{ $yayasan->email . ' | ' . env('APP_URL', 'https://pondokmbodo.com') . ' | ' . $yayasan->phone }}</i>
+                    <i>{{ $yayasan->email . ' | ' . config('app.url', 'https://pondokmbodo.com') . ' | ' . $yayasan->phone }}</i>
                 </p>
             </td>
         </tr>
@@ -120,7 +120,7 @@
         </tr>
     </table>
     <section class="text-center">
-        <h2>LAPORAN KEUANGAN {{ $walletId }}</h2>
+        <h2>LAPORAN KEUANGAN {{ $wallet->wallet_code }}</h2>
         <p>{{ $startDate }} - {{ $endDate }}</p>
     </section>
     <br>
