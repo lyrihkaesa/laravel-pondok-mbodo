@@ -91,14 +91,14 @@ class FinancialTransactionResource extends Resource implements HasShieldPermissi
                             ->helperText(\App\Utilities\FileUtility::getImageHelperText(prefix: 'Masukan bukti transaksi/invoice dalam bentuk gambar.'))
                             ->multiple()
                             ->image()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('financial_transaction_images'),
                         Forms\Components\FileUpload::make('file_attachments')
                             ->label(__('File Attachments'))
                             ->helperText(\App\Utilities\FileUtility::getPdfHelperText(prefix: 'Masukan bukti transaksi/invoice dalam bentuk pdf.'))
                             ->multiple()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('financial_transaction_files'),
                     ])

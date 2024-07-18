@@ -153,7 +153,7 @@ class EditProfileEmployee extends Page implements HasForms
                                 ->imageEditor()
                                 ->downloadable()
                                 ->openable()
-                                ->disk('minio')
+                                ->disk(config('filesystems.default'))
                                 ->visibility('private')
                                 ->directory('profile_pictures'),
                         ])->columnSpan(1),
@@ -361,7 +361,7 @@ class EditProfileEmployee extends Page implements HasForms
                             ->image()
                             ->downloadable()
                             ->openable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('profile_picture_4x6')
@@ -375,7 +375,7 @@ class EditProfileEmployee extends Page implements HasForms
                             ->image()
                             ->downloadable()
                             ->openable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('birth_certificate')
@@ -388,7 +388,7 @@ class EditProfileEmployee extends Page implements HasForms
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('birth_certificates'),
                         Forms\Components\FileUpload::make('family_card')
@@ -401,7 +401,7 @@ class EditProfileEmployee extends Page implements HasForms
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('family_cards')
                             ->hintActions([
@@ -447,7 +447,7 @@ class EditProfileEmployee extends Page implements HasForms
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('skhun'),
                         Forms\Components\FileUpload::make('ijazah')
@@ -460,7 +460,7 @@ class EditProfileEmployee extends Page implements HasForms
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('ijazah'),
                     ])

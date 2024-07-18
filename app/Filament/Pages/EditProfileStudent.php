@@ -152,7 +152,7 @@ class EditProfileStudent extends Page
                                 ->imageEditor()
                                 ->downloadable()
                                 ->openable()
-                                ->disk('minio')
+                                ->disk(config('filesystems.default'))
                                 ->visibility('private')
                                 ->directory('profile_pictures'),
                         ])->columnSpan(1),
@@ -402,7 +402,7 @@ class EditProfileStudent extends Page
                             ->image()
                             ->downloadable()
                             ->openable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('profile_picture_4x6')
@@ -416,7 +416,7 @@ class EditProfileStudent extends Page
                             ->image()
                             ->downloadable()
                             ->openable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('birth_certificate')
@@ -429,7 +429,7 @@ class EditProfileStudent extends Page
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('birth_certificates'),
                         Forms\Components\FileUpload::make('family_card')
@@ -442,7 +442,7 @@ class EditProfileStudent extends Page
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('family_cards')
                             ->hintActions([
@@ -488,7 +488,7 @@ class EditProfileStudent extends Page
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('skhun'),
                         Forms\Components\FileUpload::make('ijazah')
@@ -501,7 +501,7 @@ class EditProfileStudent extends Page
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('ijazah'),
                     ])

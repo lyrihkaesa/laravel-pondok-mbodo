@@ -111,7 +111,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         }
 
         /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
-        $disk = \Illuminate\Support\Facades\Storage::disk('minio_public');
+        $disk = \Illuminate\Support\Facades\Storage::disk(config('filament.default_filesystem_disk'));
         return $disk->url($this->profile_picture_1x1);
     }
 

@@ -10,7 +10,7 @@
             <div class="pb-8">
                 <div class="">
                     <div class="space-y-8 bg-cover bg-center lg:space-y-16"
-                        style="background-image: url({{ $this->post->thumbnail ? Storage::disk('minio_public')->url($this->post->thumbnail) : asset('images\thumbnails\images-dark.webp') }});">
+                        style="background-image: url({{ $this->post->thumbnail ? Storage::disk(config('filament.default_filesystem_disk'))->url($this->post->thumbnail) : asset('images\thumbnails\images-dark.webp') }});">
                         <div class="px-4 pt-8 sm:px-6 lg:px-8">
                             <a class="inline-flex items-center gap-x-1.5 rounded-full bg-gray-950 py-2 pe-6 ps-4 text-sm text-blue-500 decoration-2 hover:underline"
                                 href="{{ route('posts.index') }}">

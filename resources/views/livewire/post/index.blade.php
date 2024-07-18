@@ -12,7 +12,7 @@
                         <div
                             class="mb-3 block w-full gap-3 rounded-lg bg-gray-50 p-5 duration-200 hover:bg-white hover:shadow dark:bg-gray-800 dark:hover:bg-gray-700 xl:flex xl:hover:scale-105">
                             <div class="flex xl:w-1/3">
-                                <img src="{{ $post->thumbnail ? Storage::disk('minio_public')->url($post->thumbnail) : asset('images\thumbnails\images-dark.webp') }}"
+                                <img src="{{ $post->thumbnail ? Storage::disk(config('filament.default_filesystem_disk'))->url($post->thumbnail) : asset('images\thumbnails\images-dark.webp') }}"
                                     alt="{{ $post->title }}" class="h-48 w-full rounded-md object-cover xl:h-44">
                             </div>
                             <div class="flex xl:w-2/3">

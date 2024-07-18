@@ -8,7 +8,7 @@
             <x-block.slider.index>
                 <x-block.slider.main>
                     @foreach ($block['data']['slides'] as $slide)
-                        <x-block.slider.item src="{{ Storage::disk('minio_public')->url($slide['url']) }}"
+                        <x-block.slider.item src="{{ Storage::disk(config('filament.default_filesystem_disk'))->url($slide['url']) }}"
                             alt="{{ $slide['alt'] }}" />
                     @endforeach
                 </x-block.slider.main>
@@ -28,7 +28,7 @@
                 </x-block.team.header>
                 <x-block.team.grid>
                     @foreach ($block['data']['teams'] as $member)
-                        <x-block.team.item imageUrl="{{ Storage::disk('minio_public')->url($member['url']) }}"
+                        <x-block.team.item imageUrl="{{ Storage::disk(config('filament.default_filesystem_disk'))->url($member['url']) }}"
                             imageAlt="{{ $member['alt'] }}"
                             role="{{ $member['role'] }}">{{ $member['name'] }}</x-block.team.item>
                     @endforeach
@@ -48,7 +48,7 @@
                                 {{ $block['data']['sub_title'] }}
                             @endisset
                             @isset($block['data']['url'])
-                                <img src="{{ Storage::disk('minio_public')->url($block['data']['url']) }}"
+                                <img src="{{ Storage::disk(config('filament.default_filesystem_disk'))->url($block['data']['url']) }}"
                                     alt="{{ $block['data']['alt'] }}">
                             @endisset
                         </x-block.article.sub-title>
@@ -76,7 +76,7 @@
                 </x-block.hero.left>
                 <x-block.hero.right>
                     <img class="w-full rounded-md"
-                        src="{{ Storage::disk('minio_public')->url($block['data']['image']) }}"
+                        src="{{ Storage::disk(config('filament.default_filesystem_disk'))->url($block['data']['image']) }}"
                         alt="{{ $block['data']['image_alt'] }}">
                 </x-block.hero.right>
             </x-block.hero.index>

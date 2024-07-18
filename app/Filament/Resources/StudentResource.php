@@ -134,7 +134,7 @@ class StudentResource extends Resource implements HasShieldPermissions
                                     ->imageEditor()
                                     ->downloadable()
                                     ->openable()
-                                    ->disk('minio')
+                                    ->disk(config('filesystems.default'))
                                     ->visibility('private')
                                     ->directory('profile_pictures'),
                                 Forms\Components\FileUpload::make('user_profile_picture_1x1')
@@ -441,7 +441,7 @@ class StudentResource extends Resource implements HasShieldPermissions
                             ->image()
                             ->downloadable()
                             ->openable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('profile_picture_4x6')
@@ -455,7 +455,7 @@ class StudentResource extends Resource implements HasShieldPermissions
                             ->image()
                             ->downloadable()
                             ->openable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('profile_pictures'),
                         Forms\Components\FileUpload::make('birth_certificate')
@@ -468,7 +468,7 @@ class StudentResource extends Resource implements HasShieldPermissions
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('birth_certificates'),
                         Forms\Components\FileUpload::make('family_card')
@@ -481,7 +481,7 @@ class StudentResource extends Resource implements HasShieldPermissions
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('family_cards')
                             ->hintActions([
@@ -527,7 +527,7 @@ class StudentResource extends Resource implements HasShieldPermissions
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('skhun'),
                         Forms\Components\FileUpload::make('ijazah')
@@ -540,7 +540,7 @@ class StudentResource extends Resource implements HasShieldPermissions
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
-                            ->disk('minio')
+                            ->disk(config('filesystems.default'))
                             ->visibility('private')
                             ->directory('ijazah'),
                     ])
