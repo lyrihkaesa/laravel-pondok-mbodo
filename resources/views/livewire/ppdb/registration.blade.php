@@ -43,7 +43,7 @@
                 @endif
             @endforeach
         @endisset
-        <x-filament::section aside class="my-4 lg:my-6">
+        <x-filament::section aside class="my-4 lg:my-6" id="section-submit">
             <x-slot name="heading"></x-slot>
             <x-filament::button type="submit" class="w-full" size="lg" wire:loading.attr="disabled">
                 <span wire:loading.remove>{{ __('Register') }}</span>

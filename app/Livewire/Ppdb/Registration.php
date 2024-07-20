@@ -56,6 +56,9 @@ class Registration extends Component implements HasForms
                             ->length(16)
                             ->hintActions([
                                 Forms\Components\Actions\Action::make('autoInputFormNik')
+                                    ->extraAttributes([
+                                        'dusk' => 'autoInputFormNik',
+                                    ])
                                     ->label(__('Auto Input Form Nik'))
                                     ->badge()
                                     ->icon('heroicon-c-paint-brush')
