@@ -508,7 +508,7 @@ class Registration extends Component implements HasForms
             $userModel = User::create($user);
 
             $userModel->wallets()->create([
-                'id' => $userModel->phone,
+                'wallet_code' => $userModel->phone,
                 'name' => 'Dompet Utama',
                 'balance' => 0,
             ]);
