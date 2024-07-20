@@ -587,7 +587,7 @@ class EmployeeResource extends Resource
                     ->formatStateUsing(fn (string $state): string => str($state)->replace('_', ' ')->title())
                     ->badge()
                     ->color('warning')
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
