@@ -134,7 +134,7 @@
     "Wallet": "Dompet",
     "Balance": "Saldo",
     "Wallet Code": "Kode Dompet",
-    "Form Wallet": "Dari Dompet",
+    "From Wallet": "Dari Dompet",
     "To Wallet": "Ke Dompet",
     "Name": "Nama",
     "Student Product Name": "Jenis Biaya",
@@ -257,5 +257,6 @@
     "You are free to connect any social accounts to your profile and may remove any connected accounts at any time. If you feel any of your connected accounts have been compromised, you should disconnect them immediately and change your password.": "Anda bebas untuk menghubungkan akun sosial apa pun ke profil Anda dan dapat menghapus akun yang terhubung kapan saja. Jika Anda merasa salah satu akun terhubung Anda telah disusupi, sebaiknya segera putuskan koneksinya dan ubah kata sandi Anda.",
     "Not connected": "Tidak terkoneksi",
     "Connect": "Hubungkan",
-    "Disconnect": "Putuskan"
+    "Disconnect": "Putuskan",
+    "Quantity": "Kuantitas"
 }

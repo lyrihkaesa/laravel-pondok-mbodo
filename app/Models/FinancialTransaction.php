@@ -21,6 +21,8 @@ class FinancialTransaction extends Model
         'name',
         'type',
         'amount',
+        'quantity',
+        'unit_price',
         'description',
         'from_wallet_id',
         'to_wallet_id',
@@ -37,6 +39,15 @@ class FinancialTransaction extends Model
             'image_attachments' => 'array',
             'file_attachments' => 'array',
         ];
+    }
+
+    public static function boot(): void
+    {
+        parent::boot();
+
+        static::saving(function ($transaction) {
+            $transaction->unit_price = $transaction->quantity > 0 ? $transaction->amount / $transaction->quantity : 0;
+        });
     }
 
     public function fromWallet(): BelongsTo

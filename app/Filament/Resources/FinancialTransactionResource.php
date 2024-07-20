@@ -54,27 +54,32 @@ class FinancialTransactionResource extends Resource implements HasShieldPermissi
                             ->label(__('Name'))
                             ->placeholder(__('Listrik Yayasan / Konsumsi / Lainnya'))
                             ->maxLength(255)
-                            ->required()
-                            ->columnSpanFull(),
-                        Forms\Components\TextInput::make('amount')
-                            ->label(__('Amount'))
-                            ->placeholder(__('Amount Placeholder'))
-                            ->numeric()
-                            ->minValue(1)
-                            ->disabled(fn ($operation) => $operation === 'edit')
                             ->required(),
-                        // Forms\Components\TextInput::make('type')
-                        //     ->label(__('Type'))
-                        //     ->required()
-                        //     ->visible(fn ($operation) => dd($operation)),
-                        Forms\Components\DateTimePicker::make('transaction_at')
-                            ->label(__('Transaction At'))
-                            ->timezone('Asia/Jakarta')
-                            ->required()
-                            ->default(now()),
+                        Forms\Components\Group::make()
+                            ->schema([
+                                Forms\Components\TextInput::make('quantity')
+                                    ->label(__('Quantity'))
+                                    ->numeric()
+                                    ->minValue(1)
+                                    ->disabled(fn ($operation) => $operation === 'edit')
+                                    ->default(1)
+                                    ->required(),
+                                Forms\Components\TextInput::make('amount')
+                                    ->label(__('Amount'))
+                                    ->placeholder(__('Amount Placeholder'))
+                                    ->numeric()
+                                    ->minValue(1)
+                                    ->disabled(fn ($operation) => $operation === 'edit')
+                                    ->required(),
+                                Forms\Components\DateTimePicker::make('transaction_at')
+                                    ->label(__('Transaction At'))
+                                    ->timezone('Asia/Jakarta')
+                                    ->required()
+                                    ->default(now()),
+                            ])
+                            ->columns(3),
                     ])
-                    ->compact()
-                    ->columns(2),
+                    ->compact(),
 
                 Forms\Components\Section::make(__('Other Information'))
                     ->schema([
@@ -123,7 +128,7 @@ class FinancialTransactionResource extends Resource implements HasShieldPermissi
                     ->copyMessageDuration(1500)
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('formWallet.wallet_code')
+                Tables\Columns\TextColumn::make('fromWallet.wallet_code')
                     ->label(__('From Wallet'))
                     ->badge()
                     ->color('danger')
@@ -142,22 +147,12 @@ class FinancialTransactionResource extends Resource implements HasShieldPermissi
                     ->separator(',')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
+                Tables\Columns\TextColumn::make('quantity')
+                    ->label(__('Quantity'))
+                    ->badge()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('amount')
                     ->label(__('Amount'))
-                    // ->prefix(function ($record) {
-                    //     if (str($record->type)->contains('credit')) {
-                    //         return '+';
-                    //     } else {
-                    //         return '-';
-                    //     }
-                    // })
-                    // ->color(function ($record) {
-                    //     if (str($record->type)->contains('credit')) {
-                    //         return 'success';
-                    //     } else {
-                    //         return 'danger';
-                    //     }
-                    // })
                     ->money(currency: 'IDR', locale: 'id'),
                 Tables\Columns\TextColumn::make('description')
                     ->label(__('Description'))

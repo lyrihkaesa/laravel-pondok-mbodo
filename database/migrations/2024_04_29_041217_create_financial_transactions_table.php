@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->decimal('amount', 20, 2);
+            $table->unsignedInteger('quantity')->default(1);
+            $table->decimal('unit_price', 20, 2)->nullable();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('from_wallet_id')->nullable();
             $table->unsignedBigInteger('to_wallet_id')->nullable();

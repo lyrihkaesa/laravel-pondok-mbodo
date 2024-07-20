@@ -35,6 +35,7 @@ class ManageFinancialTransactions extends ManageRecords
                     'to_wallet_id' => Wallet::expense()->first()->id,
                     'transaction_at' => now(),
                     'validated_by' => auth()->id(),
+                    'quantity' => 1,
                 ])
                 ->action(function (array $data, WalletService $walletService) {
                     $this->transfer($data, $walletService);
@@ -49,6 +50,7 @@ class ManageFinancialTransactions extends ManageRecords
                     'to_wallet_id' => Wallet::yayasan()->first()->id,
                     'transaction_at' => now(),
                     'validated_by' => auth()->id(),
+                    'quantity' => 1,
                 ])
                 ->action(function (array $data, WalletService $walletService) {
                     $this->transfer($data, $walletService);
@@ -63,6 +65,7 @@ class ManageFinancialTransactions extends ManageRecords
                     'to_wallet_id' => Wallet::yayasan()->first()->id,
                     'transaction_at' => now(),
                     'validated_by' => auth()->id(),
+                    'quantity' => 1,
                 ])
                 ->action(function (array $data, WalletService $walletService) {
                     $this->transfer($data, $walletService);
