@@ -43,6 +43,8 @@ RUN apk update && \
     nodejs \
     npm \
     libpq-dev \
+    icu-libs \
+    icu-data-full \
     $PHPIZE_DEPS
 
 RUN docker-php-ext-configure zip && \

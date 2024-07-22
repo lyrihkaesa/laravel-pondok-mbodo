@@ -34,6 +34,6 @@ class AppServiceProvider extends ServiceProvider
             'neutral' => Color::Neutral,
         ]);
 
-        Number::useLocale('id');
+        Number::useLocale(config('app.locale'));
     }
 }
