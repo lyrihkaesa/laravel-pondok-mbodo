@@ -16,8 +16,8 @@ class CreateEmployee extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        // Generate password based on birth_date and phone
-        $password = $data['password'] ?? substr($data['phone'], -4) . date('dmY', strtotime($data['birth_date']));
+        // Generate password
+        $password = $data['password'] ?? \App\Utilities\PasswordUtility::generatePassword($data['name'], $data['phone'], $data['birth_date']);
 
         // Create User
         $user = User::create([
