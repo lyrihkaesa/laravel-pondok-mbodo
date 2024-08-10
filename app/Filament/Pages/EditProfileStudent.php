@@ -144,7 +144,7 @@ class EditProfileStudent extends Page
                                 ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: __('Image Helper Suffix')))
                                 ->getUploadedFileNameForStorageUsing(
                                     function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                        return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-1x1');
+                                        return \App\Utilities\FileUtility::getFileName('profile-picture-1x1', $file->getFileName());
                                     }
                                 )
                                 ->avatar()
@@ -154,7 +154,7 @@ class EditProfileStudent extends Page
                                 ->openable()
                                 ->disk(config('filesystems.default'))
                                 ->visibility('private')
-                                ->directory('profile_pictures'),
+                                ->directory(fn(Forms\Get $get): string => 'documents/' . $get('nik')),
                         ])->columnSpan(1),
                     ])
                     ->columns(2),
@@ -177,13 +177,13 @@ class EditProfileStudent extends Page
                                             ->label(__('Username'))
                                             ->placeholder(__('Username Placeholder'))
                                             ->maxLength(255)
-                                            ->visible(fn (Forms\Get $get) => $get('platform') !== 'web')
+                                            ->visible(fn(Forms\Get $get) => $get('platform') !== 'web')
                                             ->columnSpan(2),
                                         Forms\Components\TextInput::make('url')
                                             ->label(__('URL'))
                                             ->placeholder(__('URL Placeholder'))
                                             ->url()
-                                            ->visible(fn (Forms\Get $get) => $get('platform') === 'web')
+                                            ->visible(fn(Forms\Get $get) => $get('platform') === 'web')
                                             ->columnSpan(2),
                                     ])
                                     ->columns(3),
@@ -193,7 +193,7 @@ class EditProfileStudent extends Page
                                     ->inline()
                                     ->options(\App\Enums\SocialMediaVisibility::class)
                                     ->default(\App\Enums\SocialMediaVisibility::PUBLIC)
-                                    ->helperText(fn ($state) => str((($state instanceof \App\Enums\SocialMediaVisibility) ? $state : \App\Enums\SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
+                                    ->helperText(fn($state) => str((($state instanceof \App\Enums\SocialMediaVisibility) ? $state : \App\Enums\SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
                                     ->required(),
                             ]),
                         // ->deleteAction(fn ($action) => $action->requiresConfirmation()),
@@ -225,7 +225,7 @@ class EditProfileStudent extends Page
                     ])
                     ->collapsible()
                     ->collapsed()
-                    ->visible(fn (string $operation): bool => $operation === 'edit'),
+                    ->visible(fn(string $operation): bool => $operation === 'edit'),
 
 
                 Forms\Components\Section::make(__('Address Information'))
@@ -245,7 +245,7 @@ class EditProfileStudent extends Page
                             ->searchable(),
                         Forms\Components\Select::make('regency')
                             ->label(__('Regency'))
-                            ->disabled(fn (Forms\Get $get): bool => $get('province') == null)
+                            ->disabled(fn(Forms\Get $get): bool => $get('province') == null)
                             ->options(function (Forms\Get $get, ?string $state) {
                                 if ($get('province') !== null) {
                                     $province = \Creasi\Nusa\Models\Province::where('code', $get('province'))->first();
@@ -263,10 +263,10 @@ class EditProfileStudent extends Page
                                 }
                                 return $state;
                             })
-                            ->searchable(fn (Forms\Get $get): bool => $get('province') != null),
+                            ->searchable(fn(Forms\Get $get): bool => $get('province') != null),
                         Forms\Components\Select::make('district')
                             ->label(__('District'))
-                            ->disabled(fn (Forms\Get $get): bool => $get('regency') == null)
+                            ->disabled(fn(Forms\Get $get): bool => $get('regency') == null)
                             ->options(function (?string $state, Forms\Get $get) {
                                 if ($get('regency') !== null) {
                                     $regency = \Creasi\Nusa\Models\Regency::where('code', $get('regency'))->first();
@@ -283,10 +283,10 @@ class EditProfileStudent extends Page
                                 }
                                 return $state;
                             })
-                            ->searchable(fn (Forms\Get $get): bool => $get('regency') != null),
+                            ->searchable(fn(Forms\Get $get): bool => $get('regency') != null),
                         Forms\Components\Select::make('village')
                             ->label(__('Village'))
-                            ->disabled(fn (Forms\Get $get): bool => $get('district') == null)
+                            ->disabled(fn(Forms\Get $get): bool => $get('district') == null)
                             ->options(function (?string $state, Forms\Get $get) {
                                 $villages = [];
                                 if ($get('district') != null) {
@@ -297,7 +297,7 @@ class EditProfileStudent extends Page
                                 }
                                 return $villages;
                             })
-                            ->searchable(fn (Forms\Get $get): bool => $get('district') != null),
+                            ->searchable(fn(Forms\Get $get): bool => $get('district') != null),
                         Forms\Components\Textarea::make('address')
                             ->label(__('Full Address'))
                             ->autosize()
@@ -396,7 +396,7 @@ class EditProfileStudent extends Page
                             ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: __('Image Helper Suffix')))
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-3x4');
+                                    return \App\Utilities\FileUtility::getFileName('profile-picture-3x4', $file->getFileName());
                                 }
                             )
                             ->image()
@@ -404,13 +404,13 @@ class EditProfileStudent extends Page
                             ->openable()
                             ->disk(config('filesystems.default'))
                             ->visibility('private')
-                            ->directory('profile_pictures'),
+                            ->directory(fn(Forms\Get $get): string => 'documents/' . $get('nik')),
                         Forms\Components\FileUpload::make('profile_picture_4x6')
                             ->label(__('Profile Picture 4x6'))
                             ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: __('Image Helper Suffix')))
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'profile-picture-4x6');
+                                    return \App\Utilities\FileUtility::getFileName('profile-picture-4x6', $file->getFileName());
                                 }
                             )
                             ->image()
@@ -418,33 +418,33 @@ class EditProfileStudent extends Page
                             ->openable()
                             ->disk(config('filesystems.default'))
                             ->visibility('private')
-                            ->directory('profile_pictures'),
+                            ->directory(fn(Forms\Get $get): string => 'documents/' . $get('nik')),
                         Forms\Components\FileUpload::make('birth_certificate')
                             ->label(__('Birth Certificate'))
                             ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'akta-kelahiran');
+                                    return \App\Utilities\FileUtility::getFileName('birth-certificate', $file->getFileName());
                                 }
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
                             ->disk(config('filesystems.default'))
                             ->visibility('private')
-                            ->directory('birth_certificates'),
+                            ->directory(fn(Forms\Get $get): string => 'documents/' . $get('nik')),
                         Forms\Components\FileUpload::make('family_card')
                             ->label(__('Family Card'))
                             ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'kk');
+                                    return \App\Utilities\FileUtility::getFileName('family-card', $file->getFileName());
                                 }
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
                             ->disk(config('filesystems.default'))
                             ->visibility('private')
-                            ->directory('family_cards')
+                            ->directory(fn(Forms\Get $get): string => 'documents/' . $get('nik'))
                             ->hintActions([
                                 Forms\Components\Actions\Action::make('preview-fc')
                                     ->label('Lihat Berkas')
@@ -483,27 +483,27 @@ class EditProfileStudent extends Page
                             ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'akta-kelahiran');
+                                    return \App\Utilities\FileUtility::getFileName('skhun', $file->getFileName());
                                 }
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
                             ->disk(config('filesystems.default'))
                             ->visibility('private')
-                            ->directory('skhun'),
+                            ->directory(fn(Forms\Get $get): string => 'documents/' . $get('nik')),
                         Forms\Components\FileUpload::make('ijazah')
                             ->label(__('Ijazah'))
                             ->helperText(\App\Utilities\FileUtility::getPdfHelperText())
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('nik'), $file->getFileName(), 'akta-kelahiran');
+                                    return \App\Utilities\FileUtility::getFileName('ijazah', $file->getFileName());
                                 }
                             )
                             ->acceptedFileTypes(['application/pdf'])
                             ->downloadable()
                             ->disk(config('filesystems.default'))
                             ->visibility('private')
-                            ->directory('ijazah'),
+                            ->directory(fn(Forms\Get $get): string => 'documents/' . $get('nik')),
                     ])
                     ->columns(2)
                     ->collapsible(),
@@ -571,7 +571,7 @@ class EditProfileStudent extends Page
                             ->relationship('guardians')
                             // ->collapsed()
                             ->columns(2)
-                            ->itemLabel(fn (array $state): ?string => $state['relationship'] . ' : ' . $state['name'] ?? null)
+                            ->itemLabel(fn(array $state): ?string => $state['relationship'] . ' : ' . $state['name'] ?? null)
                             ->mutateRelationshipDataBeforeCreateUsing(function (array $data, $record): array|null {
                                 $guardian = \App\Models\Guardian::where('nik', $data['nik'])
                                     ->where('phone', $data['phone'])

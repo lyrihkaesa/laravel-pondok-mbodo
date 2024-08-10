@@ -42,4 +42,10 @@ class FileUtility
 
         return $uniqueValue . $suffixLabel . '.' . $extension;
     }
+
+    public static function getFileName(string $name, string $fileNameWithExtension): string
+    {
+        $extension = pathinfo($fileNameWithExtension, PATHINFO_EXTENSION);
+        return $name . '.' . $extension;
+    }
 }

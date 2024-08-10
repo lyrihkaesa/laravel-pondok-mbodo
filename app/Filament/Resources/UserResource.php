@@ -49,7 +49,7 @@ class UserResource extends Resource implements HasShieldPermissions
                             ->inline()
                             ->options(SocialMediaVisibility::class)
                             ->default(SocialMediaVisibility::PUBLIC)
-                            ->helperText(fn ($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
+                            ->helperText(fn($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
                             ->required(),
                         Forms\Components\TextInput::make('password')
                             ->label(__('Password'))
@@ -64,16 +64,16 @@ class UserResource extends Resource implements HasShieldPermissions
                         Forms\Components\Actions::make([
                             Forms\Components\Actions\Action::make('student')
                                 ->label(__('Student'))
-                                ->url(fn (User $record): string => route('filament.admin.resources.students.edit', ['record' => $record->student]))
+                                ->url(fn(User $record): string => route('filament.admin.resources.students.edit', ['record' => $record->student]))
                                 ->openUrlInNewTab()
-                                ->visible(fn (User $record): bool => $record->student !== null)
-                                ->disabled(fn () => !auth()->user()->can('edit_student')),
+                                ->visible(fn(User $record): bool => $record->student !== null)
+                                ->disabled(fn() => !auth()->user()->can('edit_student')),
                             Forms\Components\Actions\Action::make('employee')
                                 ->label(__('Employee'))
-                                ->url(fn (User $record): string => route('filament.admin.resources.employees.edit', ['record' => $record->employee]))
+                                ->url(fn(User $record): string => route('filament.admin.resources.employees.edit', ['record' => $record->employee]))
                                 ->openUrlInNewTab()
-                                ->visible(fn (User $record): bool => $record->employee !== null)
-                                ->disabled(fn () => !auth()->user()->can('edit_employee')),
+                                ->visible(fn(User $record): bool => $record->employee !== null)
+                                ->disabled(fn() => !auth()->user()->can('edit_employee')),
                         ]),
                         Forms\Components\FileUpload::make('profile_picture_1x1')
                             ->label(__('Profile Picture 1x1'))
@@ -81,7 +81,7 @@ class UserResource extends Resource implements HasShieldPermissions
                             ->image()
                             ->downloadable()
                             ->openable()
-                            ->directory('profile_pictures'),
+                            ->directory('profile-pictures'),
                         Forms\Components\DateTimePicker::make('email_verified_at')
                             ->label(__('Email Verified At'))
                             ->disabled(),

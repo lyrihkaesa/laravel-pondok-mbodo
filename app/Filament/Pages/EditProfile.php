@@ -84,7 +84,7 @@ class EditProfile extends Page implements HasForms
                             ->imageEditor()
                             ->downloadable()
                             ->openable()
-                            ->directory('profile_pictures'),
+                            ->directory('profile-pictures'),
                         Forms\Components\TextInput::make('name')
                             ->label(__('Name'))
                             ->required()
@@ -112,7 +112,7 @@ class EditProfile extends Page implements HasForms
                             ->inline()
                             ->options(SocialMediaVisibility::class)
                             ->default(SocialMediaVisibility::PUBLIC)
-                            ->helperText(fn ($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
+                            ->helperText(fn($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
                             ->required(),
                     ]),
             ])
@@ -142,13 +142,13 @@ class EditProfile extends Page implements HasForms
                                             ->label(__('Username'))
                                             ->placeholder(__('Username Placeholder'))
                                             ->maxLength(255)
-                                            ->visible(fn (Forms\Get $get) => $get('platform') !== 'web')
+                                            ->visible(fn(Forms\Get $get) => $get('platform') !== 'web')
                                             ->columnSpan(2),
                                         Forms\Components\TextInput::make('url')
                                             ->label(__('URL'))
                                             ->placeholder(__('URL Placeholder'))
                                             ->url()
-                                            ->visible(fn (Forms\Get $get) => $get('platform') === 'web')
+                                            ->visible(fn(Forms\Get $get) => $get('platform') === 'web')
                                             ->columnSpan(2),
                                     ])
                                     ->columns(3),
@@ -158,7 +158,7 @@ class EditProfile extends Page implements HasForms
                                     ->inline()
                                     ->options(SocialMediaVisibility::class)
                                     ->default(SocialMediaVisibility::PUBLIC)
-                                    ->helperText(fn ($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
+                                    ->helperText(fn($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
                                     ->required(),
                             ]),
                         // ->deleteAction(fn ($action) => $action->requiresConfirmation()),
@@ -217,7 +217,7 @@ class EditProfile extends Page implements HasForms
                             ->required()
                             ->rule(Password::default())
                             ->autocomplete('new-password')
-                            ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
+                            ->dehydrateStateUsing(fn($state): string => Hash::make($state))
                             ->live(debounce: 500)
                             ->same('passwordConfirmation'),
                         Forms\Components\TextInput::make('passwordConfirmation')
