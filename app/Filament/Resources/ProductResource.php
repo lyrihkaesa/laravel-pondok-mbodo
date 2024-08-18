@@ -24,40 +24,69 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->live(onBlur: true)
-                    ->maxLength(255)
-                    ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', str()->slug($state)) : null),
-                Forms\Components\TextInput::make('slug')
-                    ->dehydrated()
-                    ->required()
-                    ->maxLength(255)
-                    ->unique(Product::class, 'slug', ignoreRecord: true),
-                Forms\Components\TextInput::make('price')->label('Harga')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\Select::make('payment_term')
-                    ->label('Jangka Waktu')
-                    ->options([
-                        'Sekali' => 'Sekali',
-                        'Bulanan' => 'Bulanan',
-                        '6 Bulan' => '6 Bulan',
-                        'Tahunan' => 'Tahunan',
+                Forms\Components\Section::make(__('Product Information'))
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label(__('Name'))
+                            ->required()
+                            ->live(onBlur: true)
+                            ->maxLength(255)
+                            ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', str()->slug($state)) : null),
+                        Forms\Components\TextInput::make('slug')
+                            ->label(__('Slug'))
+                            ->dehydrated()
+                            ->required()
+                            ->maxLength(255)
+                            ->unique(Product::class, 'slug', ignoreRecord: true),
+                        Forms\Components\TextInput::make('price')
+                            ->label(__('Price'))
+                            ->required()
+                            ->numeric(),
+                        Forms\Components\Select::make('payment_term')
+                            ->label(__('Payment Term'))
+                            ->options([
+                                'Sekali' => 'Sekali',
+                                'Bulanan' => 'Bulanan',
+                                '6 Bulan' => '6 Bulan',
+                                'Tahunan' => 'Tahunan',
+                            ])
+                            ->native(false)
+                            ->createOptionForm([
+                                Forms\Components\TextInput::make('name')
+                                    ->label(__('Payment Term'))
+                                    ->required(),
+                            ])
+                            ->createOptionUsing(function (array $data): string {
+                                // dd($data['name']);
+                                return $data['name'];
+                            }),
                     ])
-                    ->native(false)
-                    ->createOptionForm([
-                        Forms\Components\TextInput::make('name')->label('Jangka Waktu')->required(),
+                    ->columns(2)
+                    ->columnSpan(2),
+
+                Forms\Components\Section::make(__('Metadata'))
+                    ->schema([
+                        Forms\Components\FileUpload::make('image_attachments')
+                            ->label(__('Image Attachments'))
+                            ->multiple()
+                            ->image()
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                '1:1',
+                            ])
+                            ->imageCropAspectRatio('1:1')
+                            ->downloadable()
+                            ->openable()
+                            ->directory('products'),
+                        Forms\Components\Select::make('categories')
+                            ->label(__('Categories'))
+                            ->relationship('categories', 'name')
+                            ->multiple()
+                            ->searchable(),
                     ])
-                    ->createOptionUsing(function (array $data): string {
-                        // dd($data['name']);
-                        return $data['name'];
-                    }),
-                Forms\Components\Select::make('categories')
-                    ->relationship('categories', 'name')
-                    ->multiple()
-                    ->searchable(),
-            ]);
+                    ->columnSpan(1),
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -65,12 +94,12 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nama'),
+                    ->label(__('Name')),
                 Tables\Columns\TextColumn::make('price')
-                    ->label('Harga')
+                    ->label(__('Price'))
                     ->money('IDR'),
                 Tables\Columns\TextColumn::make('payment_term')
-                    ->label('Jangka Waktu'),
+                    ->label(__('Payment Term')),
             ])
             ->filters([
                 //

@@ -14,7 +14,15 @@ class Product extends Model
         'name',
         'price',
         'payment_term',
+        'image_attachments',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'image_attachments' => 'array',
+        ];
+    }
 
     public function students(): BelongsToMany
     {

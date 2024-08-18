@@ -258,5 +258,9 @@
     "Not connected": "Tidak terkoneksi",
     "Connect": "Hubungkan",
     "Disconnect": "Putuskan",
-    "Quantity": "Kuantitas"
+    "Quantity": "Kuantitas",
+    "Payment Term": "Jangka Waktu",
+    "Price": "Harga",
+    "Categories": "Kategori",
+    "Product Information": "Informasi Produk"
 }

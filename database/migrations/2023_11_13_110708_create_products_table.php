@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->integer('price');
             $table->string('payment_term')->nullable();
+            $table->json('image_attachments')->nullable();
             $table->timestamps();
         });
     }
