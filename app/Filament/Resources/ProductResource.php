@@ -24,7 +24,23 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make(__('Product Information'))
+                Forms\Components\FileUpload::make('image_attachments')
+                    ->label(__('Image Attachments'))
+                    ->multiple()
+                    ->image()
+                    ->imageEditor()
+                    ->imageEditorAspectRatios([
+                        '1:1',
+                    ])
+                    ->imageCropAspectRatio('1:1')
+                    ->downloadable()
+                    ->openable()
+                    ->directory('products')
+                    ->columnSpan([
+                        'default' => 3,
+                        'md' => 1,
+                    ]),
+                Forms\Components\Group::make()
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->label(__('Name'))
@@ -38,53 +54,30 @@ class ProductResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->unique(Product::class, 'slug', ignoreRecord: true),
-                        Forms\Components\TextInput::make('price')
-                            ->label(__('Price'))
-                            ->required()
-                            ->numeric(),
-                        Forms\Components\Select::make('payment_term')
+                        Forms\Components\Group::make()
+                            ->schema([
+                                Forms\Components\TextInput::make('price')
+                                    ->label(__('Price'))
+                                    ->required()
+                                    ->numeric(),
+                                Forms\Components\Select::make('categories')
+                                    ->label(__('Categories'))
+                                    ->relationship('categories', 'name')
+                                    ->multiple()
+                                    ->searchable(),
+                            ])
+                            ->columns(2),
+                        Forms\Components\ToggleButtons::make('payment_term')
                             ->label(__('Payment Term'))
-                            ->options([
-                                'Sekali' => 'Sekali',
-                                'Bulanan' => 'Bulanan',
-                                '6 Bulan' => '6 Bulan',
-                                'Tahunan' => 'Tahunan',
-                            ])
-                            ->native(false)
-                            ->createOptionForm([
-                                Forms\Components\TextInput::make('name')
-                                    ->label(__('Payment Term'))
-                                    ->required(),
-                            ])
-                            ->createOptionUsing(function (array $data): string {
-                                // dd($data['name']);
-                                return $data['name'];
-                            }),
+                            ->inline()
+                            ->options(\App\Enums\PaymentTerm::class)
+                            ->required()
+                            ->default(\App\Enums\PaymentTerm::MONTHLY),
                     ])
-                    ->columns(2)
-                    ->columnSpan(2),
-
-                Forms\Components\Section::make(__('Metadata'))
-                    ->schema([
-                        Forms\Components\FileUpload::make('image_attachments')
-                            ->label(__('Image Attachments'))
-                            ->multiple()
-                            ->image()
-                            ->imageEditor()
-                            ->imageEditorAspectRatios([
-                                '1:1',
-                            ])
-                            ->imageCropAspectRatio('1:1')
-                            ->downloadable()
-                            ->openable()
-                            ->directory('products'),
-                        Forms\Components\Select::make('categories')
-                            ->label(__('Categories'))
-                            ->relationship('categories', 'name')
-                            ->multiple()
-                            ->searchable(),
-                    ])
-                    ->columnSpan(1),
+                    ->columnSpan([
+                        'default' => 3,
+                        'md' => 2,
+                    ]),
             ])
             ->columns(3);
     }
@@ -93,13 +86,16 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('image_attachments')
+                    ->label(__('Image Attachments')),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('Name')),
                 Tables\Columns\TextColumn::make('price')
                     ->label(__('Price'))
                     ->money('IDR'),
                 Tables\Columns\TextColumn::make('payment_term')
-                    ->label(__('Payment Term')),
+                    ->label(__('Payment Term'))
+                    ->badge(),
             ])
             ->filters([
                 //

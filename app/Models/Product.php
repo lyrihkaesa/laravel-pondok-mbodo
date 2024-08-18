@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentTerm;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -20,6 +21,7 @@ class Product extends Model
     protected function casts(): array
     {
         return [
+            'payment_term' => PaymentTerm::class,
             'image_attachments' => 'array',
         ];
     }

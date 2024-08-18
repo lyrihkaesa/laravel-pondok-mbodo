@@ -262,5 +262,9 @@
     "Payment Term": "Jangka Waktu",
     "Price": "Harga",
     "Categories": "Kategori",
-    "Product Information": "Informasi Produk"
+    "Product Information": "Informasi Produk",
+    "Once": "Sekali",
+    "Monthly": "Bulanan",
+    "Semester": "Semester",
+    "Yearly": "Tahunan"
 }
