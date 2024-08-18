@@ -1,7 +1,3 @@
-@push('styles')
-    @vite('resources/css/markdown.css')
-@endpush
-
 <!-- Blog Article -->
 <div class="mx-auto max-w-[85rem]">
     <div class="grid gap-y-4 lg:grid-cols-3 lg:gap-y-0">
@@ -36,9 +32,9 @@
                         </div>
                     </div>
                     <div class="space-y-5 px-4 pt-6 sm:px-6 lg:space-y-8 lg:px-8">
-                        <section class="markdown post">
+                        <article class="prose prose-blue max-w-none dark:prose-invert">
                             {!! str($this->post->content)->markdown() !!}
-                        </section>
+                        </article>
 
                         <div class="grid gap-y-5 lg:flex lg:items-center lg:justify-between lg:gap-y-0">
                             <!-- Badges/Tags -->
