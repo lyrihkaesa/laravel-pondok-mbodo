@@ -36,6 +36,7 @@ class ProductResource extends Resource
                     ->downloadable()
                     ->openable()
                     ->directory('products')
+                    ->reorderable()
                     ->columnSpan([
                         'default' => 3,
                         'md' => 1,
