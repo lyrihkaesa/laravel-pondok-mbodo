@@ -36,7 +36,7 @@
                             {!! str($this->post->content)->markdown() !!}
                         </article>
 
-                        <div class="grid gap-y-5 lg:flex lg:items-center lg:justify-between lg:gap-y-0">
+                        {{-- <div class="grid gap-y-5 lg:flex lg:items-center lg:justify-between lg:gap-y-0">
                             <!-- Badges/Tags -->
                             <div>
                                 <a class="m-0.5 inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800 hover:bg-gray-200 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
@@ -167,7 +167,7 @@
                                 </div>
                                 <!-- Button -->
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -176,7 +176,7 @@
 
         <!-- Sidebar -->
         <div
-            class="dark:from-gray-950 lg:col-span-1 lg:h-full lg:w-full lg:bg-gradient-to-r lg:from-gray-50 lg:via-transparent lg:to-transparent">
+            class="from-gray-50 dark:from-gray-950 lg:col-span-1 lg:h-full lg:w-full lg:bg-gradient-to-r lg:via-transparent lg:to-transparent">
             <div class="sticky start-0 top-0 py-8 lg:ps-8">
                 <!-- Avatar Media -->
                 <div

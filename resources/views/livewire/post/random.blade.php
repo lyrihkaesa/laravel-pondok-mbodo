@@ -1,7 +1,7 @@
 <div class="space-y-5 px-4 sm:px-6 lg:px-0 lg:pe-8">
     @foreach ($this->randomPosts as $post)
         <!-- Media -->
-        <a class="group flex items-center gap-x-6 rounded-md bg-gray-50 p-3 dark:bg-gray-800"
+        <a class="group flex items-center gap-x-6 rounded-md bg-white p-3 dark:bg-gray-800"
             href="{{ route('posts.show', $post->slug) }}">
             <div class="flex grow flex-col">
                 <span

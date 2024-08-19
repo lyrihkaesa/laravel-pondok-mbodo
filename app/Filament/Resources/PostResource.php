@@ -47,6 +47,7 @@ class PostResource extends Resource
                             ->required(),
                         Forms\Components\MarkdownEditor::make('content')
                             ->label(__('Content'))
+                            ->fileAttachmentsDirectory('posts/attachments')
                             ->required()
                             ->columnSpanFull(),
                     ])
