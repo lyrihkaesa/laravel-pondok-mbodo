@@ -22,7 +22,6 @@
                 </x-block.slider.pagination>
             </x-block.slider.index>
         @elseif ($block['type'] === 'team')
-            {{-- @dd($block) --}}
             <x-block.team.index :iteration="$loop->iteration">
                 <x-block.team.header>
                     <x-block.team.title>{{ $block['data']['title'] }}</x-block.team.title>
@@ -111,6 +110,9 @@
         @elseif ($block['type'] === 'team-b')
             {{-- @dd($block) --}}
             <livewire:block.team-b :iteration="$loop->iteration" :title="$block['data']['title']" :description="$block['data']['description']" :memberIds="$block['data']['member_id']" />
+        @elseif ($block['type'] === 'many-table-packages')
+            <livewire:block.many-table-packages :iteration="$loop->iteration" :title="$block['data']['title']" :description="$block['data']['description']"
+                :packageIds="$block['data']['package_ids']" />
         @endif
     @endforeach
 

@@ -45,6 +45,7 @@ class PublicPageResource extends Resource
                     ->blocks([
                         // SLIDER
                         Forms\Components\Builder\Block::make('slider')
+                            ->label(__('Slider'))
                             ->schema([
                                 Forms\Components\Repeater::make('slides')
                                     ->schema([
@@ -64,6 +65,7 @@ class PublicPageResource extends Resource
 
                         // TEAM
                         Forms\Components\Builder\Block::make('team')
+                            ->label(__('Team'))
                             ->schema([
                                 Forms\Components\Grid::make()
                                     ->schema([
@@ -92,6 +94,7 @@ class PublicPageResource extends Resource
 
                         // POST
                         Forms\Components\Builder\Block::make('post')
+                            ->label(__('Random Posts'))
                             ->schema([
                                 Forms\Components\Grid::make()
                                     ->schema([
@@ -109,6 +112,7 @@ class PublicPageResource extends Resource
 
                         // ARTICLE
                         Forms\Components\Builder\Block::make('article')
+                            ->label(__('Article Single Markdown'))
                             ->schema([
                                 Forms\Components\TextInput::make('title'),
                                 Forms\Components\Textarea::make('sub_title'),
@@ -117,16 +121,15 @@ class PublicPageResource extends Resource
                                     ->image()
                                     ->downloadable()
                                     ->openable()
-                                    ->required()
                                     ->directory('pages'),
                                 Forms\Components\TextInput::make('alt')
-                                    ->label(__('Alt text'))
-                                    ->required(),
+                                    ->label(__('Alt text')),
                                 Forms\Components\MarkdownEditor::make('body'),
                             ]),
 
                         // HERO
                         Forms\Components\Builder\Block::make('hero')
+                            ->label(__('Hero'))
                             ->schema([
                                 Forms\Components\Grid::make()
                                     ->schema([
@@ -172,6 +175,7 @@ class PublicPageResource extends Resource
 
                         // ARTICLE_A
                         Forms\Components\Builder\Block::make('article-a')
+                            ->label(__('Article Dual Markdown'))
                             ->schema([
                                 Forms\Components\Group::make()
                                     ->schema([
@@ -188,6 +192,7 @@ class PublicPageResource extends Resource
 
                         // TEAM_B
                         Forms\Components\Builder\Block::make('team-b')
+                            ->label(__('Team Type-B'))
                             ->schema([
                                 Forms\Components\TextInput::make('title'),
                                 Forms\Components\Textarea::make('description'),
@@ -198,8 +203,22 @@ class PublicPageResource extends Resource
                                     ->multiple(),
                             ]),
 
+                        // MANY TABLE PACKAGE
+                        Forms\Components\Builder\Block::make('many-table-packages')
+                            ->label(__('Many Table Packages'))
+                            ->schema([
+                                Forms\Components\TextInput::make('title'),
+                                Forms\Components\Textarea::make('description'),
+                                Forms\Components\Select::make('package_ids')
+                                    ->label(__('Packages'))
+                                    ->options(\App\Models\Package::all()->pluck('name', 'id'))
+                                    ->searchable()
+                                    ->multiple(),
+                            ]),
+
                         // FILAMENT SECTION
                         Forms\Components\Builder\Block::make('filament-section')
+                            ->label(__('Filament Section'))
                             ->schema([
                                 Forms\Components\Group::make()
                                     ->schema([

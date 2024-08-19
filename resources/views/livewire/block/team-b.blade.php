@@ -20,7 +20,7 @@
         @foreach ($this->members as $member)
             <div class="text-center">
                 <img class="sm:size-48 lg:size-60 mx-auto rounded-xl"
-                    src="{{ $member->profile_picture_1x1 ? Storage::disk(config('filament.default_filesystem_disk'))->url($member->profile_picture_1x1) : asset('images\thumbnails\images-dark.webp') }}"
+                    src="{{ $member->profile_picture_1x1 ? Storage::disk(config('filament.default_filesystem_disk'))->url($member->profile_picture_1x1) : asset('images\thumbnails\images-dark-500x500.jpg') }}"
                     alt="{{ $member->name }}">
                 <div class="mt-2 sm:mt-4">
                     <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 sm:text-base lg:text-lg">

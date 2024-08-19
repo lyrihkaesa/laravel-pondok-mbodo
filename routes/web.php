@@ -8,7 +8,7 @@ Route::get('/tentang', \App\Livewire\Page::class)->name('about');
 
 Route::get('/ppdb', \App\Livewire\Page::class)->name('ppdb.index');
 Route::get('/ppdb/formulir', \App\Livewire\Ppdb\Registration::class)->name('student-registration');
-Route::get('/ppdb/biaya', \App\Livewire\Ppdb\Price::class)->name('ppdb.price');
+Route::get('/ppdb/biaya', \App\Livewire\Page::class)->name('ppdb.price');
 
 Route::get('/peraturan', \App\Livewire\Law\Index::class)->name('law.index');
 
@@ -42,4 +42,4 @@ Route::get('/pdf', function () {
 
 require __DIR__ . '/auth.php';
 
-// Route::fallback(\App\Livewire\Page::class);
+Route::fallback(\App\Livewire\Page::class);
