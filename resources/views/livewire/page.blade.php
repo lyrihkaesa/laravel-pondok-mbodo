@@ -8,7 +8,8 @@
             <x-block.slider.index>
                 <x-block.slider.main>
                     @foreach ($block['data']['slides'] as $slide)
-                        <x-block.slider.item src="{{ Storage::disk(config('filament.default_filesystem_disk'))->url($slide['url']) }}"
+                        <x-block.slider.item
+                            src="{{ Storage::disk(config('filament.default_filesystem_disk'))->url($slide['url']) }}"
                             alt="{{ $slide['alt'] }}" />
                     @endforeach
                 </x-block.slider.main>
@@ -28,7 +29,8 @@
                 </x-block.team.header>
                 <x-block.team.grid>
                     @foreach ($block['data']['teams'] as $member)
-                        <x-block.team.item imageUrl="{{ Storage::disk(config('filament.default_filesystem_disk'))->url($member['url']) }}"
+                        <x-block.team.item
+                            imageUrl="{{ Storage::disk(config('filament.default_filesystem_disk'))->url($member['url']) }}"
                             imageAlt="{{ $member['alt'] }}"
                             role="{{ $member['role'] }}">{{ $member['name'] }}</x-block.team.item>
                     @endforeach
