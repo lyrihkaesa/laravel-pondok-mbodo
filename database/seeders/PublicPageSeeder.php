@@ -14,6 +14,6 @@ class PublicPageSeeder extends Seeder
     public function run(): void
     {
         DB::unprepared(file_get_contents(database_path('sql/public_pages.sql')));
-        DB::statement('ALTER SEQUENCE public_pages_id_seq RESTART WITH 5');
+        DB::statement('ALTER SEQUENCE public_pages_id_seq RESTART WITH 6');
     }
 }
