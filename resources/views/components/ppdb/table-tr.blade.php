@@ -66,7 +66,8 @@
                                 </div>
                             </div>
 
-                            @isset($product->image_attachments)
+                            @if (is_array($product->image_attachments) && count($product->image_attachments) > 1)
+                                {{-- Previous --}}
                                 <button type="button"
                                     class="hs-carousel-prev hs-carousel:disabled:opacity-50 absolute inset-y-0 start-0 inline-flex h-full w-[46px] items-center justify-center rounded-s-lg text-gray-800 hover:bg-gray-800/10 focus:bg-gray-800/10 focus:outline-none disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
                                     <span class="text-2xl" aria-hidden="true">
@@ -78,6 +79,8 @@
                                     </span>
                                     <span class="sr-only">Previous</span>
                                 </button>
+
+                                {{-- Next --}}
                                 <button type="button"
                                     class="hs-carousel-next hs-carousel:disabled:opacity-50 absolute inset-y-0 end-0 inline-flex h-full w-[46px] items-center justify-center rounded-e-lg text-gray-800 hover:bg-gray-800/10 focus:bg-gray-800/10 focus:outline-none disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
                                     <span class="sr-only">Next</span>
@@ -90,6 +93,7 @@
                                     </span>
                                 </button>
 
+                                {{-- Pagination Icon Circle Bottom --}}
                                 <div
                                     class="hs-carousel-pagination flex absolute bottom-3 end-0 start-0 justify-center space-x-2">
                                     @foreach ($product->image_attachments as $image)
@@ -97,7 +101,8 @@
                                             class="size-3 cursor-pointer rounded-full border border-gray-400 hs-carousel-active:border-blue-700 hs-carousel-active:bg-blue-700 dark:border-neutral-600 dark:hs-carousel-active:border-blue-500 dark:hs-carousel-active:bg-blue-500"></span>
                                     @endforeach
                                 </div>
-                            @endisset
+                            @endif
+
                             {{-- Close Button --}}
                             <button type="button"
                                 class="size-7 absolute right-3 top-3 z-10 inline-flex items-center justify-center rounded-full bg-white text-gray-800 shadow-sm hover:bg-gray-200 focus:outline-none dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600"
