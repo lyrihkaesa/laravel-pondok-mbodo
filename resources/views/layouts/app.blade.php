@@ -6,7 +6,8 @@
     x-bind:class="{
         'dark': theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)')
             .matches)
-    }">
+    }"
+    class="!scroll-smooth">
 
 <head>
     <meta charset="utf-8">

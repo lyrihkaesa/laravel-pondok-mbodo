@@ -184,7 +184,7 @@
                     <a class="group flex flex-row items-center gap-x-3" href="#">
                         <div class="block flex-shrink-0">
                             <img class="size-10 rounded-full"
-                                src="{{ $this->post->author->getFilamentAvatarUrl() ? $this->post->author->getFilamentAvatarUrl() : asset('images\thumbnails\images-dark.webp') }}"
+                                src="{{ $this->post->author->getFilamentAvatarUrl() ? $this->post->author->getFilamentAvatarUrl() : asset('images\thumbnails\images-dark-500x500.jpg') }}"
                                 alt="{{ $this->post->author->name }}">
                         </div>
                         <div class="group block grow">
@@ -200,7 +200,7 @@
                     <a class="group flex flex-row items-center gap-x-3" href="###">
                         <div class="block flex-shrink-0">
                             <img class="size-10 rounded-full"
-                                src="{{ $this->post->editor->getFilamentAvatarUrl() ? $this->post->editor->getFilamentAvatarUrl() : asset('images\thumbnails\images-dark.webp') }}"
+                                src="{{ $this->post->editor->getFilamentAvatarUrl() ? $this->post->editor->getFilamentAvatarUrl() : asset('images\thumbnails\images-dark-500x500.jpg') }}"
                                 alt="{{ $this->post->editor->name }}">
                         </div>
 

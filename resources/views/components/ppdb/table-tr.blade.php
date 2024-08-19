@@ -4,7 +4,7 @@
     <td class="h-px min-w-fit text-start">
         <div class="px-4 py-2 md:px-6 md:py-3">
             <span class="text-xs font-semibold text-gray-800 dark:text-gray-200 md:text-sm">{{ $product->name }}</span>
-            <span x-data="{ term: '{{ $product->payment_term }}' }"
+            <span x-data="{ term: '{{ $product->payment_term->getLabel() }}' }"
                 x-bind:class="{
                     'bg-yellow-100 text-yellow-800 dark:bg-yellow-500/10 dark:text-yellow-500': term === 'Bulanan',
                     'bg-teal-100 text-teal-800 dark:bg-teal-500/10 dark:text-teal-500': term === 'Sekali',
@@ -20,8 +20,8 @@
     </td>
     <td class="h-px min-w-fit whitespace-nowrap text-end">
         <div class="px-4 py-2 md:px-6 md:py-3">
-            <span
-                class="block text-xs font-semibold text-gray-800 dark:text-gray-200 md:text-sm">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
+            <span class="block text-xs font-semibold text-gray-800 dark:text-gray-200 md:text-sm">Rp
+                {{ number_format($product->price, 0, ',', '.') }}</span>
         </div>
     </td>
 </tr>

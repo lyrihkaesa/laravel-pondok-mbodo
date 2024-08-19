@@ -9,7 +9,7 @@
     </div>
 
     <div class="text-sm font-semibold text-gray-800 dark:text-gray-200 md:text-base">
-        Total: Rp{{ number_format($total, 0, ',', '.') }},-
+        Total: Rp {{ number_format($total, 0, ',', '.') }}
     </div>
 </div>
 <!-- End Footer -->
