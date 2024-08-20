@@ -27,30 +27,34 @@ class PackageResource extends Resource
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('name')
+                            ->label(__('Name'))
                             ->required()
                             ->live(onBlur: true)
                             ->maxLength(255)
-                            ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', str()->slug($state)) : null),
+                            ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', str()->slug($state)) : null),
                         Forms\Components\TextInput::make('slug')
-                            ->dehydrated()
-                            ->required()
+                            ->label(__('Slug'))
+                            ->minLength(1)
                             ->maxLength(255)
-                            ->unique(Package::class, 'slug', ignoreRecord: true),
+                            ->unique(ignoreRecord: true)
+                            ->required(),
                         Forms\Components\Select::make('categories')
+                            ->label(__('Categories'))
                             ->relationship('categories', 'name')
+                            ->preload()
                             ->multiple()
                             ->searchable(),
                     ])
                     ->columns(2)
-                    ->columnSpan(['lg' => fn (?Model $record) => $record === null ? 3 : 2]),
+                    ->columnSpan(['lg' => fn(?Model $record) => $record === null ? 3 : 2]),
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\Placeholder::make('total_price')
                             ->label('Harga Total')
-                            ->content(fn (Model $record): ?string => 'Rp' . number_format($record->products->sum('price'), 0, ',', '.'))->live()
+                            ->content(fn(Model $record): ?string => 'Rp' . number_format($record->products->sum('price'), 0, ',', '.'))->live()
                     ])
                     ->columnSpan(['lg' => 1])
-                    ->hidden(fn (?Model $record) => $record === null),
+                    ->hidden(fn(?Model $record) => $record === null),
             ])->columns(3);
     }
 
