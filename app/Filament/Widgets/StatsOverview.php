@@ -14,13 +14,13 @@ class StatsOverview extends BaseWidget
 {
     public static function canView(): bool
     {
-        return auth()->user()->employee !== null;
+        return auth()->user()->can('widget_StatsOverview');
     }
 
     protected function getStats(): array
     {
         return [
-            Stat::make('Jumlah Santri', Student::where('status', StudentStatus::ACTIVE)->count())
+            Stat::make('Jumlah Santri Aktif', Student::where('status', StudentStatus::ACTIVE)->count())
                 ->description(Student::where('status', StudentStatus::ENROLLED)->count() . ' Mendaftar')
                 ->descriptionIcon(StudentStatus::ENROLLED->getIcon()),
             Stat::make('Jumlah Pengurus', Employee::count()),
