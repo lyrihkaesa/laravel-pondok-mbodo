@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('path')->unique();
-            $table->json('content');
+            $table->jsonb('content');
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
