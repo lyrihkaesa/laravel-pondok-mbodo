@@ -32,27 +32,28 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->id('admin')
             ->path('admin')
+            ->favicon(asset('favicon-150x150.png'))
             ->login()
             ->profile()
             ->userMenuItems([
                 'profile' => MenuItem::make()
                     ->label(__('Profile'))
                     ->icon('heroicon-o-user-circle')
-                    ->url(fn (): string => EditProfile::getUrl()),
+                    ->url(fn(): string => EditProfile::getUrl()),
                 'home' => MenuItem::make()
                     ->label(__('Home'))
                     ->icon('heroicon-o-home')
-                    ->url(fn (): string => '/'),
+                    ->url(fn(): string => '/'),
                 'profile student' => MenuItem::make()
                     ->label(__('Profile Student'))
                     ->icon('icon-student-male')
-                    ->visible(fn (): bool => auth()->user()->student !== null)
-                    ->url(fn (): string => EditProfileStudent::getUrl()),
+                    ->visible(fn(): bool => auth()->user()->student !== null)
+                    ->url(fn(): string => EditProfileStudent::getUrl()),
                 'profile employee' => MenuItem::make()
                     ->label(__('Profile Employee'))
                     ->icon('icon-school-director')
-                    ->visible(fn (): bool => auth()->user()->employee !== null)
-                    ->url(fn (): string => EditProfileEmployee::getUrl()),
+                    ->visible(fn(): bool => auth()->user()->employee !== null)
+                    ->url(fn(): string => EditProfileEmployee::getUrl()),
             ])
             ->colors([
                 // 'primary' => Color::Lime,
