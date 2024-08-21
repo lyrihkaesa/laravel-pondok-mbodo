@@ -1,8 +1,8 @@
-@props(['packageId'])
+@props(['slug'])
 
 <!-- Table Section -->
 <div>
-    <div id="{{ $packageId }}" class="pt-4 md:pt-6"></div>
+    <div id="{{ $slug }}" class="pt-4 md:pt-6"></div>
     <!-- Card -->
     <div class="flex flex-col">
         <div class="-m-1.5 overflow-x-auto">

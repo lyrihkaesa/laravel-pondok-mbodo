@@ -19,7 +19,7 @@
                 <ul class="flex flex-col">
                     @foreach ($this->packages as $package)
                         <a class="-mt-px inline-flex items-center gap-x-2 border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-800 first:mt-0 first:rounded-t-lg last:rounded-b-lg hover:bg-gray-200 dark:border-gray-700 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-800"
-                            href="#{{ $package->id }}">
+                            href="#{{ $package->slug }}">
                             <li class="">
                                 {{ $package->name }}
                             </li>
@@ -34,7 +34,7 @@
         <!-- Content -->
         <div class="md:col-span-2">
             @foreach ($this->packages as $package)
-                <x-ppdb.card :packageId="$package->id">
+                <x-ppdb.card :slug="$package->slug">
                     <x-ppdb.card-header>{{ $package->name }}</x-ppdb.card-header>
                     <x-ppdb.table>
                         @foreach ($package->products as $product)

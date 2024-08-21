@@ -45,7 +45,6 @@ class PackageResource extends Resource
                             ->multiple()
                             ->searchable(),
                     ])
-                    ->columns(2)
                     ->columnSpan(['lg' => fn(?Model $record) => $record === null ? 3 : 2]),
                 Forms\Components\Section::make()
                     ->schema([
