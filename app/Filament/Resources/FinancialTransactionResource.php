@@ -31,19 +31,19 @@ class FinancialTransactionResource extends Resource implements HasShieldPermissi
                         Forms\Components\Select::make('from_wallet_id')
                             ->label(__('From Wallet'))
                             ->relationship('fromWallet')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => (in_array("ALLOW_NEGATIVE_BALANCE", $record->policy ?? []) ? "🔻" : "")  . "{$record->wallet_code} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
+                            ->getOptionLabelFromRecordUsing(fn($record) => (in_array("ALLOW_NEGATIVE_BALANCE", $record->policy ?? []) ? "🔻" : "")  . "{$record->wallet_code} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
                             ->required()
                             ->searchable(['id', 'wallet_code', 'name'])
                             ->preload()
-                            ->disabled(fn ($operation) => $operation === 'edit'),
+                            ->disabled(fn($operation) => $operation === 'edit'),
                         Forms\Components\Select::make('to_wallet_id')
                             ->label(__('To Wallet'))
                             ->relationship('toWallet')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->wallet_code} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
+                            ->getOptionLabelFromRecordUsing(fn($record) => "{$record->wallet_code} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
                             ->required()
                             ->searchable(['id', 'wallet_code', 'name'])
                             ->preload()
-                            ->disabled(fn ($operation) => $operation === 'edit'),
+                            ->disabled(fn($operation) => $operation === 'edit'),
                     ])
                     ->compact()
                     ->columns(2),
@@ -58,18 +58,18 @@ class FinancialTransactionResource extends Resource implements HasShieldPermissi
                         Forms\Components\Group::make()
                             ->schema([
                                 Forms\Components\TextInput::make('quantity')
-                                    ->label(__('Quantity'))
+                                    ->label(__('Amount'))
                                     ->numeric()
                                     ->minValue(1)
-                                    ->disabled(fn ($operation) => $operation === 'edit')
+                                    ->disabled(fn($operation) => $operation === 'edit')
                                     ->default(1)
                                     ->required(),
                                 Forms\Components\TextInput::make('amount')
-                                    ->label(__('Amount'))
+                                    ->label(__('Nominal'))
                                     ->placeholder(__('Amount Placeholder'))
                                     ->numeric()
                                     ->minValue(1)
-                                    ->disabled(fn ($operation) => $operation === 'edit')
+                                    ->disabled(fn($operation) => $operation === 'edit')
                                     ->required(),
                                 Forms\Components\DateTimePicker::make('transaction_at')
                                     ->label(__('Transaction At'))
@@ -156,11 +156,11 @@ class FinancialTransactionResource extends Resource implements HasShieldPermissi
                     ->money(currency: 'IDR', locale: 'id'),
                 Tables\Columns\TextColumn::make('description')
                     ->label(__('Description'))
-                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('transaction_at')
                     ->label(__('Transaction At'))
-                    ->date(format: 'd/m/Y H:i:s', timezone: 'Asia/Jakarta'),
+                    ->date(format: 'd-m-Y H:i:s', timezone: 'Asia/Jakarta'),
 
             ])
             ->filters([
