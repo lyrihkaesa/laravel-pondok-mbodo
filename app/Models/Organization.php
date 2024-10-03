@@ -13,14 +13,7 @@ class Organization extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'slug',
-        'category',
-        'vision',
-        'mission',
-        'description',
-    ];
+    protected $guarded = ['id'];
 
     protected function casts(): array
     {
@@ -59,9 +52,6 @@ class Organization extends Model
         return $this->hasMany(Classroom::class);
     }
 
-    /**
-     * Get the wallets owned by the organization.
-     */
     public function wallets(): HasMany
     {
         return $this->hasMany(Wallet::class, 'organization_id');

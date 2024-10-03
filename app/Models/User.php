@@ -107,7 +107,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     public function getFilamentAvatarUrl(): ?string
     {
         if ($this->profile_picture_1x1 === null) {
-            return null;
+            return asset('images/thumbnails/images-dark-500x500.jpg');
         }
 
         /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */

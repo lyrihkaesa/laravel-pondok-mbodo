@@ -190,8 +190,7 @@
             <div class="grid grid-cols-2 gap-8 md:gap-12 lg:grid-cols-3">
                 @foreach ($organization->users as $user)
                     <div class="grid gap-x-4 gap-y-3 sm:flex sm:items-center">
-                        <img class="size-20 rounded-lg"
-                            src="{{ $user->profile_picture_1x1 ? asset('storage/' . $user->profile_picture_1x1) : asset('images\thumbnails\images-dark.webp') }}"
+                        <img class="size-20 rounded-lg" src="{{ $user->getFilamentAvatarUrl() }}"
                             alt="{{ $user->name }}">
 
 
@@ -207,12 +206,12 @@
 
                             <!-- Social Brands -->
                             <div class="mt-2 space-x-2.5 sm:mt-auto">
-                                <a class="inline-flex items-center justify-center rounded-full fill-gray-500 hover:fill-gray-800 dark:hover:fill-gray-200"
-                                    target="_blank" href="https://wa.me/{{ $user->phone }}">@svg('icon-whatsapp', ['class' => 'size-3.5 flex-shrink-0'])</a>
-                                <a class="inline-flex items-center justify-center rounded-full fill-gray-500 hover:fill-gray-800 dark:hover:fill-gray-200"
-                                    target="_blank" href="#">@svg('icon-facebook', ['class' => 'size-3.5 flex-shrink-0'])</a>
-                                <a class="inline-flex items-center justify-center rounded-full fill-gray-500 hover:fill-gray-800 dark:hover:fill-gray-200"
-                                    target="_blank" href="#">@svg('icon-instagram', ['class' => 'size-3.5 flex-shrink-0'])</a>
+                                <a class="inline-flex items-center justify-center rounded-full text-amber-500 hover:text-amber-800 dark:hover:text-amber-200"
+                                    target="_blank" href="https://wa.me/{{ $user->phone }}">@svg('icon-whatsapp', ['class' => 'size-4 flex-shrink-0'])</a>
+                                <a class="inline-flex items-center justify-center rounded-full text-amber-500 hover:text-amber-800 dark:hover:text-amber-200"
+                                    target="_blank" href="#">@svg('icon-facebook', ['class' => 'size-4 flex-shrink-0'])</a>
+                                <a class="inline-flex items-center justify-center rounded-full text-amber-500 hover:text-amber-800 dark:hover:text-amber-200"
+                                    target="_blank" href="#">@svg('icon-instagram', ['class' => 'size-4 flex-shrink-0'])</a>
                             </div>
                             <!-- End Social Brands -->
                         </div>
