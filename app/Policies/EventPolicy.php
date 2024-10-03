@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\FinancialTransaction;
+use App\Models\Event;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class FinancialTransactionPolicy
+class EventPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class FinancialTransactionPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_financial::transaction');
+        return $user->can('view_any_event');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, FinancialTransaction $financialTransaction): bool
+    public function view(User $user, Event $event): bool
     {
-        return $user->can('view_financial::transaction');
+        return $user->can('view_event');
     }
 
     /**
@@ -31,23 +31,23 @@ class FinancialTransactionPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_financial::transaction');
+        return $user->can('create_event');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, FinancialTransaction $financialTransaction): bool
+    public function update(User $user, Event $event): bool
     {
-        return $user->can('update_financial::transaction');
+        return $user->can('update_event');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, FinancialTransaction $financialTransaction): bool
+    public function delete(User $user, Event $event): bool
     {
-        return $user->can('delete_financial::transaction');
+        return $user->can('delete_event');
     }
 
     /**
@@ -55,15 +55,15 @@ class FinancialTransactionPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_financial::transaction');
+        return $user->can('delete_any_event');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, FinancialTransaction $financialTransaction): bool
+    public function forceDelete(User $user, Event $event): bool
     {
-        return $user->can('{{ ForceDelete }}');
+        return $user->can('force_delete_event');
     }
 
     /**
@@ -71,15 +71,15 @@ class FinancialTransactionPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('{{ ForceDeleteAny }}');
+        return $user->can('force_delete_any_event');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, FinancialTransaction $financialTransaction): bool
+    public function restore(User $user, Event $event): bool
     {
-        return $user->can('{{ Restore }}');
+        return $user->can('restore_event');
     }
 
     /**
@@ -87,15 +87,15 @@ class FinancialTransactionPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('{{ RestoreAny }}');
+        return $user->can('restore_any_event');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, FinancialTransaction $financialTransaction): bool
+    public function replicate(User $user, Event $event): bool
     {
-        return $user->can('{{ Replicate }}');
+        return $user->can('replicate_event');
     }
 
     /**
@@ -103,6 +103,6 @@ class FinancialTransactionPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('{{ Reorder }}');
+        return $user->can('reorder_event');
     }
 }

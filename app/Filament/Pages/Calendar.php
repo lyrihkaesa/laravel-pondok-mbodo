@@ -11,6 +11,11 @@ class Calendar extends Page
 
     protected static string $view = 'filament.pages.calendar';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->can('page_Calendar');
+    }
+
     public function getTitle(): string | Htmlable
     {
         return __('Calendar Page');

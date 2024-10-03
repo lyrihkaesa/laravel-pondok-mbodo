@@ -95,7 +95,7 @@ class StudentPolicy
      */
     public function replicate(User $user, Student $student): bool
     {
-        return $user->can('replicate_student');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,6 +103,6 @@ class StudentPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_student');
+        return $user->can('{{ Reorder }}');
     }
 }

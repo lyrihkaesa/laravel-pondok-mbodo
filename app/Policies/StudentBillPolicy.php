@@ -63,7 +63,7 @@ class StudentBillPolicy
      */
     public function forceDelete(User $user, StudentBill $studentBill): bool
     {
-        return $user->can('force_delete_student::bill');
+        return $user->can('{{ ForceDelete }}');
     }
 
     /**
@@ -71,7 +71,7 @@ class StudentBillPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_student::bill');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
@@ -79,7 +79,7 @@ class StudentBillPolicy
      */
     public function restore(User $user, StudentBill $studentBill): bool
     {
-        return $user->can('restore_student::bill');
+        return $user->can('{{ Restore }}');
     }
 
     /**
@@ -87,7 +87,7 @@ class StudentBillPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_student::bill');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
@@ -95,7 +95,7 @@ class StudentBillPolicy
      */
     public function replicate(User $user, StudentBill $studentBill): bool
     {
-        return $user->can('replicate_student::bill');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -103,11 +103,6 @@ class StudentBillPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_student::bill');
-    }
-
-    public function export(User $user): bool
-    {
-        return $user->can('export_student::bill');
+        return $user->can('{{ Reorder }}');
     }
 }
