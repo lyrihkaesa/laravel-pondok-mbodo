@@ -7,7 +7,7 @@ use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Navigation\MenuItem;
-use Filament\Support\Colors\Color;
+use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\EditProfile;
 use App\Filament\Pages\EditProfileStudent;
 use Filament\Http\Middleware\Authenticate;
@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->favicon(asset('favicon-150x150.png'))
-            ->login()
+            ->login(Login::class)
             ->profile()
             ->userMenuItems([
                 'profile' => MenuItem::make()
