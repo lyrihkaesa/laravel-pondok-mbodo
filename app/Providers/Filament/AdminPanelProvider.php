@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->id('admin')
             ->path('admin')
-            ->favicon(asset('favicon-150x150.png'))
+            ->favicon(secure_asset('favicon-150x150.png'))
             ->login(Login::class)
             ->profile()
             ->userMenuItems([
