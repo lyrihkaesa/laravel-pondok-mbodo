@@ -22,6 +22,7 @@ class OrganizationSeeder extends Seeder
         $categories = [
             'Yayasan' => [
                 "Yayasan Pondok Pesantren Ki Ageng Mbodo" => [
+                    'code' => '00',
                     'description' => null,
                     'email' => 'pondokmbodo@gmail.com',
                     'phone' => '6281234567890',
@@ -63,18 +64,21 @@ class OrganizationSeeder extends Seeder
             ],
             'Pondok Pesantren' => [
                 "Pesantren Putra" => [
+                    'code' => '11',
                     'description' => null,
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
                     'classrooms' => [],
                 ],
                 "Pesantren Putri" => [
+                    'code' => '12',
                     'description' => null,
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
                     'classrooms' => [],
                 ],
                 "Pesantren Tahfidzul Quran Putri" => [
+                    'code' => '13',
                     'description' => null,
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -89,6 +93,7 @@ class OrganizationSeeder extends Seeder
             ],
             'Sekolah Formal' => [
                 'Paud/TK Al-Hawi' => [
+                    'code' => '21',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -106,6 +111,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Madrasah Ibtidaiyyah Al-Hawi' => [
+                    'code' => '22',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -120,6 +126,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'SMP Islam Al-Hawi' => [
+                    'code' => '23',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -134,6 +141,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Madrasah Aliyah Plus Islam Al-Hawi' => [
+                    'code' => '24',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -150,6 +158,7 @@ class OrganizationSeeder extends Seeder
             ],
             'Sekolah Madrasah' => [
                 'Takhasus Athfal' => [
+                    'code' => '31',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -158,6 +167,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Madrasah Wustho' => [
+                    'code' => '32',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -166,6 +176,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Madrasah Ulya' => [
+                    'code' => '33',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -176,6 +187,7 @@ class OrganizationSeeder extends Seeder
             ],
             'Program Jurusan' => [
                 'Jurusan Persiapan' => [
+                    'code' => '41',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -184,6 +196,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Jurusan Tahsin Quran' => [
+                    'code' => '42',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -192,6 +205,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Jurusan Mahir Kitab' => [
+                    'code' => '43',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -200,6 +214,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Jurusan Suwuk' => [
+                    'code' => '44',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -208,6 +223,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Jurusan Tahfidz' => [
+                    'code' => '45',
                     'description' => 'Tempat belajar untuk anak-anak asik dan menyenangkan.',
                     'vision' => 'Terwujudnya tempat belajar menjadi Madrasah Idaman yang memiliki keunggulan barakhlakulkarimah dan berilmu pengetahuan.',
                     'mission' => "Untuk mewujudkan Visi Sekolah, maka ditetapkan Misi sebagai berikut: \n 1. Menanamkan akhlakul karimah di lingkungan madrasah. \n 2. Meningkatkan KBM yang berkualitas \n 3. Meningkatnya profesionalisme lembaga pendidikan dan administrasi. \n 4. Meningkatnya lingkungan madrasah aman, tertib, dan indah. \n 5. Meningkatnya optimalisasi sarana prasarana serta sumber daya pendidikan yang baik secara berkualitas maupun kuantitas.",
@@ -218,6 +234,7 @@ class OrganizationSeeder extends Seeder
             ],
             'Badan Lembaga' => [
                 'Majelis Lapanan Ahad Kliwon Jimad Sholawat' => [
+                    'code' => '51',
                     'description' => null,
                     'vision' => null,
                     'mission' => null,
@@ -230,6 +247,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Jamiyah Thoriqoh Qodiriyah Al Jaelaniyah' => [
+                    'code' => '52',
                     'description' => null,
                     'vision' => null,
                     'mission' => null,
@@ -242,12 +260,14 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Langit Tour' => [
+                    'code' => '53',
                     'description' => null,
                     'vision' => null,
                     'mission' => null,
                     'classrooms' => [],
                 ],
                 'Taman Suwuk Nusantara' => [
+                    'code' => '54',
                     'description' => null,
                     'vision' => null,
                     'mission' => null,
@@ -260,6 +280,7 @@ class OrganizationSeeder extends Seeder
                     ],
                 ],
                 'Padepokan Satrio Mbodo' => [
+                    'code' => '55',
                     'description' => null,
                     'vision' => null,
                     'mission' => null,
@@ -283,6 +304,7 @@ class OrganizationSeeder extends Seeder
         foreach ($categories as $category => $organizations) {
             foreach ($organizations as $organizationName => $organization) {
                 $organizationModel = Organization::create([
+                    'code' => $organization['code'],
                     'name' => $organizationName,
                     'slug' => str()->slug($organizationName),
                     'category' => $category,

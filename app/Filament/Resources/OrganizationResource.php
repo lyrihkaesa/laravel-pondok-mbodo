@@ -25,10 +25,10 @@ class OrganizationResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Profile')
+                Forms\Components\Section::make(__('Basic Information'))
                     ->schema([
                         Forms\Components\TextInput::make('name')
-                            ->label('Nama')
+                            ->label(__('Name'))
                             ->required()
                             ->live(onBlur: true)
                             ->minLength(1)
@@ -41,19 +41,19 @@ class OrganizationResource extends Resource
                                 $set('slug', str()->slug($state));
                             }),
                         Forms\Components\TextInput::make('slug')
-                            ->label('Slug')
+                            ->label(__('Slug'))
                             ->minLength(1)
                             ->maxLength(255)
                             ->unique(ignoreRecord: true)
                             ->required(),
                         Forms\Components\MarkdownEditor::make('vision')
-                            ->label('Visi')
+                            ->label(__('Vision'))
                             ->disableToolbarButtons([
                                 'attachFiles',
                             ])
                             ->columnSpanFull(),
                         Forms\Components\MarkdownEditor::make('mission')
-                            ->label('Misi')
+                            ->label(__('Mission'))
                             ->disableToolbarButtons([
                                 'attachFiles',
                             ])
@@ -61,29 +61,32 @@ class OrganizationResource extends Resource
                     ])
                     ->columns(2)
                     ->columnSpan(2),
-                Forms\Components\Section::make('Metadata')
+                Forms\Components\Section::make(__('Metadata'))
                     ->schema([
+                        Forms\Components\TextInput::make('code')
+                            ->label(__('Code'))
+                            ->required(),
                         Forms\Components\Select::make('category')
-                            ->label('Kategori')
+                            ->label(__('Category'))
                             ->required()
                             ->options(OrganizationCategory::class)
                             ->default(OrganizationCategory::BADAN_LEMBAGA)
                             ->native(false),
                         Forms\Components\TextInput::make('email')
-                            ->label('Email'),
+                            ->label(__('Email')),
                         Forms\Components\TextInput::make('phone')
-                            ->label('Phone'),
+                            ->label(__('Phone')),
                         Forms\Components\Textarea::make('address')
-                            ->label('Full Address')
+                            ->label(__('Address'))
                             ->autoSize(),
                         Forms\Components\MarkdownEditor::make('description')
-                            ->label('Deskripsi')
+                            ->label(__('Description'))
                             ->disableToolbarButtons([
                                 'attachFiles',
                             ])
                             ->columnSpanFull(),
                         Forms\Components\FileUpload::make('thumbnail')
-                            ->label('Gambar Thumbnail')
+                            ->label(__('Thumbnail'))
                             ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: ''))
                             ->getUploadedFileNameForStorageUsing(
                                 function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
@@ -105,13 +108,15 @@ class OrganizationResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nama'),
+                    ->label(__('Name')),
                 Tables\Columns\TextColumn::make('slug')
+                    ->label(__('Slug'))
                     ->badge()
                     ->color('neutral')
                     ->copyable(),
                 Tables\Columns\TextColumn::make('category')
-                    ->label('Kategori'),
+                    ->label(__('Category'))
+                    ->badge(),
             ])
             ->filters([
                 //
