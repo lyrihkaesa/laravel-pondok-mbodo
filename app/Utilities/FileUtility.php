@@ -3,6 +3,7 @@
 namespace App\Utilities;
 
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\Storage;
 
 class FileUtility
 {
@@ -47,5 +48,15 @@ class FileUtility
     {
         $extension = pathinfo($fileNameWithExtension, PATHINFO_EXTENSION);
         return $name . '.' . $extension;
+    }
+
+
+    public static function getJsonUrlImages(array $images): string
+    {
+        $result = [];
+        foreach ($images as $key => $value) {
+            $result[] = Storage::disk(config('filament.default_filesystem_disk'))->url($value);
+        }
+        return json_encode($result);
     }
 }
