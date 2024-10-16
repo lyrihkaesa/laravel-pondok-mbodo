@@ -26,4 +26,27 @@ class OrganizationSocialMediaLink extends Model
     {
         return $this->belongsTo(Organization::class);
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::updated(function ($model) {
+            if ($model->organization_id === 1) {
+                cache()->forget('yayasan_pondok_mbodo');
+            }
+        });
+
+        static::created(function ($model) {
+            if ($model->organization_id === 1) {
+                cache()->forget('yayasan_pondok_mbodo');
+            }
+        });
+
+        static::deleted(function ($model) {
+            if ($model->organization_id === 1) {
+                cache()->forget('yayasan_pondok_mbodo');
+            }
+        });
+    }
 }

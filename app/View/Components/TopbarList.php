@@ -9,12 +9,20 @@ use Illuminate\View\Component;
 class TopbarList extends Component
 {
     public $items;
+    public $yayasan;
 
     /**
      * Create a new component instance.
      */
     public function __construct($items = null)
     {
+        $this->yayasan = cache()->remember('yayasan_pondok_mbodo', 3600, function () {
+            return \App\Models\Organization::query()
+                ->with('socialMediaLinks')
+                ->where('category', 'Yayasan')
+                ->get()
+                ->first();
+        });
         $this->items = $items ?? [
             [
                 'type' => 'link',
@@ -26,25 +34,6 @@ class TopbarList extends Component
                 'href' => route('filament.admin.pages.dashboard'),
                 'slot' => 'Pengurus',
             ],
-            [
-                'type' => 'h-divinder',
-                'slot' => '|',
-            ],
-            [
-                'type' => 'icon',
-                'href' => 'https://www.facebook.com/profile.php?id=100010159720610',
-                'slot' => 'icon-facebook',
-            ],
-            [
-                'type' => 'icon',
-                'href' => 'https://www.instagram.com/pondokmbodo/',
-                'slot' => 'icon-instagram',
-            ],
-            [
-                'type' => 'icon',
-                'href' => 'https://www.youtube.com/@pondokmbodochannel1385',
-                'slot' => 'icon-youtube',
-            ],
         ];
     }
 
@@ -53,6 +42,22 @@ class TopbarList extends Component
      */
     public function render(): View|Closure|string
     {
+        if (isset($this->yayasan)) {
+            if ($this->yayasan->socialMediaLinks->isNotEmpty()) {
+                $this->items[] = [
+                    'type' => 'h-divinder',
+                    'slot' => '|',
+                ];
+
+                foreach ($this->yayasan->socialMediaLinks as $socialMediaLink) {
+                    $this->items[] = [
+                        'type' => 'icon',
+                        'href' => $socialMediaLink->url,
+                        'slot' => $socialMediaLink->platform->getIcon(),
+                    ];
+                }
+            }
+        }
         return view('components.topbar.list');
     }
 }
