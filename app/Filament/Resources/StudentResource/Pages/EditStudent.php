@@ -27,7 +27,7 @@ class EditStudent extends EditRecord
                 ->requiresConfirmation()
                 ->icon('icon-school-director')
                 ->color('warning')
-                ->visible(fn (Model $record) => $record->user->employee === null)
+                ->visible(fn(Model $record) => $record->user->employee === null)
                 ->action(function (Model $record) {
 
                     $userModel = $record->user;
@@ -63,7 +63,7 @@ class EditStudent extends EditRecord
 
                         DB::commit();
 
-                        redirect(route('filament.admin.resources.employees.edit', $employeeModel));
+                        redirect(route('filament.app.resources.employees.edit', $employeeModel));
 
                         Notification::make()
                             ->title(__('Success'))
@@ -88,8 +88,8 @@ class EditStudent extends EditRecord
             Actions\Action::make('goToEmployeeAction')
                 ->label(__('Employee'))
                 ->icon('icon-school-director')
-                ->visible(fn (Model $record) => $record->user->employee !== null)
-                ->url(fn (Model $record) => route('filament.admin.resources.employees.edit', $record->user->employee))
+                ->visible(fn(Model $record) => $record->user->employee !== null)
+                ->url(fn(Model $record) => route('filament.app.resources.employees.edit', $record->user->employee))
                 ->openUrlInNewTab(),
         ];
     }

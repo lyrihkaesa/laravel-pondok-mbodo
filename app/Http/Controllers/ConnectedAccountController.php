@@ -19,7 +19,7 @@ class ConnectedAccountController extends Controller
     public function handleProviderCallback(Request $request, string $provider): RedirectResponse
     {
         if (!Auth::check()) {
-            return redirect()->route('filament.admin.auth.login');
+            return redirect()->route('filament.app.auth.login');
         }
 
         // Retrieve authentication information from the provider
@@ -30,13 +30,13 @@ class ConnectedAccountController extends Controller
         if ($connectedAccount) {
             Auth::login($connectedAccount->user);
             Session::regenerate();
-            return redirect()->route('filament.admin.pages.my');
+            return redirect()->route('filament.app.pages.my');
         }
 
         $userModel = Auth::user();
 
         if (!$userModel) {
-            return redirect()->route('filament.admin.auth.login');
+            return redirect()->route('filament.app.auth.login');
         }
 
         $connectedAccount = new ConnectedAccount();
@@ -54,6 +54,6 @@ class ConnectedAccountController extends Controller
         $connectedAccount->save();
 
         // Redirect to the appropriate page after successful authentication
-        return redirect()->route('filament.admin.pages.my');
+        return redirect()->route('filament.app.pages.my');
     }
 }

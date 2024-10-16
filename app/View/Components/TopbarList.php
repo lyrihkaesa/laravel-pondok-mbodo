@@ -31,7 +31,7 @@ class TopbarList extends Component
             ],
             [
                 'type' => 'link',
-                'href' => route('filament.admin.pages.dashboard'),
+                'href' => route('filament.app.pages.dashboard'),
                 'slot' => 'Pengurus',
             ],
         ];

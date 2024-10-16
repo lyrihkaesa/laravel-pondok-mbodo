@@ -1,6 +1,6 @@
 @push('styles')
     @filamentStyles
-    @vite('resources/css/filament/admin/theme.css')
+    @vite('resources/css/filament/app/theme.css')
 @endpush
 
 @push('scripts')

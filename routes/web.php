@@ -7,7 +7,7 @@ Route::get('/', \App\Livewire\Page::class)->name('home');
 Route::get('/tentang', \App\Livewire\Page::class)->name('about');
 
 Route::get('/login', function () {
-    return redirect()->route('filament.admin.auth.login');
+    return redirect()->route('filament.app.auth.login');
 })->name('login');
 
 Route::get('/ppdb', \App\Livewire\Page::class)->name('ppdb.index');
@@ -31,8 +31,8 @@ Route::get('auth/{provider}/callback', [\App\Http\Controllers\ConnectedAccountCo
     ->name('auth.callback');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/financial-transactions/pdf', [Controllers\FinancialTransactionController::class, 'generatePdfReport'])->name('admin.financial-transactions.pdf');
-    Route::get('/admin/student-bill/pdf', [Controllers\StudentBillController::class, 'generatePdfReport'])->name('admin.student-bill.pdf');
+    Route::get('/app/financial-transactions/pdf', [Controllers\FinancialTransactionController::class, 'generatePdfReport'])->name('admin.financial-transactions.pdf');
+    Route::get('/app/student-bill/pdf', [Controllers\StudentBillController::class, 'generatePdfReport'])->name('admin.student-bill.pdf');
 });
 
 Route::get('/pdf', function () {

@@ -18,8 +18,8 @@ class ViewEmployee extends ViewRecord
             Actions\Action::make('goToViewStudentAction')
                 ->label(__('Student'))
                 ->icon('icon-student-male')
-                ->visible(fn (Model $record) => $record->user->student !== null)
-                ->url(fn (Model $record) => route('filament.admin.resources.students.view', $record->user->student))
+                ->visible(fn(Model $record) => $record->user->student !== null)
+                ->url(fn(Model $record) => route('filament.app.resources.students.view', $record->user->student))
                 ->openUrlInNewTab(),
         ];
     }

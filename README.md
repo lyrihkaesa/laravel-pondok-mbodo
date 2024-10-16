@@ -23,7 +23,7 @@ Website Sistem Informasi Yayasan Pondok Pesantren Ki Ageng Mbodo, digunakan untu
 
 -   [ ] PPDB Page `/ppdb`
 -   [ ] Biaya Pendidikan Page `/ppdb/biaya`
--   [ ] Edit PPDB Page `/admin/pages/{id}`
+-   [ ] Edit PPDB Page `/app/pages/{id}`
 -   [ ] PPDB/Formulir Page (Pendaftaran Calon Santri) `/ppdb/formulir`
     -   [ ] Create Santri Reguler
     -   [ ] Create Santri Ndalem

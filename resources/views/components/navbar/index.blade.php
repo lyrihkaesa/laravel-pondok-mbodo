@@ -33,7 +33,7 @@
             <x-dark-mode-button />
             @if (!request()->is('ppdb'))
                 @auth
-                    <a href="{{ route('filament.admin.pages.dashboard') }}">
+                    <a href="{{ route('filament.app.pages.dashboard') }}">
                         <x-filament::avatar src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}" />
                     </a>
                 @else
@@ -92,7 +92,7 @@
         <x-dark-mode-button class="hidden sm:block" />
         @if (!request()->is('ppdb'))
             @auth
-                <a class="hidden sm:block" href="{{ route('filament.admin.pages.dashboard') }}">
+                <a class="hidden sm:block" href="{{ route('filament.app.pages.dashboard') }}">
                     <x-filament::avatar class="h-auto" src="{{ $user->getAvatarUrl() }}" alt="{{ $user->name }}" />
                 </a>
             @else

@@ -23,15 +23,15 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 
 
-class AdminPanelProvider extends PanelProvider
+class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->default()
             ->sidebarCollapsibleOnDesktop()
-            ->id('admin')
-            ->path('admin')
+            ->id('app')
+            ->path('app')
             ->favicon(secure_asset('favicon-150x150.png'))
             ->login(Login::class)
             ->profile()
@@ -101,7 +101,7 @@ class AdminPanelProvider extends PanelProvider
                     ->selectable()
                     ->editable(),
             ])
-            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->viteTheme('resources/css/filament/app/theme.css')
             ->databaseNotifications();
     }
 }

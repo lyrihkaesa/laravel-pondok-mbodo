@@ -127,7 +127,7 @@ class Registration extends Component implements HasForms
                             ->required(),
                         Forms\Components\Select::make('regency')
                             ->label(__('Regency'))
-                            ->disabled(fn (Forms\Get $get): bool => $get('province') == null)
+                            ->disabled(fn(Forms\Get $get): bool => $get('province') == null)
                             ->options(function (Forms\Get $get, ?string $state) {
                                 if ($get('province') !== null) {
                                     $province = \Creasi\Nusa\Models\Province::where('code', $get('province'))->first();
@@ -146,11 +146,11 @@ class Registration extends Component implements HasForms
                                 }
                                 return $state;
                             })
-                            ->searchable(fn (Forms\Get $get): bool => $get('province') != null)
+                            ->searchable(fn(Forms\Get $get): bool => $get('province') != null)
                             ->required(),
                         Forms\Components\Select::make('district')
                             ->label(__('District'))
-                            ->disabled(fn (Forms\Get $get): bool => $get('regency') == null)
+                            ->disabled(fn(Forms\Get $get): bool => $get('regency') == null)
                             ->options(function (?string $state, Forms\Get $get) {
                                 if ($get('regency') !== null) {
                                     $regency = \Creasi\Nusa\Models\Regency::where('code', $get('regency'))->first();
@@ -167,11 +167,11 @@ class Registration extends Component implements HasForms
                                 }
                                 return $state;
                             })
-                            ->searchable(fn (Forms\Get $get): bool => $get('regency') != null)
+                            ->searchable(fn(Forms\Get $get): bool => $get('regency') != null)
                             ->required(),
                         Forms\Components\Select::make('village')
                             ->label(__('Village'))
-                            ->disabled(fn (Forms\Get $get): bool => $get('district') == null)
+                            ->disabled(fn(Forms\Get $get): bool => $get('district') == null)
                             ->options(function (?string $state, Forms\Get $get) {
                                 $villages = [];
                                 if ($get('district') != null) {
@@ -182,7 +182,7 @@ class Registration extends Component implements HasForms
                                 }
                                 return $villages;
                             })
-                            ->searchable(fn (Forms\Get $get): bool => $get('district') != null)
+                            ->searchable(fn(Forms\Get $get): bool => $get('district') != null)
                             ->required(),
                         Forms\Components\Textarea::make('address')
                             ->label(__('Full Address'))
@@ -439,7 +439,7 @@ class Registration extends Component implements HasForms
                                     ->defaultItems(0)
                                     // ->collapsed()
                                     ->columns(2)
-                                    ->itemLabel(fn (array $state): ?string => $state['relationship'] . ' : ' . $state['name'] ?? null)
+                                    ->itemLabel(fn(array $state): ?string => $state['relationship'] . ' : ' . $state['name'] ?? null)
                             ])
                     ])
                     ->collapsible(),
@@ -451,14 +451,14 @@ class Registration extends Component implements HasForms
                         Forms\Components\Checkbox::make('term_01')
                             ->label('Saya bersedia melunasi biaya pendidikan diawal karena putra/putri kami tidak mendaftar sebagai Santri Ndalem.')
                             ->live(onBlur: true)
-                            ->visible(fn (Forms\Get $get) => $get('category') === StudentCategory::REGULER || $get('category') === StudentCategory::BERPRESTASI)
-                            ->accepted(fn (Forms\Get $get) => $get('category') === StudentCategory::REGULER || $get('category') === StudentCategory::BERPRESTASI),
+                            ->visible(fn(Forms\Get $get) => $get('category') === StudentCategory::REGULER || $get('category') === StudentCategory::BERPRESTASI)
+                            ->accepted(fn(Forms\Get $get) => $get('category') === StudentCategory::REGULER || $get('category') === StudentCategory::BERPRESTASI),
 
                         Forms\Components\Checkbox::make('term_02')
                             ->label('Saya meridhoi putra/putri kami sebagai Santri Ndalem dengan ketentuan - ketentuan yang telah ditetapkan.')
                             ->live()
-                            ->visible(fn (Forms\Get $get) => $get('category') === StudentCategory::NDALEM)
-                            ->accepted(fn (Forms\Get $get) => $get('category') === StudentCategory::NDALEM),
+                            ->visible(fn(Forms\Get $get) => $get('category') === StudentCategory::NDALEM)
+                            ->accepted(fn(Forms\Get $get) => $get('category') === StudentCategory::NDALEM),
 
                         Forms\Components\Checkbox::make('term_03')
                             ->label('Apabila dikemudian hari putra/putri kami mengundurkan diri dengan alasan apapun, biaya pendidikan yang sudah dibayarkan tidak bisa ditarik kembali.')
@@ -623,7 +623,7 @@ class Registration extends Component implements HasForms
                     Notifications\Actions\Action::make('viewStudent')
                         ->label(__('View Student'))
                         ->color('pink')
-                        ->url(route('filament.admin.resources.students.view', $studentModel))
+                        ->url(route('filament.app.resources.students.view', $studentModel))
                         ->openUrlInNewTab(),
                     Notifications\Actions\Action::make('chatWhatsapp')
                         ->label(__('Chat Whatsapp'))
