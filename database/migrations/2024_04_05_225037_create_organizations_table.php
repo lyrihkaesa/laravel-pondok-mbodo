@@ -29,6 +29,7 @@ return new class extends Migration
             // Contact
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
+            $table->string('phone_visibility')->default(\App\Enums\SocialMediaVisibility::PUBLIC);
             $table->string('address')->nullable();
 
             // The Number

@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Enums\OrganizationCategory;
+use App\Enums\SocialMediaVisibility;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Organization extends Model
 {
@@ -19,6 +20,7 @@ class Organization extends Model
     {
         return [
             'category' => OrganizationCategory::class,
+            'phone_visibility' => SocialMediaVisibility::class,
         ];
     }
 
