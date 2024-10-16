@@ -84,6 +84,7 @@ class EditProfile extends Page implements HasForms
                             ->imageEditor()
                             ->downloadable()
                             ->openable()
+                            ->maxSize(500) // 500KB
                             ->directory('profile-pictures'),
                         Forms\Components\TextInput::make('name')
                             ->label(__('Name'))

@@ -131,6 +131,7 @@ class EmployeeResource extends Resource
                                     ->imageEditor()
                                     ->downloadable()
                                     ->openable()
+                                    ->maxSize(500) // 500KB
                                     ->disk(config('filesystems.default'))
                                     ->visibility('private')
                                     ->directory(fn(Forms\Get $get): string => 'documents/' . $get('nik')),
@@ -142,6 +143,7 @@ class EmployeeResource extends Resource
                                     ->imageEditor()
                                     ->downloadable()
                                     ->openable()
+                                    ->maxSize(500) // 500KB
                                     ->directory('profile-pictures'),
                             ])
                             ->columns(2)

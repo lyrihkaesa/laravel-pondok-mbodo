@@ -81,6 +81,7 @@ class UserResource extends Resource implements HasShieldPermissions
                             ->image()
                             ->downloadable()
                             ->openable()
+                            ->maxSize(500) // 500KB
                             ->directory('profile-pictures'),
                         Forms\Components\DateTimePicker::make('email_verified_at')
                             ->label(__('Email Verified At'))
