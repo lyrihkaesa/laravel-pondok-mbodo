@@ -56,4 +56,9 @@ class Organization extends Model
     {
         return $this->hasMany(Wallet::class, 'organization_id');
     }
+
+    public function socialMediaLinks(): HasMany
+    {
+        return $this->hasMany(OrganizationSocialMediaLink::class);
+    }
 }

@@ -4,11 +4,14 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Organization;
 use Filament\Resources\Resource;
+use App\Enums\SocialMediaPlatform;
 use App\Enums\OrganizationCategory;
+use App\Enums\SocialMediaVisibility;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrganizationResource\Pages;
@@ -77,6 +80,36 @@ class OrganizationResource extends Resource
                             ->openable()
                             ->directory('organizations/thumbnails')
                             ->columnSpanFull(),
+                        Forms\Components\Repeater::make('socialMediaLinks')
+                            ->relationship('socialMediaLinks')
+                            ->label(__('Social Media Links'))
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->label(__('Name')),
+                                Forms\Components\Grid::make()
+                                    ->schema([
+                                        Forms\Components\Select::make('platform')
+                                            ->label(__('Platform'))
+                                            ->options(SocialMediaPlatform::class)
+                                            ->live(onBlur: true)
+                                            ->required(),
+                                        Forms\Components\TextInput::make('url')
+                                            ->label(__('URL'))
+                                            ->placeholder(__('URL Placeholder'))
+                                            ->url()
+                                            ->columnSpan(2),
+                                    ])
+                                    ->columns(3),
+                                Forms\Components\ToggleButtons::make('visibility')
+                                    ->label(__('Visibility'))
+                                    ->debounce(delay: 200)
+                                    ->inline()
+                                    ->options(SocialMediaVisibility::class)
+                                    ->default(SocialMediaVisibility::PUBLIC)
+                                    ->helperText(fn($state) => str((($state instanceof SocialMediaVisibility) ? $state : SocialMediaVisibility::from($state))->getDescription())->markdown()->toHtmlString())
+                                    ->required(),
+                            ])
+                            ->columnSpanFull(),
                     ])
                     ->columns(2)
                     ->columnSpan(2),
@@ -118,7 +151,8 @@ class OrganizationResource extends Resource
                     ->label(__('Slug'))
                     ->badge()
                     ->color('neutral')
-                    ->copyable(),
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('category')
                     ->label(__('Category'))
                     ->badge(),
@@ -127,6 +161,16 @@ class OrganizationResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\Action::make('publicShow')
+                    ->label(__('Public Show'))
+                    ->icon('heroicon-o-eye')
+                    ->color('info')
+                    ->url(function (Organization $record) {
+                        return route('organizations.show', [
+                            'slug' => $record->slug,
+                        ]);
+                    })
+                    ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

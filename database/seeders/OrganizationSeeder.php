@@ -60,6 +60,26 @@ class OrganizationSeeder extends Seeder
                             'balance' => 0,
                         ],
                     ],
+                    'socialMediaLinks' => [
+                        [
+                            'name' => 'Pondok Pesantren Ki Ageng Mbodo',
+                            'platform' => 'facebook',
+                            'url' => 'https://www.facebook.com/profile.php?id=100010159720610',
+                            'visibility' => 'public',
+                        ],
+                        [
+                            'name' => 'Pondok Pesantren Ki Ageng Mbodo',
+                            'platform' => 'instagram',
+                            'url' => 'https://www.instagram.com/pondokmbodo/',
+                            'visibility' => 'public',
+                        ],
+                        [
+                            'name' => 'Pondok Pesantren Ki Ageng Mbodo',
+                            'platform' => 'youtube',
+                            'url' => 'https://www.youtube.com/@pondokmbodochannel1385',
+                            'visibility' => 'public',
+                        ],
+                    ]
                 ],
             ],
             'Pondok Pesantren' => [
@@ -331,6 +351,18 @@ class OrganizationSeeder extends Seeder
                         'name' => 'Dompet Utama',
                         'balance' => 0,
                     ]);
+                }
+
+                if (isset($organization['socialMediaLinks'])) {
+                    foreach ($organization['socialMediaLinks'] as $key => $value) {
+                        $organizationModel->socialMediaLinks()->create([
+                            'name' => $value['name'],
+                            // 'username' => $value['username'],
+                            'url' => $value['url'],
+                            'visibility' => $value['visibility'],
+                            'platform' => $value['platform'],
+                        ]);
+                    }
                 }
 
                 foreach ($organization['classrooms'] as $className => $count) {
