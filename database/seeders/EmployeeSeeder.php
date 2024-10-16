@@ -12,6 +12,8 @@ class EmployeeSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Employee::factory(50)->create();
+        if (app()->isLocal()) {
+            \App\Models\Employee::factory(50)->create();
+        }
     }
 }

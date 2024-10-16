@@ -365,69 +365,71 @@ class OrganizationSeeder extends Seeder
                     }
                 }
 
-                foreach ($organization['classrooms'] as $className => $count) {
-                    for ($i = 1; $i <= $count; $i++) {
-                        if ($homeroom_teacher_last_id == 51) {
-                            $homeroom_teacher_last_id = 3;
+                if (app()->isLocal()) {
+                    foreach ($organization['classrooms'] as $className => $count) {
+                        for ($i = 1; $i <= $count; $i++) {
+                            if ($homeroom_teacher_last_id == 51) {
+                                $homeroom_teacher_last_id = 3;
+                            }
+
+                            // Kelas Putra
+                            $classroomName = $className . ' ' . $i . ' Putra';
+                            $classroomMale = $organizationModel->classrooms()->create([
+                                'name' => $classroomName,
+                                'combined_name' => $classroomName . ' - ' . $academicYear->name,
+                                'academic_year_id' => $academicYear->id,
+                                'homeroom_teacher_id' => $homeroom_teacher_last_id,
+                            ]);
+
+                            // Info Command
+                            $seconds = number_format((microtime(true) - $startTime), 2);
+                            $this->command->info($counter . ' ' . $organizationModel->name . ' ' . 'Classroom created: ' . $classroomName . ' ....... ' . $seconds . ' seconds.');
+
+                            // Create Student
+                            $classroomMale->students()->createMany(Student::factory($studentint)->make([
+                                'gender' => Gender::MALE,
+                                'status' => StudentStatus::ACTIVE,
+                            ])->toArray());
+
+                            // Info Command
+                            $studentCounter += $studentint;
+                            $seconds = number_format((microtime(true) - $startTime), 2);
+                            $this->command->line('   ->  [' . $studentCounter . ']  -->  ' . $studentint . ' Student created. (' . $seconds . ') seconds.',);
+
+                            // Create Homeroom Teacher
+                            $organizationModel->users()->attach($homeroom_teacher_last_id, ['role' => 'Wali Kelas ' . $classroomName]);
+                            $homeroom_teacher_last_id++;
+                            $counter++;
+
+                            // Kelas Putri
+                            $classroomName = $className . ' ' . $i . ' Putri';
+                            $classroomFemale = $organizationModel->classrooms()->create([
+                                'name' => $classroomName,
+                                'combined_name' => $classroomName . ' - ' . $academicYear->name,
+                                'academic_year_id' => $academicYear->id,
+                                'homeroom_teacher_id' => $homeroom_teacher_last_id,
+                            ]);
+
+                            // Info Command
+                            $seconds = number_format((microtime(true) - $startTime), 2);
+                            $this->command->warn($counter . ' ' . $organizationModel->name . ' ' . 'Classroom created: ' . $classroomName . ' ....... ' . $seconds . ' seconds.');
+
+                            // Create Student
+                            $classroomFemale->students()->createMany(Student::factory($studentint)->make([
+                                'gender' => Gender::FEMALE,
+                                'status' => StudentStatus::ACTIVE,
+                            ])->toArray());
+
+                            // Info Command
+                            $studentCounter += $studentint;
+                            $seconds = number_format((microtime(true) - $startTime), 2);
+                            $this->command->line('   ->  [' . $studentCounter . ']  -->  ' . $studentint . ' Student created. (' . $seconds . ') seconds.',);
+
+                            // Create Homeroom Teacher
+                            $organizationModel->users()->attach($homeroom_teacher_last_id, ['role' => 'Wali Kelas ' . $classroomName]);
+                            $homeroom_teacher_last_id++;
+                            $counter++;
                         }
-
-                        // Kelas Putra
-                        $classroomName = $className . ' ' . $i . ' Putra';
-                        $classroomMale = $organizationModel->classrooms()->create([
-                            'name' => $classroomName,
-                            'combined_name' => $classroomName . ' - ' . $academicYear->name,
-                            'academic_year_id' => $academicYear->id,
-                            'homeroom_teacher_id' => $homeroom_teacher_last_id,
-                        ]);
-
-                        // Info Command
-                        $seconds = number_format((microtime(true) - $startTime), 2);
-                        $this->command->info($counter . ' ' . $organizationModel->name . ' ' . 'Classroom created: ' . $classroomName . ' ....... ' . $seconds . ' seconds.');
-
-                        // Create Student
-                        $classroomMale->students()->createMany(Student::factory($studentint)->make([
-                            'gender' => Gender::MALE,
-                            'status' => StudentStatus::ACTIVE,
-                        ])->toArray());
-
-                        // Info Command
-                        $studentCounter += $studentint;
-                        $seconds = number_format((microtime(true) - $startTime), 2);
-                        $this->command->line('   ->  [' . $studentCounter . ']  -->  ' . $studentint . ' Student created. (' . $seconds . ') seconds.',);
-
-                        // Create Homeroom Teacher
-                        $organizationModel->users()->attach($homeroom_teacher_last_id, ['role' => 'Wali Kelas ' . $classroomName]);
-                        $homeroom_teacher_last_id++;
-                        $counter++;
-
-                        // Kelas Putri
-                        $classroomName = $className . ' ' . $i . ' Putri';
-                        $classroomFemale = $organizationModel->classrooms()->create([
-                            'name' => $classroomName,
-                            'combined_name' => $classroomName . ' - ' . $academicYear->name,
-                            'academic_year_id' => $academicYear->id,
-                            'homeroom_teacher_id' => $homeroom_teacher_last_id,
-                        ]);
-
-                        // Info Command
-                        $seconds = number_format((microtime(true) - $startTime), 2);
-                        $this->command->warn($counter . ' ' . $organizationModel->name . ' ' . 'Classroom created: ' . $classroomName . ' ....... ' . $seconds . ' seconds.');
-
-                        // Create Student
-                        $classroomFemale->students()->createMany(Student::factory($studentint)->make([
-                            'gender' => Gender::FEMALE,
-                            'status' => StudentStatus::ACTIVE,
-                        ])->toArray());
-
-                        // Info Command
-                        $studentCounter += $studentint;
-                        $seconds = number_format((microtime(true) - $startTime), 2);
-                        $this->command->line('   ->  [' . $studentCounter . ']  -->  ' . $studentint . ' Student created. (' . $seconds . ') seconds.',);
-
-                        // Create Homeroom Teacher
-                        $organizationModel->users()->attach($homeroom_teacher_last_id, ['role' => 'Wali Kelas ' . $classroomName]);
-                        $homeroom_teacher_last_id++;
-                        $counter++;
                     }
                 }
             }
