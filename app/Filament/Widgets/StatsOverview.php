@@ -14,7 +14,11 @@ class StatsOverview extends BaseWidget
 {
     public static function canView(): bool
     {
-        return auth()->user()->can('widget_StatsOverview');
+        /**
+         * @var \App\Models\User::class $user
+         */
+        $user = auth()->user();
+        return $user->can('widget_StatsOverview');
     }
 
     protected function getStats(): array
@@ -24,7 +28,6 @@ class StatsOverview extends BaseWidget
                 ->description(Student::where('status', StudentStatus::ENROLLED)->count() . ' Mendaftar')
                 ->descriptionIcon(StudentStatus::ENROLLED->getIcon()),
             Stat::make('Jumlah Pengurus', Employee::count()),
-            Stat::make('Saldo Yayasan', Number::currency(Wallet::yayasan()->first()->balance, 'IDR')),
         ];
     }
 }
