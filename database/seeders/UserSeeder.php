@@ -20,8 +20,11 @@ class UserSeeder extends Seeder
         // RuntimeException Could not verify the hashed value's configuration.
         $password = Hash::make('password');
         // $password = '$2y$10$LRwNfyUnjpOgX2o0vbvLiuM1oVTo9yx.MbHKoHWeazIc8bLEw9hNq';
-        // Membuat user untuk peran "Super Admin"
-        $adminSuperRole = Role::where('name', 'super_admin')->first();
+
+        // Role
+        $roleAdminSuper = Role::where('name', 'super_admin')->first();
+        $rolePengurus = Role::where('name', 'pengurus')->first();
+
         $userKaesa = User::create([
             'name' => 'Kaesa Lyrih',
             'email' => 'admin@gmail.com',
@@ -45,10 +48,8 @@ class UserSeeder extends Seeder
             'birth_date' => '1990-01-01',
         ]);
 
-        $userKaesa->assignRole($adminSuperRole);
-
-
-        $rolePengurus = Role::where('name', 'pengurus')->first();
+        $userKaesa->assignRole($roleAdminSuper);
+        $userKaesa->assignRole($rolePengurus);
 
         // Membuat Pengurus 01 Wajib
         $userPengurus01 = User::create([
@@ -76,12 +77,10 @@ class UserSeeder extends Seeder
 
         $userPengurus01->assignRole($rolePengurus);
 
-
-        // Membuat Pengurus 02 Wajib
         $userPengurus02 = User::create([
             'name' => 'Yani Example Name',
             'email' => 'yani@gmail.com',
-            'phone' => '6282136687558', // Ganti dengan nomor telepon yang diinginkan
+            'phone' => '6282224255517', // Ganti dengan nomor telepon yang diinginkan
             'phone_visibility' => 'public',
             'password' => $password, // password
         ]);
@@ -106,9 +105,9 @@ class UserSeeder extends Seeder
 
         // Membuat Pengurus 02 Wajib
         $userPengurus03 = User::create([
-            'name' => 'Ulfa Example Name',
-            'email' => 'ulfa@gmail.com',
-            'phone' => '6282134125855', // Ganti dengan nomor telepon yang diinginkan
+            'name' => 'Fera Example Name',
+            'email' => 'fera@gmail.com',
+            'phone' => '6282137079827', // Ganti dengan nomor telepon yang diinginkan
             'phone_visibility' => 'public',
             'password' => $password, // password
         ]);

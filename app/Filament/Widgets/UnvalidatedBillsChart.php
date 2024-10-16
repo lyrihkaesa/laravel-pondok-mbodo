@@ -52,6 +52,12 @@ class UnvalidatedBillsChart extends ChartWidget
             }
         }
 
+        if (empty($data)) {
+            return [
+                'datasets' => [],
+                'labels' => [],
+            ];
+        }
         return [
             'datasets' => [
                 [
