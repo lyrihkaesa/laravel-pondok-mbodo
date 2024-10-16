@@ -22,6 +22,6 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.post.show');
+        return view('livewire.post.show')->title($this->post->title);
     }
 }

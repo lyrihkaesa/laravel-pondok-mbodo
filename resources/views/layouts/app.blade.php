@@ -14,7 +14,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ isset($title) ? $title . ' - ' . config('app.name', 'Laravel') : config('app.name', 'Laravel') }}</title>
+
+    <meta name="description"
+        content="Pondok Pesantren Darul Falah Ki Ageng Mbodo. Sistem Pendidikan Pondok Mbodo mengacu pada sistem Salafiyyah, yaitu sistem pendidikan tertua di Nusantara.">
+    <meta name="keywords"
+        content="Pondok Pesantren, Pondok Mbodo, Darul Falah Ki Ageng Mbodo, Gus Mbodo, Sendangsari, Mbodo, Taman Suwuk, Suwuk Nusantara">
+    <meta property="og:title"
+        content="{{ isset($title) ? $title . ' - ' . config('app.name', 'Laravel') : config('app.name', 'Laravel') }}">
+    <meta property="og:description"
+        content="Pondok Pesantren Darul Falah Ki Ageng Mbodo. Sistem Pendidikan Pondok Mbodo mengacu pada sistem Salafiyyah, yaitu sistem pendidikan tertua di Nusantara.">
+    <meta property="og:image" content="/favicon-150x150.png"> <!-- atau link gambar yang lebih besar -->
+    <meta property="og:url" content="{{ request()->url() }}">
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical" href="{{ request()->url() }}">
+
+    <!-- Structured Data for EducationalOrganization -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
+          "name": "Pondok Pesantren Darul Falah Ki Ageng Mbodo",
+          "url": "{{ request()->url() }}",
+          "logo": "/favicon-150x150.png",
+          "description": "Sistem Pendidikan Pondok Mbodo mengacu pada sistem Salafiyyah, yaitu sistem pendidikan tertua di Nusantara."
+        }
+        </script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

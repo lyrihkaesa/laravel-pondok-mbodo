@@ -668,6 +668,6 @@ class Registration extends Component implements HasForms
 
     public function render(): View
     {
-        return view('livewire.ppdb.registration');
+        return view('livewire.ppdb.registration')->title(__('Pendaftaran Santri'));
     }
 }

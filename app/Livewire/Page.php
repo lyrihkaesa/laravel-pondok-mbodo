@@ -27,6 +27,7 @@ class Page extends Component
         if (!$this->publicPage) {
             abort(404);
         }
-        return view('livewire.page');
+
+        return view('livewire.page')->title($this->publicPage->title);
     }
 }

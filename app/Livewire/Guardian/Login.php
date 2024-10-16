@@ -80,6 +80,6 @@ class Login extends Component implements HasForms
 
     public function render(): View
     {
-        return view('livewire.guardian.login');
+        return view('livewire.guardian.login')->title(__('Portal Orang Tua'));
     }
 }

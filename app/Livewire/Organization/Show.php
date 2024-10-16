@@ -21,6 +21,6 @@ class Show extends Component
             abort(404);
         }
 
-        return view('livewire.organization.show');
+        return view('livewire.organization.show')->title($this->organization->name);
     }
 }

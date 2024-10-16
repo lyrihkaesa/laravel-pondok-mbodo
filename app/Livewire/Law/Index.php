@@ -17,7 +17,7 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.law.index');
+        return view('livewire.law.index')->title(__('Peraturan & Tata Tertib'));
     }
 
     private function formatLawsData()
