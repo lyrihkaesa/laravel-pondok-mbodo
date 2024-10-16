@@ -58,6 +58,25 @@ class OrganizationResource extends Resource
                                 'attachFiles',
                             ])
                             ->columnSpanFull(),
+                        Forms\Components\MarkdownEditor::make('description')
+                            ->label(__('Description'))
+                            ->disableToolbarButtons([
+                                'attachFiles',
+                            ])
+                            ->columnSpanFull(),
+                        Forms\Components\FileUpload::make('thumbnail')
+                            ->label(__('Thumbnail'))
+                            ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: ''))
+                            ->getUploadedFileNameForStorageUsing(
+                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
+                                    return \App\Utilities\FileUtility::generateFileName($get('slug'), $file->getFileName());
+                                }
+                            )
+                            ->image()
+                            ->downloadable()
+                            ->openable()
+                            ->directory('organizations/thumbnails')
+                            ->columnSpanFull(),
                     ])
                     ->columns(2)
                     ->columnSpan(2),
@@ -79,24 +98,10 @@ class OrganizationResource extends Resource
                         Forms\Components\Textarea::make('address')
                             ->label(__('Address'))
                             ->autoSize(),
-                        Forms\Components\MarkdownEditor::make('description')
-                            ->label(__('Description'))
-                            ->disableToolbarButtons([
-                                'attachFiles',
-                            ])
-                            ->columnSpanFull(),
-                        Forms\Components\FileUpload::make('thumbnail')
-                            ->label(__('Thumbnail'))
-                            ->helperText(\App\Utilities\FileUtility::getImageHelperText(suffix: ''))
-                            ->getUploadedFileNameForStorageUsing(
-                                function (\Livewire\Features\SupportFileUploads\TemporaryUploadedFile $file, Forms\Get $get): string {
-                                    return \App\Utilities\FileUtility::generateFileName($get('slug'), $file->getFileName());
-                                }
-                            )
-                            ->image()
-                            ->downloadable()
-                            ->openable()
-                            ->directory('organizations/thumbnails'),
+                        Forms\Components\TextInput::make('npsn')
+                            ->label(__('NPSN')),
+                        Forms\Components\TextInput::make('nsm')
+                            ->label(__('NSM')),
                     ])
                     ->columnSpan(1),
             ])
