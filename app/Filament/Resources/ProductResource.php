@@ -37,6 +37,7 @@ class ProductResource extends Resource
                     ->openable()
                     ->directory('products')
                     ->reorderable()
+                    ->maxSize(500) // 500KB
                     ->columnSpan([
                         'default' => 3,
                         'md' => 1,

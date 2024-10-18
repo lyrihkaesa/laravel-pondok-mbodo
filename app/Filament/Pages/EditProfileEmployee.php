@@ -313,7 +313,7 @@ class EditProfileEmployee extends Page implements HasForms
                             ->columnSpanFull(),
                         Forms\Components\Select::make('roles')
                             ->label(__('Role'))
-                            ->options(Role::all()->pluck('name', 'id')->map(function ($name) {
+                            ->options(Role::whereNotIn('name', ['super_admin'])->pluck('name', 'id')->map(function ($name) {
                                 return str($name)->replace('_', ' ')->title();
                             }))
                             ->preload()

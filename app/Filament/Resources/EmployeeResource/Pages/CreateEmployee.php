@@ -41,6 +41,7 @@ class CreateEmployee extends CreateRecord
         unset($data['phone']);
         unset($data['password']);
         unset($data['roles']);
+        unset($data['phone_visibility']);
         unset($data['user_profile_picture_1x1']);
 
         $data['user_id'] = $user->id;
