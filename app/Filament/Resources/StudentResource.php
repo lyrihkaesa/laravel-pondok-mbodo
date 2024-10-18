@@ -66,7 +66,20 @@ class StudentResource extends Resource implements HasShieldPermissions
                             Forms\Components\TextInput::make('name')
                                 ->label(__('Full Name'))
                                 ->placeholder(__('Full Name Placeholder Student'))
-                                ->required(),
+                                ->required()
+                                ->hintActions([
+                                    Forms\Components\Actions\Action::make('capitalizeEachWord')
+                                        ->label(__('CEW'))
+                                        ->badge()
+                                        ->icon('heroicon-c-paint-brush')
+                                        ->color('warning')
+                                        ->action(function (?String $state, Forms\Get $get, Forms\Set $set) {
+                                            if ($state !== null) {
+                                                $set('name', str($state)->headline());
+                                            }
+                                        })
+                                        ->disabled(fn(string $operation): bool => $operation === 'view'),
+                                ]),
                             Forms\Components\TextInput::make('nik')
                                 ->label(__('Nik'))
                                 ->placeholder(__('Nik Placeholder'))
