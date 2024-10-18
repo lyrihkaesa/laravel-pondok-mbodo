@@ -24,6 +24,7 @@ class CreateEmployee extends CreateRecord
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
+            'phone_visibility' => $data['phone_visibility'],
             'password' => Hash::make($password),
             'profile_picture_1x1' => $data['user_profile_picture_1x1'],
         ]);
