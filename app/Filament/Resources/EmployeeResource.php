@@ -431,9 +431,7 @@ class EmployeeResource extends Resource
                             }),
                         Forms\Components\Select::make('roles')
                             ->label(__('Role'))
-                            ->options(Role::whereNotIn('name', ['super_admin'])->pluck('name', 'id')->map(function ($name) {
-                                return str($name)->replace('_', ' ')->title();
-                            }))
+                            ->options(\App\Utilities\RoleUtility::getNameOptions())
                             ->preload()
                             ->multiple()
                             ->searchable(),
@@ -622,9 +620,11 @@ class EmployeeResource extends Resource
                 ]),
             ])
             ->modifyQueryUsing(function (Builder $query) {
-                $query->whereDoesntHave('user.roles', function (Builder $query) {
-                    $query->where('name', 'super_admin');
-                });
+                if (!auth('web')->user()->hasRole('super_admin')) {
+                    $query->whereDoesntHave('user.roles', function (Builder $query) {
+                        $query->where('name', 'super_admin');
+                    });
+                }
             })
             ->defaultSort('created_at', 'desc');
     }

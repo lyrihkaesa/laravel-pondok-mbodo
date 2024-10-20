@@ -14,7 +14,7 @@ class UnvalidatedBillsChart extends ChartWidget
         /**
          * @var \App\Models\User::class $user
          */
-        $user = auth()->user();
+        $user = auth('web')->user();
         return $user->can('widget_UnvalidatedBillsChart');
     }
     protected static ?string $heading = 'Total Santri Belum Validasi Tagihan per Sekolah';

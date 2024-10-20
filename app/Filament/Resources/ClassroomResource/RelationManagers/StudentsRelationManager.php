@@ -71,7 +71,7 @@ class StudentsRelationManager extends RelationManager
                     ->color('warning')
                     ->url(fn(Model $record): string => route('filament.app.resources.students.view', $record))
                     ->openUrlInNewTab()
-                    ->visible(fn(Model $record): bool => auth()->user()->can('view_student')),
+                    ->visible(fn(Model $record): bool => auth('web')->user()->can('view_student')),
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                 Tables\Actions\DetachAction::make(),

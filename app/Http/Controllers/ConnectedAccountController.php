@@ -40,7 +40,7 @@ class ConnectedAccountController extends Controller
         }
 
         $connectedAccount = new ConnectedAccount();
-        $connectedAccount->user_id = auth()->user()->id;
+        $connectedAccount->user_id = auth('web')->user()->id;
         $connectedAccount->provider = $provider;
         $connectedAccount->provider_id = $userSocialite->getId();
         $connectedAccount->nickname = $userSocialite->getNickname();

@@ -209,7 +209,7 @@
                                 @if (
                                     $user->phone_visibility->value === 'public' ||
                                         ($user->phone_visibility->value === 'member' && $user) ||
-                                        ($user->phone_visibility->value === 'private' && auth()->user()?->hasRole('pengurus')))
+                                        ($user->phone_visibility->value === 'private' && auth('web')->user()?->hasRole('pengurus')))
                                     <a class="inline-flex items-center justify-center rounded-full text-amber-500 hover:text-amber-800 dark:hover:text-amber-200"
                                         target="_blank" href="https://wa.me/{{ $user->phone }}">@svg('icon-whatsapp', ['class' => 'size-4 flex-shrink-0'])</a>
                                 @endif
@@ -218,7 +218,7 @@
                                     @if (
                                         $socialMediaLink->visibility->value === 'public' ||
                                             ($socialMediaLink->visibility->value === 'member' && $user) ||
-                                            ($socialMediaLink->visibility->value === 'private' && auth()->user()?->hasRole('pengurus')))
+                                            ($socialMediaLink->visibility->value === 'private' && auth('web')->user()?->hasRole('pengurus')))
                                         <a class="inline-flex items-center justify-center rounded-full text-amber-500 hover:text-amber-800 dark:hover:text-amber-200"
                                             target="_blank" href="{{ $socialMediaLink->url }}">@svg($socialMediaLink->platform->getIcon(), ['class' => 'size-4 flex-shrink-0'])</a>
                                     @endif

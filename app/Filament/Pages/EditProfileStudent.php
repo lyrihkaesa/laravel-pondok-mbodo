@@ -30,12 +30,12 @@ class EditProfileStudent extends Page
 
     // public static function shouldRegisterNavigation(): bool
     // {
-    //     return auth()->user()->student !== null;
+    //     return auth('web')->user()->student !== null;
     // }
 
     public static function canAccess(): bool
     {
-        return auth()->user()->student !== null;
+        return auth('web')->user()->student !== null;
     }
 
     public function getTitle(): string | Htmlable

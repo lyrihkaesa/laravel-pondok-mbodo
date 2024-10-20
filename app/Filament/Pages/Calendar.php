@@ -13,7 +13,7 @@ class Calendar extends Page
 
     public static function canAccess(): bool
     {
-        return auth()->user()->can('page_Calendar');
+        return auth('web')->user()->can('page_Calendar');
     }
 
     public function getTitle(): string | Htmlable

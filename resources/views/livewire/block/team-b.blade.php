@@ -12,7 +12,7 @@
     @endisset
 
     @php
-        $user = auth()->user();
+        $user = auth('web')->user();
     @endphp
 
     <!-- Grid -->

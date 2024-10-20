@@ -67,13 +67,13 @@ class UserResource extends Resource implements HasShieldPermissions
                                 ->url(fn(User $record): string => route('filament.app.resources.students.edit', ['record' => $record->student]))
                                 ->openUrlInNewTab()
                                 ->visible(fn(User $record): bool => $record->student !== null)
-                                ->disabled(fn() => !auth()->user()->can('edit_student')),
+                                ->disabled(fn() => !auth('web')->user()->can('edit_student')),
                             Forms\Components\Actions\Action::make('employee')
                                 ->label(__('Employee'))
                                 ->url(fn(User $record): string => route('filament.app.resources.employees.edit', ['record' => $record->employee]))
                                 ->openUrlInNewTab()
                                 ->visible(fn(User $record): bool => $record->employee !== null)
-                                ->disabled(fn() => !auth()->user()->can('edit_employee')),
+                                ->disabled(fn() => !auth('web')->user()->can('edit_employee')),
                         ]),
                         Forms\Components\FileUpload::make('profile_picture_1x1')
                             ->label(__('Profile Picture 1x1'))

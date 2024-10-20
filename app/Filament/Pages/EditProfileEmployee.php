@@ -29,12 +29,12 @@ class EditProfileEmployee extends Page implements HasForms
 
     // public static function shouldRegisterNavigation(): bool
     // {
-    //     return auth()->user()->employee !== null;
+    //     return auth('web')->user()->employee !== null;
     // }
 
     public static function canAccess(): bool
     {
-        return auth()->user()->employee !== null;
+        return auth('web')->user()->employee !== null;
     }
 
     public function getTitle(): string | Htmlable
@@ -313,9 +313,7 @@ class EditProfileEmployee extends Page implements HasForms
                             ->columnSpanFull(),
                         Forms\Components\Select::make('roles')
                             ->label(__('Role'))
-                            ->options(Role::whereNotIn('name', ['super_admin'])->pluck('name', 'id')->map(function ($name) {
-                                return str($name)->replace('_', ' ')->title();
-                            }))
+                            ->options(\App\Utilities\RoleUtility::getNameOptions())
                             ->preload()
                             ->multiple()
                             ->searchable()

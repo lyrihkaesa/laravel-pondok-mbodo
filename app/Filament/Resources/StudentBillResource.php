@@ -129,7 +129,7 @@ class StudentBillResource extends Resource implements HasShieldPermissions
                             ->live(onBlur: true)
                             ->afterStateUpdated(function (?string $state, Forms\Set $set, $record) {
                                 $set('validated_at', $state ? now()->toDateTimeString() : null);
-                                $set('validated_by', $state ? auth()->id() : null);
+                                $set('validated_by', $state ? auth('web')->id() : null);
                                 return $state;
                             })
                             ->afterStateHydrated(function (?string $operation, $record, $component) {
@@ -137,7 +137,7 @@ class StudentBillResource extends Resource implements HasShieldPermissions
                                     $component->state($record->validated_at ? true : false);
                                 }
                             })
-                            ->disabled(fn (string $operation): bool => $operation === 'edit' || !auth()->user()->can('validate_student::bill'))
+                            ->disabled(fn(string $operation): bool => $operation === 'edit' || !auth('web')->user()->can('validate_student::bill'))
                             ->columnSpan([
                                 'default' => 1,
                             ]),
@@ -150,14 +150,14 @@ class StudentBillResource extends Resource implements HasShieldPermissions
                             ->afterStateUpdated(function (?string $state, ?string $old, ?string $operation, Forms\Set $set) {
                                 if ($operation === 'create') {
                                     $set('is_validated', $state ? true : false);
-                                    $set('validated_by', $state ? auth()->id() : null);
+                                    $set('validated_by', $state ? auth('web')->id() : null);
                                 } else if ($operation === 'edit' && $state === null) {
                                     return $old;
                                 }
                                 return $state;
                             })
                             // ->visible(fn (string $operation): bool => $operation === 'edit')
-                            ->disabled(fn ($state): bool => $state === null || !auth()->user()->can('validate_student::bill'))
+                            ->disabled(fn($state): bool => $state === null || !auth('web')->user()->can('validate_student::bill'))
                             ->columnSpan([
                                 'default' => 3,
                             ]),
@@ -200,7 +200,7 @@ class StudentBillResource extends Resource implements HasShieldPermissions
                         $studentBillModel = $record;
                         $student = $studentBillModel->student;
                         $studentBillId = $studentBillModel->id;
-                        $userLogin = auth()->user();
+                        $userLogin = auth('web')->user();
                         if ($state) {
                             $description = $userLogin->name . ' - ' . $userLogin->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
@@ -272,7 +272,7 @@ class StudentBillResource extends Resource implements HasShieldPermissions
                     ->default(function ($record) {
                         return $record->validated_at === null ? false : true;
                     })
-                    ->visible(fn (): bool => auth()->user()->can('validate_student::bill')),
+                    ->visible(fn(): bool => auth('web')->user()->can('validate_student::bill')),
                 Tables\Columns\TextColumn::make('validated_at')
                     ->dateTime(format: 'd-m-Y H:i', timezone: 'Asia/Jakarta')
                     ->label(__('Validated At')),
@@ -284,7 +284,7 @@ class StudentBillResource extends Resource implements HasShieldPermissions
             ])
             ->filters([
                 Tables\Filters\Filter::make('validated_at')
-                    ->query(fn (Builder $query, array $data): Builder => $query->where('validated_at', null))
+                    ->query(fn(Builder $query, array $data): Builder => $query->where('validated_at', null))
                     ->default(true)
                     ->label('Belum Validasi'),
                 Tables\Filters\SelectFilter::make('current_school')
@@ -309,9 +309,9 @@ class StudentBillResource extends Resource implements HasShieldPermissions
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn ($record) => $record->validated_at === null),
+                    ->visible(fn($record) => $record->validated_at === null),
                 Tables\Actions\DeleteAction::make()
-                    ->visible(fn ($record) => $record->validated_at === null),
+                    ->visible(fn($record) => $record->validated_at === null),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([

@@ -18,7 +18,7 @@ class StatsOverview extends BaseWidget
         /**
          * @var \App\Models\User::class $user
          */
-        $user = auth()->user();
+        $user = auth('web')->user();
         return $user->can('widget_StatsOverview');
     }
 
@@ -28,9 +28,20 @@ class StatsOverview extends BaseWidget
             Stat::make('Jumlah Santri Aktif', Student::where('status', StudentStatus::ACTIVE)->count())
                 ->description(Student::where('status', StudentStatus::ENROLLED)->count() . ' Mendaftar')
                 ->descriptionIcon(StudentStatus::ENROLLED->getIcon()),
-            Stat::make('Jumlah Pengurus', Employee::query()->whereDoesntHave('user.roles', function (Builder $query) {
-                $query->where('name', 'super_admin');
-            })->count()),
+            Stat::make('Jumlah Pengurus', $this->countEmployee()),
         ];
+    }
+
+    protected function countEmployee(): int
+    {
+        $employees = Employee::query();
+
+        if (!auth('web')->user()->hasRole('super_admin')) {
+            $employees->whereDoesntHave('user.roles', function (Builder $query) {
+                $query->where('name', 'super_admin');
+            });
+        }
+
+        return $employees->count();
     }
 }

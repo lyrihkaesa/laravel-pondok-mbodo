@@ -36,10 +36,10 @@ test('transfer from SYSTEM to YAYASAN success with data', function () {
         'product_name' => $productModel->name,
         'product_price' => $productModel->price,
         'validated_at' => now(),
-        'validated_by' => auth()->user()->id,
+        'validated_by' => auth('web')->user()->id,
     ]);
 
-    $description = auth()->user()->name . ' - ' . auth()->user()->phone . ' melakukan validasi biaya administrasi ' . $studentModel->name . ' #' . $studentModel->id . ' - ' . $studentModel->user->phone;
+    $description = auth('web')->user()->name . ' - ' . auth('web')->user()->phone . ' melakukan validasi biaya administrasi ' . $studentModel->name . ' #' . $studentModel->id . ' - ' . $studentModel->user->phone;
 
     $result = $this->WalletService->transfer('SYSTEM', 'YAYASAN', $studentBillModel->product_price, [
         'student_bill_id' => $studentBillModel->id,

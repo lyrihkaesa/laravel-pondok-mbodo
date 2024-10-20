@@ -5,7 +5,7 @@
     <div class="mt-1 text-sm text-gray-500 dark:text-gray-400">
         <p>{{ $description }}</p>
         @php
-            $user = auth()->user();
+            $user = auth('web')->user();
         @endphp
 
         @foreach ($this->members as $member)

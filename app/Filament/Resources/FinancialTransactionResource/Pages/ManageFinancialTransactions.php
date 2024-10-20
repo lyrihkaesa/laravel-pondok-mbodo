@@ -30,11 +30,11 @@ class ManageFinancialTransactions extends ManageRecords
                 ->label(__('Expense'))
                 ->color('danger')
                 ->icon('heroicon-o-arrow-trending-down')
-                ->fillForm(fn (): array => [
+                ->fillForm(fn(): array => [
                     'from_wallet_id' => Wallet::yayasan()->first()->id,
                     'to_wallet_id' => Wallet::expense()->first()->id,
                     'transaction_at' => now(),
-                    'validated_by' => auth()->id(),
+                    'validated_by' => auth('web')->user()->id,
                     'quantity' => 1,
                 ])
                 ->action(function (array $data, WalletService $walletService) {
@@ -45,11 +45,11 @@ class ManageFinancialTransactions extends ManageRecords
                 ->label(__('Income'))
                 ->color('success')
                 ->icon('heroicon-o-arrow-trending-up')
-                ->fillForm(fn (): array => [
+                ->fillForm(fn(): array => [
                     'from_wallet_id' => Wallet::income()->first()->id,
                     'to_wallet_id' => Wallet::yayasan()->first()->id,
                     'transaction_at' => now(),
-                    'validated_by' => auth()->id(),
+                    'validated_by' => auth('web')->id(),
                     'quantity' => 1,
                 ])
                 ->action(function (array $data, WalletService $walletService) {
@@ -60,11 +60,11 @@ class ManageFinancialTransactions extends ManageRecords
                 ->label(__('Dana BOS'))
                 ->color('success')
                 ->icon('heroicon-o-building-library')
-                ->fillForm(fn (): array => [
+                ->fillForm(fn(): array => [
                     'from_wallet_id' => Wallet::danaBos()->first()->id,
                     'to_wallet_id' => Wallet::yayasan()->first()->id,
                     'transaction_at' => now(),
-                    'validated_by' => auth()->id(),
+                    'validated_by' => auth('web')->id(),
                     'quantity' => 1,
                 ])
                 ->action(function (array $data, WalletService $walletService) {
@@ -82,7 +82,7 @@ class ManageFinancialTransactions extends ManageRecords
                     Forms\Components\Select::make('wallet_id')
                         ->label(__('Wallet Id'))
                         ->relationship('fromWallet')
-                        ->getOptionLabelFromRecordUsing(fn ($record) => (in_array("ALLOW_NEGATIVE_BALANCE", $record->policy ?? []) ? "🔻" : "")  . "{$record->wallet_code} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
+                        ->getOptionLabelFromRecordUsing(fn($record) => (in_array("ALLOW_NEGATIVE_BALANCE", $record->policy ?? []) ? "🔻" : "")  . "{$record->wallet_code} {$record->name} (" . Number::currency($record->balance, 'IDR', 'id') . ")")
                         ->searchable(['id', 'wallet_code', 'name'])
                         ->preload()
                         ->default(Wallet::yayasan()->first()->id)
@@ -101,7 +101,7 @@ class ManageFinancialTransactions extends ManageRecords
                         ->columns(2),
                     Forms\Components\ToggleButtons::make('month')
                         ->label(__('Month'))
-                        ->options(array_combine(range(1, 12), array_map(fn ($month) => Carbon::create(null, $month)->translatedFormat('F'), range(1, 12))))
+                        ->options(array_combine(range(1, 12), array_map(fn($month) => Carbon::create(null, $month)->translatedFormat('F'), range(1, 12))))
                         ->inline()
                         ->live()
                         ->afterStateUpdated(function ($state, Forms\Set $set, Forms\Get $get) {
@@ -118,7 +118,7 @@ class ManageFinancialTransactions extends ManageRecords
                 ->action(function (array $data) {
                     $this->replaceMountedAction('viewPdf', arguments: $data);
                 })
-                ->visible(fn (): bool => auth()->user()->can('export_financial::transaction')),
+                ->visible(fn(): bool => auth('web')->user()->can('export_financial::transaction')),
         ];
     }
 
@@ -127,7 +127,7 @@ class ManageFinancialTransactions extends ManageRecords
         return  Actions\Action::make('viewPdf')
             ->label(__('View Financial Report'))
             ->modal()
-            ->modalContent(fn ($arguments) => view('components.object-pdf', [
+            ->modalContent(fn($arguments) => view('components.object-pdf', [
                 'src' => route('admin.financial-transactions.pdf', $arguments),
             ]))
             ->slideOver()

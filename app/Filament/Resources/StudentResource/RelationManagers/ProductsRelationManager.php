@@ -88,7 +88,7 @@ class ProductsRelationManager extends RelationManager
 
                         $student = $studentBillModel->student;
                         $studentBillId = $studentBillModel->id;
-                        $userLogin = auth()->user();
+                        $userLogin = auth('web')->user();
                         if ($state) {
                             $description = $userLogin->name . ' - ' . $userLogin->phone . ' melakukan validasi biaya administrasi ' . $student->name . ' #' . $student->id . ' - ' . $student->user->phone;
 
@@ -160,25 +160,25 @@ class ProductsRelationManager extends RelationManager
                     ->default(function ($record) {
                         return $record->validated_at === null ? false : true;
                     })
-                    ->visible(fn (): bool => auth()->user()->can('validate_student::bill')),
+                    ->visible(fn(): bool => auth('web')->user()->can('validate_student::bill')),
                 Tables\Columns\TextColumn::make('validated_at')
                     ->label(__('Validated At'))
                     ->dateTime(format: 'd/m/Y H:i', timezone: 'Asia/Jakarta'),
                 Tables\Columns\TextColumn::make('validated_by')
                     ->label(__('Validated By'))
-                    ->formatStateUsing(fn (string $state): string => $state ? User::find($state)->name : '-'),
+                    ->formatStateUsing(fn(string $state): string => $state ? User::find($state)->name : '-'),
                 // Tables\Columns\TextColumn::make('created_at')
                 //     ->label('Dibuat')->since()
             ])
             ->filters([
                 Tables\Filters\Filter::make('validated_at')
-                    ->query(fn (Builder $query, array $data): Builder => $query->where('validated_at', null))
+                    ->query(fn(Builder $query, array $data): Builder => $query->where('validated_at', null))
                     ->default(true)
                     ->label('Belum Validasi'),
             ])
             ->headerActions([
                 Tables\Actions\AttachAction::make()
-                    ->form(fn (AttachAction $action): array => [
+                    ->form(fn(AttachAction $action): array => [
                         $action->getRecordSelect()
                             // ->options(Product::all()->pluck('name', 'id')) // dont need that because ->allowDuplicates()
                             ->live()
@@ -213,9 +213,9 @@ class ProductsRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn ($record): bool => $record->validated_at === null),
+                    ->visible(fn($record): bool => $record->validated_at === null),
                 Tables\Actions\DetachAction::make()
-                    ->visible(fn ($record): bool => $record->validated_at === null),
+                    ->visible(fn($record): bool => $record->validated_at === null),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

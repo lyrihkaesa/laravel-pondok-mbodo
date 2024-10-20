@@ -47,12 +47,12 @@ class AppPanelProvider extends PanelProvider
                 'profile student' => MenuItem::make()
                     ->label(__('Profile Student'))
                     ->icon('icon-student-male')
-                    ->visible(fn(): bool => auth()->user()->student !== null)
+                    ->visible(fn(): bool => auth('web')->user()->student !== null)
                     ->url(fn(): string => EditProfileStudent::getUrl()),
                 'profile employee' => MenuItem::make()
                     ->label(__('Profile Employee'))
                     ->icon('icon-school-director')
-                    ->visible(fn(): bool => auth()->user()->employee !== null)
+                    ->visible(fn(): bool => auth('web')->user()->employee !== null)
                     ->url(fn(): string => EditProfileEmployee::getUrl()),
             ])
             ->colors([

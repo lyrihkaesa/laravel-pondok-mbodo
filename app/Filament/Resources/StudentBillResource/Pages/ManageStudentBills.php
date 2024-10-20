@@ -28,7 +28,7 @@ class ManageStudentBills extends ManageRecords
         return [
             Actions\CreateAction::make()
                 ->action(function (array $data, WalletService $walletService) {
-                    $userLogin = auth()->user();
+                    $userLogin = auth('web')->user();
                     if ($data['is_validated']) {
                         $data['validated_by'] = $userLogin->id;
                     }
@@ -150,7 +150,7 @@ class ManageStudentBills extends ManageRecords
                     Notification::make()
                         ->success()
                         ->title('Generate Administrasi Santri Berhasil')
-                        ->body($students->count() . ' Santri ditambahkan Tagihan "' . $product_names . '" (' . $suffix . ') by ' . auth()->user()->name)
+                        ->body($students->count() . ' Santri ditambahkan Tagihan "' . $product_names . '" (' . $suffix . ') by ' . auth('web')->user()->name)
                         ->send()
                         ->sendToDatabase(\App\Models\User::withOut(['roles'])
                             ->whereHas('roles.permissions', function ($query) {
@@ -158,7 +158,7 @@ class ManageStudentBills extends ManageRecords
                             })
                             ->get());
                 })
-                ->visible(fn(): bool => auth()->user()->can('create_student::bill')),
+                ->visible(fn(): bool => auth('web')->user()->can('create_student::bill')),
 
 
             Actions\Action::make('generateReportPdf')
@@ -194,7 +194,7 @@ class ManageStudentBills extends ManageRecords
                 ->action(function (array $data) {
                     $this->replaceMountedAction('viewPdf', arguments: $data);
                 })
-                ->visible(fn(): bool => auth()->user()->can('export_student::bill')),
+                ->visible(fn(): bool => auth('web')->user()->can('export_student::bill')),
         ];
     }
 

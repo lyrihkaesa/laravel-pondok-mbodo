@@ -50,7 +50,7 @@ class WalletServiceImpl implements WalletService
             $financialTransaction->name = $financialTransaction->name ?? "Transfer Saldo";
             $financialTransaction->type = $financialTransaction->type ?? "transfer";
             $financialTransaction->description = $financialTransaction->description ?? "Transfer saldo " . Number::currency($amount, 'IDR', 'id') . " dari #$fromWallet->wallet_code ke #$toWallet->wallet_code";
-            $financialTransaction->validated_by = $financialTransaction->validated_by ?? auth()->user()->id;
+            $financialTransaction->validated_by = $financialTransaction->validated_by ?? auth('web')->user()->id;
 
             $financialTransaction->save();
 

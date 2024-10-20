@@ -355,7 +355,7 @@ class EditProfile extends Page implements HasForms
     /**
      * Create a new agent instance from the given session.
      */
-    protected function createAgent(mixed $session): DeviceDetector
+    protected function createAgent($session): DeviceDetector
     {
         $deviceDetector = new DeviceDetector($session->user_agent);
         $deviceDetector->parse();
