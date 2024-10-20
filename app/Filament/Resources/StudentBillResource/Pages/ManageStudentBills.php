@@ -8,8 +8,9 @@ use App\Models\Wallet;
 use App\Models\Product;
 use App\Models\Student;
 use Livewire\Component;
-use App\Enums\StudentCategory;
 use App\Models\StudentBill;
+use App\Enums\StudentCategory;
+use Illuminate\Support\Number;
 use App\Services\WalletService;
 use App\Enums\StudentCurrentSchool;
 use App\Models\FinancialTransaction;
@@ -57,7 +58,7 @@ class ManageStudentBills extends ManageRecords
 
             Actions\Action::make('generateStudentsProducts')
                 ->label("Administrasi Umum")
-                ->fillForm(fn ($record): array => [
+                ->fillForm(fn($record): array => [
                     'suffix' => now()->translatedFormat('M Y'),
                     'bill_date_time' => now()->toDateTimeString(),
                     'category' => [StudentCategory::REGULER],
@@ -76,7 +77,7 @@ class ManageStudentBills extends ManageRecords
 
                             Forms\Components\TextInput::make('suffix')
                                 ->label('Akhiran')
-                                ->helperText(fn ($state): string => 'Contoh: Catering ' . $state)
+                                ->helperText(fn($state): string => 'Contoh: Catering ' . $state)
                                 ->live(onBlur: true)
                                 ->required(),
                         ]),
@@ -85,6 +86,7 @@ class ManageStudentBills extends ManageRecords
                     Forms\Components\Select::make('product')
                         ->label(__('Student Product Name'))
                         ->relationship('product', 'name')
+                        ->getOptionLabelFromRecordUsing(fn($record) => ("{$record->name} - " . Number::currency($record->price, 'IDR', 'id')))
                         ->multiple()
                         ->preload()
                         ->searchable()
@@ -156,7 +158,7 @@ class ManageStudentBills extends ManageRecords
                             })
                             ->get());
                 })
-                ->visible(fn (): bool => auth()->user()->can('create_student::bill')),
+                ->visible(fn(): bool => auth()->user()->can('create_student::bill')),
 
 
             Actions\Action::make('generateReportPdf')
@@ -192,7 +194,7 @@ class ManageStudentBills extends ManageRecords
                 ->action(function (array $data) {
                     $this->replaceMountedAction('viewPdf', arguments: $data);
                 })
-                ->visible(fn (): bool => auth()->user()->can('export_student::bill')),
+                ->visible(fn(): bool => auth()->user()->can('export_student::bill')),
         ];
     }
 
@@ -201,7 +203,7 @@ class ManageStudentBills extends ManageRecords
         return  Actions\Action::make('viewPdf')
             ->label(__('View Student Bill'))
             ->modal()
-            ->modalContent(fn ($arguments) => view('components.object-pdf', [
+            ->modalContent(fn($arguments) => view('components.object-pdf', [
                 'src' => route('admin.student-bill.pdf', $arguments),
             ]))
             ->slideOver()

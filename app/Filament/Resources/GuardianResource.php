@@ -44,12 +44,12 @@ class GuardianResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label('Nama Lengkap')
+                    ->label(__('Name'))
                     ->placeholder('Bambang Susanto')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('relationship')
-                    ->label('Hubungan Keluarga')
+                    ->label(__('Relationship'))
                     ->options([
                         'Ayah' => '<span class="text-blue-600 dark:text-blue-400">Ayah</span>',
                         'Ibu' => '<span class="text-pink-600 dark:text-pink-400">Ibu</span>',
@@ -60,7 +60,7 @@ class GuardianResource extends Resource
                     ->allowHtml(true)
                     ->createOptionForm([
                         Forms\Components\TextInput::make('name')
-                            ->label('Hubungan Keluarga')
+                            ->label(__('Relationship'))
                             ->required()
                             ->placeholder('Paman / Bude / Kakek / Nenek')
                             ->maxLength(255),
@@ -73,24 +73,23 @@ class GuardianResource extends Resource
                     })
                     ->required(),
                 Forms\Components\TextInput::make('nik')
-                    ->label('NIK')
+                    ->label(__('NIK'))
                     ->placeholder('331504090919990001')
                     ->required()
                     ->length(16),
-
                 Forms\Components\TextInput::make('job')
-                    ->label('Pekerjaan')
+                    ->label(__('Job'))
                     ->placeholder('Petani/Wiraswasta/Wirausaha/dll')
                     ->required(),
                 Forms\Components\TextInput::make('phone')
-                    ->label('Nomor Telepon (Whatsapp)')
+                    ->label(__('Phone'))
                     ->tel()
                     ->required()
                     ->placeholder('6281234567890')
                     ->helperText('Ganti awalan 0 menjadi 62. Seperti nomor 08123456789 ke 628123456789.')
                     ->maxLength(255),
                 Forms\Components\Textarea::make('address')
-                    ->label('Alamat Lengkap')
+                    ->label(__('Address'))
                     ->placeholder('Jl. Senangsari, Dusun Sendangsari, RT 005, RW 007, Desa Tambirejo, Kec. Toroh, Kab. Grobogan, Prov. Jawa Tengah.')
                     ->autosize()
                     ->maxLength(255),
@@ -102,13 +101,43 @@ class GuardianResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nama'),
+                    ->searchable()
+                    ->label(__('Name')),
                 Tables\Columns\TextColumn::make('relationship')
-                    ->label('Hubungan'),
-                Tables\Columns\TextColumn::make('phone')
-                    ->label('Nomor Telepon')
+                    ->label(__('Relationship'))
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'Ayah' => 'info',
+                        'Ibu' => 'pink',
+                        'Saudara Laki-Laki' => 'warning',
+                        'Saudara Perempuan' => 'danger',
+                    }),
+                Tables\Columns\TextColumn::make('students.name')
+                    ->label(__('Student'))
+                    ->badge()
+                    ->color('gray')
                     ->copyable()
-                    ->copyMessage('Nomor Telepon Telah Disalin'),
+                    ->copyMessage(__('Student Copy Message'))
+                    ->copyMessageDuration(1000)
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('phone')
+                    ->label(__('Phone Column'))
+                    ->badge()
+                    ->color('success')
+                    ->copyable()
+                    ->copyMessage(__('Phone Copy Message'))
+                    ->copyMessageDuration(1000)
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('nik')
+                    ->label(__('NIK'))
+                    ->badge()
+                    ->color('gray')
+                    ->copyable()
+                    ->copyMessage(__('NIK Copy Message'))
+                    ->copyMessageDuration(1000)
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -121,7 +150,10 @@ class GuardianResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->modifyQueryUsing(function (Builder $query) {
+                $query->with('students');
+            });
     }
 
     public static function getRelations(): array
