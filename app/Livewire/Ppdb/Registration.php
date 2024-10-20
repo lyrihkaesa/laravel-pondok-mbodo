@@ -510,11 +510,12 @@ class Registration extends Component implements HasForms
 
             $userModel = User::create($user);
 
-            $userModel->wallets()->create([
-                'wallet_code' => $userModel->phone,
-                'name' => 'Dompet Utama',
-                'balance' => 0,
-            ]);
+            // Membuat dompet dibatalkan
+            // $userModel->wallets()->create([
+            //     'wallet_code' => $userModel->phone,
+            //     'name' => 'Dompet Utama',
+            //     'balance' => 0,
+            // ]);
 
             // Assign 'Student' Role
             $roleModel = \Spatie\Permission\Models\Role::where('name', 'santri')->first();
